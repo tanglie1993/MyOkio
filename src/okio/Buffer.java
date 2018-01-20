@@ -13,8 +13,8 @@ public class Buffer implements BufferedSource, BufferedSink {
         buffer.append(a);
     }
 
-    public void write(Source source, int length) throws IOException {
-        source.read(this, length);
+    public boolean write(Source source, int length) throws IOException {
+        return source.read(this, length);
     }
 
     @Override

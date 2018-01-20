@@ -22,7 +22,11 @@ public class RealBufferedSource implements BufferedSource {
         source = new Source() {
             @Override
             public boolean read(Buffer data, int length) throws IOException {
-                byte[] bytes = new byte[inputStream.available()];
+                int size = length;
+                if(length > inputStream.available()){
+                    size = inputStream.available();
+                }
+                byte[] bytes = new byte[size];
                 inputStream.read(bytes);
                 String string = new String(bytes);
                 if(length > string.length()){
@@ -42,9 +46,9 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public boolean read(Buffer data, int length) throws IOException {
-        buffer.write(source, length);
+        boolean result = buffer.write(source, length);
         buffer.read(data, length);
-        return buffer.size() > 0;
+        return result;
     }
 
     @Override
