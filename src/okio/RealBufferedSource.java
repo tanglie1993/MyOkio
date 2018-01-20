@@ -61,4 +61,10 @@ public class RealBufferedSource implements BufferedSource {
         buffer.writeAll(source);
         return buffer.readUtf8();
     }
+
+    @Override
+    public String readUtf8(int length) throws IOException {
+        buffer.write(source, length);
+        return buffer.readUtf8(length);
+    }
 }

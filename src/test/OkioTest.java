@@ -1,7 +1,9 @@
 package test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -12,6 +14,8 @@ import org.junit.rules.TemporaryFolder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static test.TestUtil.SEGMENT_SIZE;
+import static test.TestUtil.UTF_8;
 import static test.TestUtil.repeat;
 
 public final class OkioTest {
@@ -82,5 +86,29 @@ public final class OkioTest {
         assertEquals("abb", out.toString("UTF-8"));
         sink.write(data, data.size());
         assertEquals("a" + repeat('b', 9998) + "c", out.toString("UTF-8"));
+    }
+
+    @Test public void sourceFromInputStream() throws Exception {
+        InputStream in = new ByteArrayInputStream(
+                ("a" + repeat('b', SEGMENT_SIZE * 2) + "c").getBytes(UTF_8));
+
+        // Source: ab...bc
+        Source source = Okio.source(in);
+        Buffer sink = new Buffer();
+
+        // Source: b...bc. Sink: abb.
+        assertEquals(3, source.read(sink, 3));
+        assertEquals("abb", sink.readUtf8(3));
+
+        // Source: b...bc. Sink: b...b.
+        assertEquals(SEGMENT_SIZE, source.read(sink, 20000));
+        assertEquals(repeat('b', SEGMENT_SIZE), sink.readUtf8());
+
+        // Source: b...bc. Sink: b...bc.
+        assertEquals(SEGMENT_SIZE - 1, source.read(sink, 20000));
+        assertEquals(repeat('b', SEGMENT_SIZE - 2) + "c", sink.readUtf8());
+
+        // Source and sink are empty.
+        assertEquals(-1, source.read(sink, 1));
     }
 }

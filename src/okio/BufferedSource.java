@@ -8,4 +8,5 @@ import java.io.IOException;
 public interface BufferedSource extends Source {
 
     String readUtf8() throws IOException;
+    String readUtf8(int length) throws IOException;
 }

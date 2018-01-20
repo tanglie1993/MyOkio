@@ -26,9 +26,22 @@ public class Buffer implements BufferedSource, BufferedSink {
             }
         }
     }
+
+    @Override
+    public String readUtf8(int length) {
+        if(length > buffer.length()){
+            length = buffer.length();
+        }
+        String result = buffer.substring(0, length);
+        buffer.delete(0, length);
+        return result;
+    }
+
     @Override
     public String readUtf8() throws IOException {
-        return buffer.toString();
+        String result = buffer.toString();
+        buffer.delete(0, buffer.length());
+        return result;
     }
 
     @Override

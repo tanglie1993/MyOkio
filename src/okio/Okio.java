@@ -32,7 +32,7 @@ public class Okio {
         return source(new FileInputStream(file));
     }
 
-    private static Source source(InputStream inputStream) {
+    public static Source source(InputStream inputStream) {
         return new RealBufferedSource(inputStream);
     }
 
