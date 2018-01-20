@@ -72,4 +72,8 @@ public class Okio {
             }
         };
     }
+
+    public static Sink appendingSink(File file) throws FileNotFoundException {
+        return sink(new FileOutputStream(file, true));
+    }
 }
