@@ -23,6 +23,9 @@ public class RealBufferedSource implements BufferedSource {
             @Override
             public boolean read(Buffer data, int length) throws IOException {
                 int size = length;
+                if(inputStream.available() < 0){
+                    return false;
+                }
                 if(length > inputStream.available()){
                     size = inputStream.available();
                 }
@@ -46,6 +49,9 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public boolean read(Buffer data, int length) throws IOException {
+        if (length < 0) {
+            throw new IllegalArgumentException("byteCount < 0: " + length);
+        }
         boolean result = buffer.write(source, length);
         buffer.read(data, length);
         return result;
@@ -64,6 +70,9 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public String readUtf8(int length) throws IOException {
+        if (length < 0) {
+            throw new IllegalArgumentException("byteCount < 0: " + length);
+        }
         buffer.write(source, length);
         return buffer.readUtf8(length);
     }

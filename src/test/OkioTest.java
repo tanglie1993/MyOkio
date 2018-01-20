@@ -14,6 +14,7 @@ import org.junit.rules.TemporaryFolder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static test.TestUtil.SEGMENT_SIZE;
 import static test.TestUtil.UTF_8;
 import static test.TestUtil.repeat;
@@ -88,7 +89,8 @@ public final class OkioTest {
         assertEquals("a" + repeat('b', 9998) + "c", out.toString("UTF-8"));
     }
 
-    @Test public void sourceFromInputStream() throws Exception {
+    @Test
+    public void sourceFromInputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(
                 ("a" + repeat('b', SEGMENT_SIZE * 2) + "c").getBytes(UTF_8));
 
@@ -110,5 +112,15 @@ public final class OkioTest {
 
         // Source and sink are empty.
         assertEquals(-1, source.read(sink, 1));
+    }
+
+    @Test
+    public void sourceFromInputStreamBounds() throws Exception {
+        Source source = Okio.source(new ByteArrayInputStream(new byte[100]));
+        try {
+            source.read(new Buffer(), -1);
+            fail();
+        } catch (IllegalArgumentException expected) {
+        }
     }
 }
