@@ -46,6 +46,7 @@ public class RealBufferedSink implements BufferedSink {
     @Override
     public void write(Buffer data, int i) throws IOException {
         buffer.write(data, i);
+        flush();
     }
 
     @Override
