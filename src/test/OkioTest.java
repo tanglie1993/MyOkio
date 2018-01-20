@@ -1,27 +1,25 @@
 package test;
 
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import okio.BufferedSink;
-import okio.BufferedSource;
-import okio.Okio;
+import okio.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static test.TestUtil.repeat;
 
 public final class OkioTest {
-    @Rule public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    @Test public void readWriteFile() throws Exception {
+    @Test
+    public void readWriteFile() throws Exception {
         temporaryFolder.create();
         File file = temporaryFolder.newFile();
 
@@ -36,7 +34,8 @@ public final class OkioTest {
         source.close();
     }
 
-    @Test public void appendFile() throws Exception {
+    @Test
+    public void appendFile() throws Exception {
         File file = temporaryFolder.newFile();
 
         BufferedSink sink = Okio.buffer(Okio.appendingSink(file));
@@ -55,7 +54,8 @@ public final class OkioTest {
         source.close();
     }
 
-    @Test public void readWritePath() throws Exception {
+    @Test
+    public void readWritePath() throws Exception {
         Path path = temporaryFolder.newFile().toPath();
 
         BufferedSink sink = Okio.buffer(Okio.sink(path));
@@ -67,5 +67,20 @@ public final class OkioTest {
         BufferedSource source = Okio.buffer(Okio.source(path));
         assertEquals("Hello, java.nio file!", source.readUtf8());
         source.close();
+    }
+
+    @Test
+    public void sinkFromOutputStream() throws Exception {
+        Buffer data = new Buffer();
+        data.writeUtf8("a");
+        data.writeUtf8(repeat('b', 9998));
+        data.writeUtf8("c");
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Sink sink = Okio.sink(out);
+        sink.write(data, 3);
+        assertEquals("abb", out.toString("UTF-8"));
+        sink.write(data, data.size());
+        assertEquals("a" + repeat('b', 9998) + "c", out.toString("UTF-8"));
     }
 }

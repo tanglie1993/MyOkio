@@ -20,66 +20,24 @@ public class Okio {
         return source(new FileInputStream(path.toFile()));
     }
 
-    private static Sink sink(OutputStream outputStream) {
-        return new Sink() {
-            @Override
-            public void writeUtf8(String s) throws IOException {
-                outputStream.write(s.getBytes());
-            }
-
-            @Override
-            public void close() throws IOException {
-                outputStream.close();
-            }
-        };
+    public static Sink sink(OutputStream outputStream) {
+        return new RealBufferedSink(outputStream);
     }
 
     public static BufferedSink buffer(Sink sink) {
-        return new BufferedSink(){
-            @Override
-            public void writeUtf8(String s) throws IOException {
-                sink.writeUtf8(s);
-            }
-
-            @Override
-            public void close() throws IOException {
-                sink.close();
-            }
-        };
+        return new RealBufferedSink(sink);
     }
 
     public static Source source(File file) throws FileNotFoundException {
         return source(new FileInputStream(file));
     }
 
-    private static Source source(FileInputStream inputStream) {
-        return new Source() {
-            @Override
-            public String readUtf8() throws IOException {
-                byte[] bytes = new byte[inputStream.available()];
-                inputStream.read(bytes);
-                return new String(bytes);
-            }
-
-            @Override
-            public void close() throws IOException {
-                inputStream.close();
-            }
-        };
+    private static Source source(InputStream inputStream) {
+        return new RealBufferedSource(inputStream);
     }
 
     public static BufferedSource buffer(Source source) {
-        return new BufferedSource(){
-            @Override
-            public String readUtf8() throws IOException {
-                return source.readUtf8();
-            }
-
-            @Override
-            public void close() throws IOException {
-                source.close();
-            }
-        };
+        return new RealBufferedSource(source);
     }
 
     public static Sink appendingSink(File file) throws FileNotFoundException {
