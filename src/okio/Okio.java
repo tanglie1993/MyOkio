@@ -1,6 +1,7 @@
 package okio;
 
 import java.io.*;
+import java.nio.file.Path;
 
 /**
  * Created by pc on 2018/1/18.
@@ -9,6 +10,14 @@ public class Okio {
 
     public static Sink sink(File file) throws FileNotFoundException {
         return sink(new FileOutputStream(file));
+    }
+
+    public static Sink sink(Path path) throws FileNotFoundException {
+        return sink(new FileOutputStream(path.toFile()));
+    }
+
+    public static Source source(Path path) throws FileNotFoundException {
+        return source(new FileInputStream(path.toFile()));
     }
 
     private static Sink sink(OutputStream outputStream) {
