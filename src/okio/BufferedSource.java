@@ -61,4 +61,6 @@ public interface BufferedSource extends Source {
     int indexOf(byte b, int fromIndex, int toIndex);
 
     int indexOf(ByteString byteString);
+
+    int indexOf(ByteString byteString, int fromIndex);
 }

@@ -481,6 +481,25 @@ public class BufferedSourceTest {
         sink.writeUtf8("hi hi hi hey");
         assertEquals(3, source.indexOf(ByteString.encodeUtf8("hi hi hey")));
     }
+
+    @Test 
+    public void indexOfByteStringAtSegmentBoundary() throws IOException {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE - 1));
+        sink.writeUtf8("bcd");
+        assertEquals(SEGMENT_SIZE - 3, source.indexOf(ByteString.encodeUtf8("aabc"), SEGMENT_SIZE - 4));
+        assertEquals(SEGMENT_SIZE - 3, source.indexOf(ByteString.encodeUtf8("aabc"), SEGMENT_SIZE - 3));
+        assertEquals(SEGMENT_SIZE - 2, source.indexOf(ByteString.encodeUtf8("abcd"), SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE - 2, source.indexOf(ByteString.encodeUtf8("abc"),  SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE - 2, source.indexOf(ByteString.encodeUtf8("abc"),  SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE - 2, source.indexOf(ByteString.encodeUtf8("ab"),   SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE - 2, source.indexOf(ByteString.encodeUtf8("a"),    SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE - 1, source.indexOf(ByteString.encodeUtf8("bc"),   SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE - 1, source.indexOf(ByteString.encodeUtf8("b"),    SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE,     source.indexOf(ByteString.encodeUtf8("c"),    SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE,     source.indexOf(ByteString.encodeUtf8("c"),    SEGMENT_SIZE    ));
+        assertEquals(SEGMENT_SIZE + 1, source.indexOf(ByteString.encodeUtf8("d"),    SEGMENT_SIZE - 2));
+        assertEquals(SEGMENT_SIZE + 1, source.indexOf(ByteString.encodeUtf8("d"),    SEGMENT_SIZE + 1));
+    }
 }
 
 
