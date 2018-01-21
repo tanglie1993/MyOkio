@@ -165,6 +165,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public int readAll(Sink sink) throws IOException {
         int result = buffer.size();
+        if(result == 0){
+            return 0;
+        }
         sink.write(this, buffer.size());
         return result;
     }

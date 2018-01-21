@@ -154,6 +154,14 @@ public class BufferedSourceTest {
         assertEquals("abcdef", sink.readUtf8());
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void readAllExhausted() throws IOException {
+        MockSink mockSink = new MockSink();
+        assertEquals(0, source.readAll(mockSink));
+        assertTrue(source.exhausted());
+        mockSink.assertLog();
+    }
 }
 
 
