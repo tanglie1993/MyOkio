@@ -44,4 +44,6 @@ public interface BufferedSource extends Source {
     int read(byte[] sink, int offset, int byteCount);
 
     byte[] readByteArray(int count);
+
+    ByteString readByteString();
 }

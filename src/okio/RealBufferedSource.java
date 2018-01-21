@@ -172,4 +172,9 @@ public class RealBufferedSource implements BufferedSource {
     public byte[] readByteArray(int count) {
         return new byte[0];
     }
+
+    @Override
+    public ByteString readByteString() {
+        return new ByteString(readByteArray());
+    }
 }

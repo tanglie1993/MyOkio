@@ -282,6 +282,12 @@ public class BufferedSourceTest {
         assertEquals("[97, 98, 99]", Arrays.toString(source.readByteArray(3)));
         assertEquals("d", source.readUtf8(1));
     }
+
+    @Test
+    public void readByteString() throws IOException {
+        sink.writeUtf8("abcd").writeUtf8(repeat('e', SEGMENT_SIZE));
+        assertEquals("abcd" + repeat('e',SEGMENT_SIZE), source.readByteString().utf8());
+    }
 }
 
 

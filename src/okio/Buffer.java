@@ -230,6 +230,13 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return result;
     }
 
+    @Override
+    public ByteString readByteString() {
+        ByteString result = new ByteString(toArray(buffer));
+        buffer.clear();
+        return result;
+    }
+
     private List<Byte> toList(byte[] sink, int offset, int byteCount) {
         return null;
     }
