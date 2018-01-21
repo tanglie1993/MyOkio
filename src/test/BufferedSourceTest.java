@@ -401,6 +401,13 @@ public class BufferedSourceTest {
         assertEquals(SEGMENT_SIZE - 4, source.indexOf((byte) 'd'));
         assertEquals(-1, source.indexOf((byte) 'e'));
     }
+
+    @Test
+    public void indexOfByteWithStartOffset() throws IOException {
+        sink.writeUtf8("a").writeUtf8(repeat('b', SEGMENT_SIZE)).writeUtf8("c");
+        assertEquals(-1, source.indexOf((byte) 'a', 1));
+        assertEquals(15, source.indexOf((byte) 'b', 15));
+    }
 }
 
 
