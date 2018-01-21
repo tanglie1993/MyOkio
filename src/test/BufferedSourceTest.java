@@ -520,6 +520,22 @@ public class BufferedSourceTest {
         sink.writeUtf8("hi hi hi hi hey");
         assertEquals(6, source.indexOf(ByteString.encodeUtf8("hi hi hey"), 1));
     }
+
+    @Test
+    public void indexOfByteStringInvalidArgumentsThrows() throws IOException {
+        try {
+            source.indexOf(ByteString.of());
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("bytes is empty", e.getMessage());
+        }
+        try {
+            source.indexOf(ByteString.encodeUtf8("hi"), -1);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("fromIndex < 0", e.getMessage());
+        }
+    }
 }
 
 

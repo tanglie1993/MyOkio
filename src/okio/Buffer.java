@@ -312,7 +312,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public int indexOf(ByteString byteString, int fromIndex) {
         if(byteString == null || byteString.getData().length == 0){
-            return -1;
+            throw new IllegalArgumentException("bytes is empty");
+        }
+        if(fromIndex < 0){
+            throw new IllegalArgumentException("fromIndex < 0");
         }
         outer: for(int i = fromIndex; i <= buffer.size() - byteString.getData().length; i++){
             if(buffer.get(i) == byteString.getData()[0]){

@@ -35,4 +35,9 @@ public class ByteString {
     public byte[] getData() {
         return data;
     }
+
+    public static ByteString of(byte... data) {
+        if (data == null) throw new IllegalArgumentException("data == null");
+        return new ByteString(data.clone());
+    }
 }
