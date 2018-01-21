@@ -96,6 +96,17 @@ public class BufferedSourceTest {
         assertEquals(0x21436587, source.readIntLe());
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void readIntSplitAcrossMultipleSegments() throws Exception {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE - 3));
+        sink.write(new byte[] {
+                (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x01
+        });
+        source.skip(SEGMENT_SIZE - 3);
+        assertEquals(0xabcdef01, source.readInt());
+        assertTrue(source.exhausted());
+    }
 }
 
 
