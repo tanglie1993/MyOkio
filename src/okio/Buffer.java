@@ -349,6 +349,11 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return -1;
     }
 
+    @Override
+    public boolean request(int count) {
+        return buffer.size() >= count;
+    }
+
     private List<Byte> toList(byte[] sink) {
         if(sink == null){
             return new ArrayList<>();

@@ -228,4 +228,9 @@ public class RealBufferedSource implements BufferedSource {
     public int indexOfElement(ByteString byteString, int index) {
         return buffer.indexOfElement(byteString, index);
     }
+
+    @Override
+    public boolean request(int count) {
+        return buffer.request(count);
+    }
 }

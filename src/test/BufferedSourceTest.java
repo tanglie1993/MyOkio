@@ -11,9 +11,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static test.TestUtil.*;
 
 /**
@@ -571,6 +569,13 @@ public class BufferedSourceTest {
         sink.writeUtf8("a").writeUtf8(repeat('b', SEGMENT_SIZE)).writeUtf8("c");
         assertEquals(-1, source.indexOfElement(ByteString.encodeUtf8("DEFGaHIJK"), 1));
         assertEquals(15, source.indexOfElement(ByteString.encodeUtf8("DEFGHIJKb"), 15));
+    }
+
+    @Test 
+    public void request() throws IOException {
+        sink.writeUtf8("a").writeUtf8(repeat('b', SEGMENT_SIZE)).writeUtf8("c");
+        assertTrue(source.request(SEGMENT_SIZE + 2));
+        assertFalse(source.request(SEGMENT_SIZE + 3));
     }
 }
 

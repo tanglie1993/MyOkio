@@ -67,4 +67,6 @@ public interface BufferedSource extends Source {
     int indexOfElement(ByteString byteString);
 
     int indexOfElement(ByteString byteString, int index);
+
+    boolean request(int count);
 }
