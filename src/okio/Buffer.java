@@ -116,6 +116,15 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public int readInt() throws IOException {
+        if(buffer.size() < 4){
+            return -1;
+        }
+        return ((buffer.remove(0) & 0xff) << 24 |  (buffer.remove(0) & 0xff) << 16
+                |  (buffer.remove(0) & 0xff) << 8 |  (buffer.remove(0) & 0xff));
+    }
+
+    @Override
     public String readUtf8() throws IOException {
         String result = buffer.toString();
         buffer.clear();

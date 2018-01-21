@@ -90,13 +90,13 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public short readShort() throws IOException {
-        buffer.write(source, 1);
+        buffer.write(source, 2);
         return buffer.readShort();
     }
 
     @Override
     public short readShortLe() throws IOException {
-        buffer.write(source, 1);
+        buffer.write(source, 2);
         return buffer.readShortLe();
     }
 
@@ -104,5 +104,11 @@ public class RealBufferedSource implements BufferedSource {
     public void skip(int count) throws IOException {
         buffer.write(source, count);
         buffer.pop(count);
+    }
+
+    @Override
+    public int readInt() throws IOException {
+        buffer.write(source, 4);
+        return buffer.readInt();
     }
 }
