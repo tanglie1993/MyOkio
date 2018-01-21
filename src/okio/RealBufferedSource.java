@@ -129,4 +129,16 @@ public class RealBufferedSource implements BufferedSource {
         buffer.write(source, 8);
         return buffer.readLongLe();
     }
+
+    @Override
+    public Buffer buffer() {
+        return buffer;
+    }
+
+    @Override
+    public int readAll(Sink sink) throws IOException {
+        int result = buffer.size();
+        sink.write(buffer, buffer.size());
+        return result;
+    }
 }

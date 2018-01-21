@@ -158,8 +158,20 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public Buffer buffer() {
+        return this;
+    }
+
+    @Override
+    public int readAll(Sink sink) throws IOException {
+        int result = buffer.size();
+        sink.write(this, buffer.size());
+        return result;
+    }
+
+    @Override
     public String readUtf8() throws IOException {
-        String result = buffer.toString();
+        String result = new String(toArray(buffer));
         buffer.clear();
         return result;
     }

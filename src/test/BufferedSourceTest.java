@@ -143,6 +143,17 @@ public class BufferedSourceTest {
         assertEquals(0xabcdef0187654321L, source.readLong());
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void readAll() throws IOException {
+        source.buffer().writeUtf8("abc");
+        sink.writeUtf8("def");
+
+        Buffer sink = new Buffer();
+        assertEquals(6, source.readAll(sink));
+        assertEquals("abcdef", sink.readUtf8());
+        assertTrue(source.exhausted());
+    }
 }
 
 

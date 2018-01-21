@@ -27,4 +27,8 @@ public interface BufferedSource extends Source {
     long readLong() throws IOException;
 
     long readLongLe() throws IOException;
+
+    Buffer buffer();
+
+    int readAll(Sink sink) throws IOException;
 }
