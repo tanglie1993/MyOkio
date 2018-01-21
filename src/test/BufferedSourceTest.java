@@ -577,6 +577,17 @@ public class BufferedSourceTest {
         assertTrue(source.request(SEGMENT_SIZE + 2));
         assertFalse(source.request(SEGMENT_SIZE + 3));
     }
+
+    @Test 
+    public void require() throws IOException {
+        sink.writeUtf8("a").writeUtf8(repeat('b', SEGMENT_SIZE)).writeUtf8("c");
+        source.require(SEGMENT_SIZE + 2);
+        try {
+            source.require(SEGMENT_SIZE + 3);
+            fail();
+        } catch (EOFException expected) {
+        }
+    }
 }
 
 

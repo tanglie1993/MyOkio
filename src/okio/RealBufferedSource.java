@@ -233,4 +233,9 @@ public class RealBufferedSource implements BufferedSource {
     public boolean request(int count) {
         return buffer.request(count);
     }
+
+    @Override
+    public void require(int count) {
+        buffer.request(count);
+    }
 }

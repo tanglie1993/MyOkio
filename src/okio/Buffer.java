@@ -354,6 +354,13 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return buffer.size() >= count;
     }
 
+    @Override
+    public void require(int count) throws EOFException {
+        if(buffer.size() < count){
+            throw new EOFException();
+        }
+    }
+
     private List<Byte> toList(byte[] sink) {
         if(sink == null){
             return new ArrayList<>();

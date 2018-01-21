@@ -69,4 +69,6 @@ public interface BufferedSource extends Source {
     int indexOfElement(ByteString byteString, int index);
 
     boolean request(int count);
+
+    void require(int count) throws EOFException;
 }
