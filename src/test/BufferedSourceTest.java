@@ -171,6 +171,18 @@ public class BufferedSourceTest {
         assertEquals(10, sink.size());
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void readZeroBytesFromSource() throws Exception {
+        Buffer sink = new Buffer();
+        sink.writeUtf8(repeat('a', 10));
+
+        // Either 0 or -1 is reasonable here. For consistency with Android's
+        // ByteArrayInputStream we return 0.
+        assertEquals(-1, source.read(sink, 0));
+        assertEquals(10, sink.size());
+        assertTrue(source.exhausted());
+    }
 }
 
 
