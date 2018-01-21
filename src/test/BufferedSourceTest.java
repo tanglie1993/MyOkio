@@ -131,6 +131,18 @@ public class BufferedSourceTest {
         assertEquals(0x4534231269584736L, source.readLongLe());
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void readLongSplitAcrossMultipleSegments() throws Exception {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE - 7));
+        sink.write(new byte[] {
+                (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x01, (byte) 0x87, (byte) 0x65, (byte) 0x43,
+                (byte) 0x21,
+        });
+        source.skip(SEGMENT_SIZE - 7);
+        assertEquals(0xabcdef0187654321L, source.readLong());
+        assertTrue(source.exhausted());
+    }
 }
 
 
