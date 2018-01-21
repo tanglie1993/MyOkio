@@ -76,4 +76,15 @@ public class RealBufferedSource implements BufferedSource {
         buffer.write(source, length);
         return buffer.readUtf8(length);
     }
+
+    @Override
+    public byte readByte() throws IOException {
+        buffer.write(source, 1);
+        return buffer.readByte();
+    }
+
+    @Override
+    public boolean exhausted() {
+        return buffer.size() == 0;
+    }
 }

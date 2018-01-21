@@ -9,4 +9,8 @@ public interface BufferedSink extends Sink {
     void writeUtf8(String s) throws IOException;
 
     void writeAll(Source source) throws IOException;
+
+    void write(byte[] bytes);
+
+    void write(Buffer clone, boolean result);
 }

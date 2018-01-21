@@ -63,4 +63,14 @@ public class RealBufferedSink implements BufferedSink {
     public void writeAll(Source source) throws IOException {
 
     }
+
+    @Override
+    public void write(byte[] bytes) {
+        buffer.write(bytes);
+    }
+
+    @Override
+    public void write(Buffer clone, boolean result) {
+
+    }
 }
