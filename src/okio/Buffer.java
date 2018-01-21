@@ -67,7 +67,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     private void remove(int start, int length) {
 //        buffer.removeAll(buffer.subList(start, start + length));
-        for(int i = 0; i < length; i++){
+        for(int i = 0; i < length && start < buffer.size(); i++){
             buffer.remove(start);
         }
     }
@@ -117,6 +117,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public void skip(int count) throws IOException {
+        if(buffer.size() < count){
+            remove(0, count);
+            throw new EOFException();
+        }
         remove(0, count);
     }
 

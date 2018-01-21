@@ -350,6 +350,17 @@ public class BufferedSourceTest {
         source.skip(1);
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void skipInsufficientData() throws Exception {
+        sink.writeUtf8("a");
+
+        try {
+            source.skip(2);
+            fail();
+        } catch (EOFException ignored) {
+        }
+    }
 }
 
 
