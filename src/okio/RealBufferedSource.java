@@ -123,4 +123,10 @@ public class RealBufferedSource implements BufferedSource {
         buffer.write(source, 8);
         return buffer.readLong();
     }
+
+    @Override
+    public long readLongLe() throws IOException {
+        buffer.write(source, 8);
+        return buffer.readLongLe();
+    }
 }
