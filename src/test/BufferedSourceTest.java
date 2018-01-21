@@ -107,6 +107,18 @@ public class BufferedSourceTest {
         assertEquals(0xabcdef01, source.readInt());
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void readLong() throws Exception {
+        sink.write(new byte[] {
+                (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x10, (byte) 0x87, (byte) 0x65, (byte) 0x43,
+                (byte) 0x21, (byte) 0x36, (byte) 0x47, (byte) 0x58, (byte) 0x69, (byte) 0x12, (byte) 0x23,
+                (byte) 0x34, (byte) 0x45
+        });
+        assertEquals(0xabcdef1087654321L, source.readLong());
+        assertEquals(0x3647586912233445L, source.readLong());
+        assertTrue(source.exhausted());
+    }
 }
 
 

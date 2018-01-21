@@ -134,6 +134,18 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public long readLong() throws IOException {
+        if(buffer.size() < 8){
+            return -1;
+        }
+        long result = 0;
+        for(int i = 0; i < 8; i++){
+            result |= (buffer.remove(0) & 0xffL) << (8 * (7 - i));
+        }
+        return result;
+    }
+
+    @Override
     public String readUtf8() throws IOException {
         String result = buffer.toString();
         buffer.clear();

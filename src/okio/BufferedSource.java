@@ -23,4 +23,6 @@ public interface BufferedSource extends Source {
     int readInt() throws IOException;
 
     int readIntLe() throws IOException;
+
+    long readLong() throws IOException;
 }
