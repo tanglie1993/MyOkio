@@ -40,4 +40,6 @@ public interface BufferedSource extends Source {
     int read(byte[] sink) throws IOException;
 
     byte[] readByteArray();
+
+    int read(byte[] sink, int offset, int byteCount);
 }

@@ -162,4 +162,9 @@ public class RealBufferedSource implements BufferedSource {
     public byte[] readByteArray() {
         return buffer.readByteArray();
     }
+
+    @Override
+    public int read(byte[] sink, int offset, int byteCount) {
+        return buffer.read(sink, offset, byteCount);
+    }
 }

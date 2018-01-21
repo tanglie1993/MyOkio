@@ -259,6 +259,17 @@ public class BufferedSourceTest {
         byte[] expected = { 'a', 'b', 'c', 'd', 0 };
         assertByteArraysEquals(expected, sink);
     }
+
+    @Test
+    public void readIntoByteArrayOffsetAndCount() throws IOException {
+        sink.writeUtf8("abcd");
+
+        byte[] sink = new byte[7];
+        int read = source.read(sink, 2, 3);
+        assertEquals(3, read);
+        byte[] expected = { 0, 0, 'a', 'b', 'c', 0, 0 };
+        assertByteArraysEquals(expected, sink);
+    }
 }
 
 
