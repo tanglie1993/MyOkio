@@ -132,4 +132,13 @@ public final class OkioTest {
             assertEquals("sink == null", expected.getMessage());
         }
     }
+
+    @Test public void bufferSourceThrowsOnNull() {
+        try {
+            Okio.buffer((Source) null);
+            fail();
+        } catch (NullPointerException expected) {
+            assertEquals("source == null", expected.getMessage());
+        }
+    }
 }

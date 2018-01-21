@@ -59,7 +59,7 @@ public class Okio {
 
     public static BufferedSource buffer(Source source) {
         if(source == null){
-            throw new NullPointerException("source cannot be null!");
+            throw new NullPointerException("source == null");
         }
         return new RealBufferedSource(source);
     }
