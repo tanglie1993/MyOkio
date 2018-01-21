@@ -13,9 +13,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static test.TestUtil.SEGMENT_SIZE;
-import static test.TestUtil.assertByteArraysEquals;
-import static test.TestUtil.repeat;
+import static test.TestUtil.*;
 
 /**
  * Created by pc on 2018/1/21.
@@ -269,6 +267,13 @@ public class BufferedSourceTest {
         assertEquals(3, read);
         byte[] expected = { 0, 0, 'a', 'b', 'c', 0, 0 };
         assertByteArraysEquals(expected, sink);
+    }
+
+    @Test
+    public void readByteArray() throws IOException {
+        String string = "abcd" + repeat('e', SEGMENT_SIZE);
+        sink.writeUtf8(string);
+        assertByteArraysEquals(string.getBytes(UTF_8), source.readByteArray());
     }
 }
 
