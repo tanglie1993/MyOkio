@@ -337,6 +337,19 @@ public class BufferedSourceTest {
         sink.writeUtf8(repeat('a', SEGMENT_SIZE * 2));
         assertEquals(repeat('a', SEGMENT_SIZE * 2), source.readUtf8());
     }
+
+    @Test
+    public void skip() throws Exception {
+        sink.writeUtf8("a");
+        sink.writeUtf8(repeat('b', SEGMENT_SIZE));
+        sink.writeUtf8("c");
+        source.skip(1);
+        assertEquals('b', source.readByte() & 0xff);
+        source.skip(SEGMENT_SIZE - 2);
+        assertEquals('b', source.readByte() & 0xff);
+        source.skip(1);
+        assertTrue(source.exhausted());
+    }
 }
 
 
