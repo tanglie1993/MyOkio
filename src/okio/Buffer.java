@@ -1,5 +1,6 @@
 package okio;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,6 +171,14 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         }
         sink.write(this, buffer.size());
         return result;
+    }
+
+    @Override
+    public void readFully(Buffer sink, int length) throws IOException {
+        if(size() < length){
+            throw new EOFException();
+        }
+        read(sink, length);
     }
 
     @Override

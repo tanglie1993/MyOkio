@@ -124,7 +124,8 @@ public final class OkioTest {
         }
     }
 
-    @Test public void bufferSinkThrowsOnNull() {
+    @Test
+    public void bufferSinkThrowsOnNull() {
         try {
             Okio.buffer((Sink) null);
             fail();
@@ -133,7 +134,8 @@ public final class OkioTest {
         }
     }
 
-    @Test public void bufferSourceThrowsOnNull() {
+    @Test
+    public void bufferSourceThrowsOnNull() {
         try {
             Okio.buffer((Source) null);
             fail();

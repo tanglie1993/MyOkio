@@ -1,5 +1,6 @@
 package okio;
 
+import java.io.EOFException;
 import java.io.IOException;
 
 /**
@@ -31,4 +32,6 @@ public interface BufferedSource extends Source {
     Buffer buffer();
 
     int readAll(Sink sink) throws IOException;
+
+    void readFully(Buffer sink, int length) throws IOException;
 }

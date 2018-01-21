@@ -141,4 +141,9 @@ public class RealBufferedSource implements BufferedSource {
         sink.write(buffer, buffer.size());
         return result;
     }
+
+    @Override
+    public void readFully(Buffer sink, int length) throws IOException {
+        buffer.readFully(sink, length);
+    }
 }

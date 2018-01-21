@@ -183,6 +183,15 @@ public class BufferedSourceTest {
         assertEquals(10, sink.size());
         assertTrue(source.exhausted());
     }
+
+    @Test
+    public void readFully() throws Exception {
+        sink.writeUtf8(repeat('a', 10000));
+        Buffer sink = new Buffer();
+        source.readFully(sink, 9999);
+        assertEquals(repeat('a', 9999), sink.readUtf8());
+        assertEquals("a", source.readUtf8());
+    }
 }
 
 
