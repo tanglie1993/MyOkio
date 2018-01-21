@@ -331,6 +331,12 @@ public class BufferedSourceTest {
         sink.writeUtf8(repeat('a', SEGMENT_SIZE + 20));
         assertEquals(repeat('a', SEGMENT_SIZE + 10), source.readUtf8(SEGMENT_SIZE + 10));
     }
+
+    @Test
+    public void readUtf8EntireBuffer() throws Exception {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE * 2));
+        assertEquals(repeat('a', SEGMENT_SIZE * 2), source.readUtf8());
+    }
 }
 
 
