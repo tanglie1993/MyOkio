@@ -451,6 +451,23 @@ public class BufferedSourceTest {
             bytes[p] = a;
         }
     }
+
+    @Test
+    public void indexOfByteInvalidBoundsThrows() throws IOException {
+        sink.writeUtf8("abc");
+
+        try {
+            source.indexOf((byte) 'a', -1);
+            fail("Expected failure: fromIndex < 0");
+        } catch (IllegalArgumentException expected) {
+        }
+
+        try {
+            source.indexOf((byte) 'a', 10, 0);
+            fail("Expected failure: fromIndex > toIndex");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
 }
 
 

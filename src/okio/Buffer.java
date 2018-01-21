@@ -276,6 +276,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int indexOf(byte a, int fromIndex) {
+        if(fromIndex < 0){
+            throw new IllegalArgumentException("fromIndex < 0");
+        }
         for(int i = fromIndex; i < buffer.size(); i++){
             if(buffer.get(i) == a){
                 return i;
@@ -287,6 +290,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int indexOf(byte b, int fromIndex, int toIndex) {
+        if(fromIndex < 0){
+            throw new IllegalArgumentException("fromIndex < 0");
+        }
+        if(fromIndex > toIndex){
+            throw new IllegalArgumentException("Expected failure: fromIndex > toIndex");
+        }
         for(int i = fromIndex; i < buffer.size() && i < toIndex; i++){
             if(buffer.get(i) == b){
                 return i;
