@@ -3,10 +3,7 @@ package okio;
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by pc on 2018/1/20.
@@ -324,6 +321,28 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
                         continue outer;
                     }
                 }
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int indexOfElement(ByteString byteString){
+        return indexOfElement(byteString, 0);
+    }
+
+    @Override
+    public int indexOfElement(ByteString byteString, int fromIndex) {
+        if(byteString == null || byteString.getData().length == 0){
+            throw new IllegalArgumentException("bytes is empty");
+        }
+        Set<Byte> set = new HashSet<>();
+        for (byte b : byteString.getData()){
+            set.add(b);
+        }
+        for(int i = fromIndex; i < buffer.size(); i++){
+            if(set.contains(buffer.get(i))){
                 return i;
             }
         }

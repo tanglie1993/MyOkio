@@ -536,6 +536,42 @@ public class BufferedSourceTest {
             assertEquals("fromIndex < 0", e.getMessage());
         }
     }
+
+    @Test 
+    public void indexOfByteStringAcrossSegmentBoundaries() throws IOException {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE * 2 - 3));
+        sink.writeUtf8("bcdefg");
+        assertEquals(SEGMENT_SIZE * 2 - 4, source.indexOf(ByteString.encodeUtf8("ab")));
+        assertEquals(SEGMENT_SIZE * 2 - 4, source.indexOf(ByteString.encodeUtf8("abc")));
+        assertEquals(SEGMENT_SIZE * 2 - 4, source.indexOf(ByteString.encodeUtf8("abcd")));
+        assertEquals(SEGMENT_SIZE * 2 - 4, source.indexOf(ByteString.encodeUtf8("abcde")));
+        assertEquals(SEGMENT_SIZE * 2 - 4, source.indexOf(ByteString.encodeUtf8("abcdef")));
+        assertEquals(SEGMENT_SIZE * 2 - 4, source.indexOf(ByteString.encodeUtf8("abcdefg")));
+        assertEquals(SEGMENT_SIZE * 2 - 3, source.indexOf(ByteString.encodeUtf8("bcdefg")));
+        assertEquals(SEGMENT_SIZE * 2 - 2, source.indexOf(ByteString.encodeUtf8("cdefg")));
+        assertEquals(SEGMENT_SIZE * 2 - 1, source.indexOf(ByteString.encodeUtf8("defg")));
+        assertEquals(SEGMENT_SIZE * 2,     source.indexOf(ByteString.encodeUtf8("efg")));
+        assertEquals(SEGMENT_SIZE * 2 + 1, source.indexOf(ByteString.encodeUtf8("fg")));
+        assertEquals(SEGMENT_SIZE * 2 + 2, source.indexOf(ByteString.encodeUtf8("g")));
+    }
+
+    @Test 
+    public void indexOfElement() throws IOException {
+        sink.writeUtf8("a").writeUtf8(repeat('b', SEGMENT_SIZE)).writeUtf8("c");
+        assertEquals(0, source.indexOfElement(ByteString.encodeUtf8("DEFGaHIJK")));
+        assertEquals(1, source.indexOfElement(ByteString.encodeUtf8("DEFGHIJKb")));
+        assertEquals(SEGMENT_SIZE + 1, source.indexOfElement(ByteString.encodeUtf8("cDEFGHIJK")));
+        assertEquals(1, source.indexOfElement(ByteString.encodeUtf8("DEFbGHIc")));
+        assertEquals(-1L, source.indexOfElement(ByteString.encodeUtf8("DEFGHIJK")));
+        assertEquals(-1L, source.indexOfElement(ByteString.encodeUtf8("")));
+    }
+
+    @Test
+    public void indexOfElementWithOffset() throws IOException {
+        sink.writeUtf8("a").writeUtf8(repeat('b', SEGMENT_SIZE)).writeUtf8("c");
+        assertEquals(-1, source.indexOfElement(ByteString.encodeUtf8("DEFGaHIJK"), 1));
+        assertEquals(15, source.indexOfElement(ByteString.encodeUtf8("DEFGHIJKb"), 15));
+    }
 }
 
 
