@@ -13,4 +13,6 @@ public interface BufferedSource extends Source {
     byte readByte() throws IOException;
 
     boolean exhausted();
+
+    short readShort() throws IOException;
 }

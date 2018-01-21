@@ -43,6 +43,15 @@ public class BufferedSourceTest {
         assertEquals(0xcd, source.readByte() & 0xff);
         assertTrue(source.exhausted());
     }
+
+    @Test public void readShort() throws Exception {
+        sink.write(new byte[] {
+                (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x01
+        });
+        assertEquals((short) 0xabcd, source.readShort());
+        assertEquals((short) 0xef01, source.readShort());
+        assertTrue(source.exhausted());
+    }
 }
 
 

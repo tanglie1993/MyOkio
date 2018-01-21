@@ -87,4 +87,10 @@ public class RealBufferedSource implements BufferedSource {
     public boolean exhausted() {
         return buffer.size() == 0;
     }
+
+    @Override
+    public short readShort() throws IOException {
+        buffer.write(source, 1);
+        return buffer.readShort();
+    }
 }
