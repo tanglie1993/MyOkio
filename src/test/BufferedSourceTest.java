@@ -275,6 +275,13 @@ public class BufferedSourceTest {
         sink.writeUtf8(string);
         assertByteArraysEquals(string.getBytes(UTF_8), source.readByteArray());
     }
+
+    @Test
+    public void readByteArrayPartial() throws IOException {
+        sink.writeUtf8("abcd");
+        assertEquals("[97, 98, 99]", Arrays.toString(source.readByteArray(3)));
+        assertEquals("d", source.readUtf8(1));
+    }
 }
 
 

@@ -221,6 +221,15 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return count;
     }
 
+    @Override
+    public byte[] readByteArray(int count) {
+        byte[] result = new byte[count];
+        for(int i = 0; i < count && buffer.size() > 0; i++){
+            result[i] = buffer.remove(0);
+        }
+        return result;
+    }
+
     private List<Byte> toList(byte[] sink, int offset, int byteCount) {
         return null;
     }
