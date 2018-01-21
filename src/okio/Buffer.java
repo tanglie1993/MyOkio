@@ -66,6 +66,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     private void remove(int start, int length) {
+//        buffer.removeAll(buffer.subList(start, start + length));
         for(int i = 0; i < length; i++){
             buffer.remove(start);
         }
@@ -240,7 +241,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public ByteString readByteString(int count) {
-        count = Math.max(buffer.size(), count);
+        count = Math.min(buffer.size(), count);
         List<Byte> toRemove = buffer.subList(0, count);
         byte[] result = toArray(toRemove);
         buffer.removeAll(toRemove);
