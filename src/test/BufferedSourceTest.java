@@ -312,6 +312,13 @@ public class BufferedSourceTest {
                         + "000002cc000000720000006100000070000000740000025900000072"));
         assertEquals("vəˈläsəˌraptər", source.readString(Charset.forName("utf-32")));
     }
+
+    @Test
+    public void readUtf8SpansSegments() throws Exception {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE * 2));
+        source.skip(SEGMENT_SIZE - 1);
+        assertEquals("aa", source.readUtf8(2));
+    }
 }
 
 
