@@ -361,6 +361,46 @@ public class BufferedSourceTest {
         } catch (EOFException ignored) {
         }
     }
+
+    @Test
+    public void indexOf() throws Exception {
+        // The segment is empty.
+        assertEquals(-1, source.indexOf((byte) 'a'));
+
+        // The segment has one value.
+        sink.writeUtf8("a"); // a
+        assertEquals(0, source.indexOf((byte) 'a'));
+        assertEquals(-1, source.indexOf((byte) 'b'));
+
+        // The segment has lots of data.
+        sink.writeUtf8(repeat('b', SEGMENT_SIZE - 2)); // ab...b
+        assertEquals(0, source.indexOf((byte) 'a'));
+        assertEquals(1, source.indexOf((byte) 'b'));
+        assertEquals(-1, source.indexOf((byte) 'c'));
+
+        // The segment doesn't start at 0, it starts at 2.
+        source.skip(2); // b...b
+        assertEquals(-1, source.indexOf((byte) 'a'));
+        assertEquals(0, source.indexOf((byte) 'b'));
+        assertEquals(-1, source.indexOf((byte) 'c'));
+
+        // The segment is full.
+        sink.writeUtf8("c"); // b...bc
+        assertEquals(-1, source.indexOf((byte) 'a'));
+        assertEquals(0, source.indexOf((byte) 'b'));
+        assertEquals(SEGMENT_SIZE - 3, source.indexOf((byte) 'c'));
+
+        // The segment doesn't start at 2, it starts at 4.
+        source.skip(2); // b...bc
+        assertEquals(-1, source.indexOf((byte) 'a'));
+        assertEquals(0, source.indexOf((byte) 'b'));
+        assertEquals(SEGMENT_SIZE - 5, source.indexOf((byte) 'c'));
+
+        // Two segments.
+        sink.writeUtf8("d"); // b...bcd, d is in the 2nd segment.
+        assertEquals(SEGMENT_SIZE - 4, source.indexOf((byte) 'd'));
+        assertEquals(-1, source.indexOf((byte) 'e'));
+    }
 }
 
 

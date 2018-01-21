@@ -262,6 +262,18 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return new ByteString(readByteArray()).toString(charset);
     }
 
+    @Override
+    public int indexOf(byte a) {
+        int i = 0;
+        for(byte b : buffer){
+            if(b == a){
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
     private List<Byte> toList(byte[] sink) {
         if(sink == null){
             return new ArrayList<>();

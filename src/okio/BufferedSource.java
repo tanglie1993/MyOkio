@@ -53,4 +53,6 @@ public interface BufferedSource extends Source {
     String readString(int count, Charset charset);
 
     String readString(Charset charset);
+
+    int indexOf(byte a);
 }
