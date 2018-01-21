@@ -195,7 +195,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int read(byte[] sink) {
-        int result = buffer.size();
+        int result = Math.min(buffer.size(), sink.length);
         for(int i = 0; i < result; i++){
             sink[i] = buffer.get(0);
             buffer.remove(0);
