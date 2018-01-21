@@ -93,4 +93,10 @@ public class RealBufferedSource implements BufferedSource {
         buffer.write(source, 1);
         return buffer.readShort();
     }
+
+    @Override
+    public short readShortLe() throws IOException {
+        buffer.write(source, 1);
+        return buffer.readShortLe();
+    }
 }

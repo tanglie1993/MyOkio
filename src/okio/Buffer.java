@@ -101,6 +101,16 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public short readShortLe() throws IOException {
+        if(buffer.size() < 2){
+            return -1;
+        }
+        byte first = buffer.remove(0);
+        byte second = buffer.remove(0);
+        return (short) ((second & 0xff) << 8 |  (first & 0xff));
+    }
+
+    @Override
     public String readUtf8() throws IOException {
         String result = buffer.toString();
         buffer.clear();
