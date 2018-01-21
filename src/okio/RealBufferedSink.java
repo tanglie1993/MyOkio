@@ -55,8 +55,8 @@ public class RealBufferedSink implements BufferedSink {
     }
 
     @Override
-    public void writeUtf8(String s) throws IOException {
-        buffer.writeUtf8(s);
+    public Buffer writeUtf8(String s) throws IOException {
+        return buffer.writeUtf8(s);
     }
 
     @Override

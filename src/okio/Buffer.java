@@ -14,10 +14,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     private List<Byte> buffer = new ArrayList<>();
 
-    public void writeUtf8(String a) {
+    @Override
+    public Buffer writeUtf8(String a) {
         for(byte b : a.getBytes()){
             buffer.add(b);
         }
+        return this;
     }
 
     public int write(Source source, int length) throws IOException {
@@ -183,6 +185,43 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public void readFully(byte[] sink) throws EOFException {
+        if(size() < sink.length){
+            read(sink);
+            throw new EOFException();
+        }
+        read(sink);
+    }
+
+    @Override
+    public int read(byte[] sink) {
+        int result = buffer.size();
+        for(int i = 0; i < result; i++){
+            sink[i] = buffer.get(0);
+            buffer.remove(0);
+        }
+        return result;
+    }
+
+    @Override
+    public byte[] readByteArray() {
+        byte[] result = toArray(buffer);
+        buffer.clear();
+        return result;
+    }
+
+    private List<Byte> toList(byte[] sink) {
+        if(sink == null){
+            return new ArrayList<>();
+        }
+        List<Byte> result = new ArrayList<>();
+        for(byte b : sink){
+            result.add(b);
+        }
+        return result;
+    }
+
+    @Override
     public String readUtf8() throws IOException {
         String result = new String(toArray(buffer));
         buffer.clear();
@@ -217,10 +256,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         if(string == null){
             return result;
         }
-        for(byte b : string.getBytes()){
-            result.add(b);
-        }
-        return result;
+        return toList(string.getBytes());
     }
 
     @Override

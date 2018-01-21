@@ -1,6 +1,7 @@
 package okio;
 
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -145,5 +146,20 @@ public class RealBufferedSource implements BufferedSource {
     @Override
     public void readFully(Buffer sink, int length) throws IOException {
         buffer.readFully(sink, length);
+    }
+
+    @Override
+    public void readFully(byte[] sink) throws EOFException {
+        buffer.readFully(sink);
+    }
+
+    @Override
+    public int read(byte[] sink) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public byte[] readByteArray() {
+        return buffer.readByteArray();
     }
 }

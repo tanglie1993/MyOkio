@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.TestUtil.SEGMENT_SIZE;
+import static test.TestUtil.assertByteArraysEquals;
 import static test.TestUtil.repeat;
 
 /**
@@ -207,6 +208,19 @@ public class BufferedSourceTest {
 
         // Verify we read all that we could from the source.
         assertEquals("Hi", sink.readUtf8());
+    }
+
+    @Test
+    public void readFullyByteArray() throws IOException {
+        Buffer data = new Buffer();
+        data.writeUtf8("Hello").writeUtf8(repeat('e', SEGMENT_SIZE));
+
+        byte[] expected = data.clone().readByteArray();
+        sink.write(data, data.size());
+
+        byte[] sink = new byte[SEGMENT_SIZE + 5];
+        source.readFully(sink);
+        assertByteArraysEquals(expected, sink);
     }
 }
 
