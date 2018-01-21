@@ -176,6 +176,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public void readFully(Buffer sink, int length) throws IOException {
         if(size() < length){
+            read(sink, length);
             throw new EOFException();
         }
         read(sink, length);

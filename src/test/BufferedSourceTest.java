@@ -5,12 +5,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.Parameterized;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static test.TestUtil.SEGMENT_SIZE;
 import static test.TestUtil.repeat;
 
@@ -191,6 +193,20 @@ public class BufferedSourceTest {
         source.readFully(sink, 9999);
         assertEquals(repeat('a', 9999), sink.readUtf8());
         assertEquals("a", source.readUtf8());
+    }
+
+    @Test
+    public void readFullyTooShortThrows() throws IOException {
+        sink.writeUtf8("Hi");
+        Buffer sink = new Buffer();
+        try {
+            source.readFully(sink, 5);
+            fail();
+        } catch (EOFException ignored) {
+        }
+
+        // Verify we read all that we could from the source.
+        assertEquals("Hi", sink.readUtf8());
     }
 }
 
