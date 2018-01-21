@@ -46,7 +46,8 @@ public class BufferedSourceTest {
         assertTrue(source.exhausted());
     }
 
-    @Test public void readShort() throws Exception {
+    @Test
+    public void readShort() throws Exception {
         sink.write(new byte[] {
                 (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x01
         });
@@ -55,7 +56,8 @@ public class BufferedSourceTest {
         assertTrue(source.exhausted());
     }
 
-    @Test public void readShortLe() throws Exception {
+    @Test
+    public void readShortLe() throws Exception {
         sink.write(new byte[] {
                 (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x10
         });
@@ -64,7 +66,8 @@ public class BufferedSourceTest {
         assertTrue(source.exhausted());
     }
 
-    @Test public void readShortSplitAcrossMultipleSegments() throws Exception {
+    @Test
+    public void readShortSplitAcrossMultipleSegments() throws Exception {
         sink.writeUtf8(repeat('a', SEGMENT_SIZE - 1));
         sink.write(new byte[] { (byte) 0xab, (byte) 0xcd });
         source.skip(SEGMENT_SIZE - 1);
@@ -72,13 +75,25 @@ public class BufferedSourceTest {
         assertTrue(source.exhausted());
     }
 
-    @Test public void readInt() throws Exception {
+    @Test
+    public void readInt() throws Exception {
         sink.write(new byte[] {
                 (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x01, (byte) 0x87, (byte) 0x65, (byte) 0x43,
                 (byte) 0x21
         });
         assertEquals(0xabcdef01, source.readInt());
         assertEquals(0x87654321, source.readInt());
+        assertTrue(source.exhausted());
+    }
+
+    @Test
+    public void readIntLe() throws Exception {
+        sink.write(new byte[] {
+                (byte) 0xab, (byte) 0xcd, (byte) 0xef, (byte) 0x10, (byte) 0x87, (byte) 0x65, (byte) 0x43,
+                (byte) 0x21
+        });
+        assertEquals(0x10efcdab, source.readIntLe());
+        assertEquals(0x21436587, source.readIntLe());
         assertTrue(source.exhausted());
     }
 }

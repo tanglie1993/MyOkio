@@ -21,4 +21,6 @@ public interface BufferedSource extends Source {
     void skip(int count) throws IOException;
 
     int readInt() throws IOException;
+
+    int readIntLe() throws IOException;
 }

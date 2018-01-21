@@ -111,4 +111,10 @@ public class RealBufferedSource implements BufferedSource {
         buffer.write(source, 4);
         return buffer.readInt();
     }
+
+    @Override
+    public int readIntLe() throws IOException {
+        buffer.write(source, 4);
+        return buffer.readIntLe();
+    }
 }
