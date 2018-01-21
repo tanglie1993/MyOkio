@@ -19,7 +19,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         }
     }
 
-    public boolean write(Source source, int length) throws IOException {
+    public int write(Source source, int length) throws IOException {
         return source.read(this, length);
     }
 
@@ -27,7 +27,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public void writeAll(Source source) throws IOException {
         if (source == null) throw new IllegalArgumentException("source == null");
         while(true){
-            if(!source.read(this, 20)){
+            if(source.read(this, 20) <= 0){
                 break;
             }
         }
@@ -180,13 +180,16 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public boolean read(Buffer data, int length) throws IOException {
+    public int read(Buffer data, int length) throws IOException {
         if(length > buffer.size()){
             length = buffer.size();
         }
+        if(length == 0){
+            return -1;
+        }
         data.writeUtf8(new String(toArray(buffer.subList(0, length))));
         remove(0, length);
-        return buffer.size() > 0;
+        return length;
     }
 
     @Override

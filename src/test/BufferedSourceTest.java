@@ -162,6 +162,15 @@ public class BufferedSourceTest {
         assertTrue(source.exhausted());
         mockSink.assertLog();
     }
+
+    @Test
+    public void readExhaustedSource() throws Exception {
+        Buffer sink = new Buffer();
+        sink.writeUtf8(repeat('a', 10));
+        assertEquals(-1, source.read(sink, 10));
+        assertEquals(10, sink.size());
+        assertTrue(source.exhausted());
+    }
 }
 
 

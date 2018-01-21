@@ -21,10 +21,10 @@ public class RealBufferedSource implements BufferedSource {
         buffer = new Buffer();
         source = new Source() {
             @Override
-            public boolean read(Buffer data, int length) throws IOException {
+            public int read(Buffer data, int length) throws IOException {
                 int size = length;
                 if(inputStream.available() < 0){
-                    return false;
+                    return -1;
                 }
                 if(length > inputStream.available()){
                     size = inputStream.available();
@@ -36,7 +36,7 @@ public class RealBufferedSource implements BufferedSource {
                     length = string.length();
                 }
                 data.writeUtf8(string.substring(0, length));
-                return buffer.size() > 0;
+                return buffer.size();
             }
 
             @Override
@@ -48,11 +48,11 @@ public class RealBufferedSource implements BufferedSource {
 
 
     @Override
-    public boolean read(Buffer data, int length) throws IOException {
+    public int read(Buffer data, int length) throws IOException {
         if (length < 0) {
             throw new IllegalArgumentException("byteCount < 0: " + length);
         }
-        boolean result = buffer.write(source, length);
+        int result = buffer.write(source, length);
         buffer.read(data, length);
         return result;
     }

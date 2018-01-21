@@ -15,7 +15,7 @@ public class ForwardingSource implements Source {
     }
 
     @Override
-    public boolean read(Buffer sink, int length) throws IOException {
+    public int read(Buffer sink, int length) throws IOException {
         return source.read(sink, length);
     }
 
