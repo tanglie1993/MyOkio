@@ -222,6 +222,21 @@ public class BufferedSourceTest {
         source.readFully(sink);
         assertByteArraysEquals(expected, sink);
     }
+
+    @Test
+    public void readFullyByteArrayTooShortThrows() throws IOException {
+        sink.writeUtf8("Hello");
+
+        byte[] sink = new byte[6];
+        try {
+            source.readFully(sink);
+            fail();
+        } catch (EOFException ignored) {
+        }
+
+        // Verify we read all that we could from the source.
+        assertByteArraysEquals(new byte[] { 'H', 'e', 'l', 'l', 'o', 0 }, sink);
+    }
 }
 
 
