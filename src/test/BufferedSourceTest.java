@@ -500,6 +500,13 @@ public class BufferedSourceTest {
         assertEquals(SEGMENT_SIZE + 1, source.indexOf(ByteString.encodeUtf8("d"),    SEGMENT_SIZE - 2));
         assertEquals(SEGMENT_SIZE + 1, source.indexOf(ByteString.encodeUtf8("d"),    SEGMENT_SIZE + 1));
     }
+
+    @Test
+    public void indexOfDoesNotWrapAround() throws IOException {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE - 1));
+        sink.writeUtf8("bcd");
+        assertEquals(-1, source.indexOf(ByteString.encodeUtf8("abcda"), SEGMENT_SIZE - 3));
+    }
 }
 
 
