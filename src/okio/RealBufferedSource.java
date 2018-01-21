@@ -208,4 +208,9 @@ public class RealBufferedSource implements BufferedSource {
     public int indexOf(byte b, int fromIndex, int toIndex) {
         return buffer.indexOf(b, fromIndex, toIndex);
     }
+
+    @Override
+    public int indexOf(ByteString byteString) {
+        return buffer.indexOf(byteString);
+    }
 }

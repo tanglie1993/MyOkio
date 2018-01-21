@@ -304,6 +304,24 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return -1;
     }
 
+    @Override
+    public int indexOf(ByteString byteString) {
+        if(byteString == null || byteString.getData().length == 0){
+            return -1;
+        }
+        outer: for(int i = 0; i <= buffer.size() - byteString.getData().length; i++){
+            if(buffer.get(i) == byteString.getData()[0]){
+                for(int j = i + 1; j < i + byteString.getData().length; j++){
+                    if(buffer.get(j) != byteString.getData()[j - i]){
+                        continue outer;
+                    }
+                }
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private List<Byte> toList(byte[] sink) {
         if(sink == null){
             return new ArrayList<>();

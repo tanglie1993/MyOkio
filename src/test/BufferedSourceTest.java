@@ -468,6 +468,19 @@ public class BufferedSourceTest {
         } catch (IllegalArgumentException expected) {
         }
     }
+
+    @Test
+    public void indexOfByteString() throws IOException {
+        assertEquals(-1, source.indexOf(ByteString.encodeUtf8("flop")));
+
+        sink.writeUtf8("flip flop");
+        assertEquals(5, source.indexOf(ByteString.encodeUtf8("flop")));
+        source.readUtf8(); // Clear stream.
+
+        // Make sure we backtrack and resume searching after partial match.
+        sink.writeUtf8("hi hi hi hey");
+        assertEquals(3, source.indexOf(ByteString.encodeUtf8("hi hi hey")));
+    }
 }
 
 
