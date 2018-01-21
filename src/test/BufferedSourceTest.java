@@ -408,6 +408,49 @@ public class BufferedSourceTest {
         assertEquals(-1, source.indexOf((byte) 'a', 1));
         assertEquals(15, source.indexOf((byte) 'b', 15));
     }
+
+
+    @Test
+    public void indexOfByteWithBothOffsets() throws IOException {
+        byte a = (byte) 'a';
+        byte c = (byte) 'c';
+
+        int size = SEGMENT_SIZE * 5;
+        byte[] bytes = new byte[size];
+        Arrays.fill(bytes, a);
+
+        // These are tricky places where the buffer
+        // starts, ends, or segments come together.
+        int[] points = {
+                0,                       1,                   2,
+                SEGMENT_SIZE - 1,        SEGMENT_SIZE,        SEGMENT_SIZE + 1,
+                size / 2 - 1,            size / 2,            size / 2 + 1,
+                size - SEGMENT_SIZE - 1, size - SEGMENT_SIZE, size - SEGMENT_SIZE + 1,
+                size - 3,                size - 2,            size - 1
+        };
+
+        // In each iteration, we write c to the known point and then search for it using different
+        // windows. Some of the windows don't overlap with c's position, and therefore a match shouldn't
+        // be found.
+        for (int p : points) {
+            bytes[p] = c;
+            sink.write(bytes);
+
+            assertEquals( p, source.indexOf(c, 0,      size     ));
+            assertEquals( p, source.indexOf(c, 0,      p + 1    ));
+            assertEquals( p, source.indexOf(c, p,      size     ));
+            assertEquals( p, source.indexOf(c, p,      p + 1    ));
+            assertEquals( p, source.indexOf(c, p / 2,  p * 2 + 1));
+            assertEquals(-1, source.indexOf(c, 0,      p / 2    ));
+            assertEquals(-1, source.indexOf(c, 0,      p        ));
+            assertEquals(-1, source.indexOf(c, 0,      0        ));
+            assertEquals(-1, source.indexOf(c, p,      p        ));
+
+            // Reset.
+            source.readUtf8();
+            bytes[p] = a;
+        }
+    }
 }
 
 

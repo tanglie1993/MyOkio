@@ -276,11 +276,21 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int indexOf(byte a, int fromIndex) {
-        for(int i = fromIndex; fromIndex < buffer.size(); i++){
+        for(int i = fromIndex; i < buffer.size(); i++){
             if(buffer.get(i) == a){
-                return i - fromIndex;
+                return i;
             }
             i++;
+        }
+        return -1;
+    }
+
+    @Override
+    public int indexOf(byte b, int fromIndex, int toIndex) {
+        for(int i = fromIndex; i < buffer.size() && i < toIndex; i++){
+            if(buffer.get(i) == b){
+                return i;
+            }
         }
         return -1;
     }
