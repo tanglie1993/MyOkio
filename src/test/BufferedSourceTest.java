@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -287,6 +288,21 @@ public class BufferedSourceTest {
     public void readByteString() throws IOException {
         sink.writeUtf8("abcd").writeUtf8(repeat('e', SEGMENT_SIZE));
         assertEquals("abcd" + repeat('e',SEGMENT_SIZE), source.readByteString().utf8());
+    }
+
+    @Test
+    public void readByteStringPartial() throws IOException {
+        sink.writeUtf8("abcd").writeUtf8(repeat('e', SEGMENT_SIZE));
+        assertEquals("abc", source.readByteString(3).utf8());
+        assertEquals("d", source.readUtf8(1));
+    }
+
+    @Test
+    public void readSpecificCharsetPartial() throws Exception {
+        sink.write(
+                ByteString.decodeHex("0000007600000259000002c80000006c000000e40000007300000259"
+                        + "000002cc000000720000006100000070000000740000025900000072"));
+        assertEquals("vəˈläsə", source.readString(7 * 4, Charset.forName("utf-32")));
     }
 }
 

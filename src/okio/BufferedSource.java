@@ -2,6 +2,7 @@ package okio;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Created by pc on 2018/1/18.
@@ -46,4 +47,8 @@ public interface BufferedSource extends Source {
     byte[] readByteArray(int count);
 
     ByteString readByteString();
+
+    ByteString readByteString(int count);
+
+    String readString(int count, Charset charset);
 }

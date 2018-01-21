@@ -4,6 +4,7 @@ package okio;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 /**
  * Created by pc on 2018/1/20.
@@ -176,5 +177,15 @@ public class RealBufferedSource implements BufferedSource {
     @Override
     public ByteString readByteString() {
         return new ByteString(readByteArray());
+    }
+
+    @Override
+    public ByteString readByteString(int count) {
+        return new ByteString(readByteArray(count));
+    }
+
+    @Override
+    public String readString(int count, Charset charset) {
+        return new ByteString(readByteArray(count)).toString(charset);
     }
 }

@@ -2,6 +2,7 @@ package okio;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -237,8 +238,18 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return result;
     }
 
-    private List<Byte> toList(byte[] sink, int offset, int byteCount) {
-        return null;
+    @Override
+    public ByteString readByteString(int count) {
+        count = Math.max(buffer.size(), count);
+        List<Byte> toRemove = buffer.subList(0, count);
+        byte[] result = toArray(toRemove);
+        buffer.removeAll(toRemove);
+        return new ByteString(result);
+    }
+
+    @Override
+    public String readString(int count, Charset charset) {
+        return new ByteString(readByteArray(count)).toString(charset);
     }
 
     private List<Byte> toList(byte[] sink) {
