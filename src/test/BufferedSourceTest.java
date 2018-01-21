@@ -507,6 +507,19 @@ public class BufferedSourceTest {
         sink.writeUtf8("bcd");
         assertEquals(-1, source.indexOf(ByteString.encodeUtf8("abcda"), SEGMENT_SIZE - 3));
     }
+
+    @Test
+    public void indexOfByteStringWithOffset() throws IOException {
+        assertEquals(-1, source.indexOf(ByteString.encodeUtf8("flop"), 1));
+
+        sink.writeUtf8("flop flip flop");
+        assertEquals(10, source.indexOf(ByteString.encodeUtf8("flop"), 1));
+        source.readUtf8(); // Clear stream
+
+        // Make sure we backtrack and resume searching after partial match.
+        sink.writeUtf8("hi hi hi hi hey");
+        assertEquals(6, source.indexOf(ByteString.encodeUtf8("hi hi hey"), 1));
+    }
 }
 
 
