@@ -11,6 +11,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static test.TestUtil.SEGMENT_SIZE;
+import static test.TestUtil.repeat;
 
 /**
  * Created by pc on 2018/1/21.
@@ -59,6 +61,14 @@ public class BufferedSourceTest {
         });
         assertEquals((short) 0xcdab, source.readShortLe());
         assertEquals((short) 0x10ef, source.readShortLe());
+        assertTrue(source.exhausted());
+    }
+
+    @Test public void readShortSplitAcrossMultipleSegments() throws Exception {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE - 1));
+        sink.write(new byte[] { (byte) 0xab, (byte) 0xcd });
+        source.skip(SEGMENT_SIZE - 1);
+        assertEquals((short) 0xabcd, source.readShort());
         assertTrue(source.exhausted());
     }
 }

@@ -17,4 +17,6 @@ public interface BufferedSource extends Source {
     short readShort() throws IOException;
 
     short readShortLe() throws IOException;
+
+    void skip(int count) throws IOException;
 }

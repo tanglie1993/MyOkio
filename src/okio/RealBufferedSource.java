@@ -99,4 +99,10 @@ public class RealBufferedSource implements BufferedSource {
         buffer.write(source, 1);
         return buffer.readShortLe();
     }
+
+    @Override
+    public void skip(int count) throws IOException {
+        buffer.write(source, count);
+        buffer.pop(count);
+    }
 }

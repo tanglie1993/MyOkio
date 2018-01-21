@@ -111,6 +111,11 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public void skip(int count) throws IOException {
+        remove(0, count);
+    }
+
+    @Override
     public String readUtf8() throws IOException {
         String result = buffer.toString();
         buffer.clear();
