@@ -123,4 +123,13 @@ public final class OkioTest {
         } catch (IllegalArgumentException expected) {
         }
     }
+
+    @Test public void bufferSinkThrowsOnNull() {
+        try {
+            Okio.buffer((Sink) null);
+            fail();
+        } catch (NullPointerException expected) {
+            assertEquals("sink == null", expected.getMessage());
+        }
+    }
 }
