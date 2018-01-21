@@ -304,6 +304,14 @@ public class BufferedSourceTest {
                         + "000002cc000000720000006100000070000000740000025900000072"));
         assertEquals("vəˈläsə", source.readString(7 * 4, Charset.forName("utf-32")));
     }
+
+    @Test
+    public void readSpecificCharset() throws Exception {
+        sink.write(
+                ByteString.decodeHex("0000007600000259000002c80000006c000000e40000007300000259"
+                        + "000002cc000000720000006100000070000000740000025900000072"));
+        assertEquals("vəˈläsəˌraptər", source.readString(Charset.forName("utf-32")));
+    }
 }
 
 

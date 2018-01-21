@@ -188,4 +188,9 @@ public class RealBufferedSource implements BufferedSource {
     public String readString(int count, Charset charset) {
         return new ByteString(readByteArray(count)).toString(charset);
     }
+
+    @Override
+    public String readString(Charset charset) {
+        return new ByteString(readByteArray()).toString(charset);
+    }
 }
