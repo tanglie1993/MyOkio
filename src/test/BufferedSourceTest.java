@@ -611,6 +611,39 @@ public class BufferedSourceTest {
         assertEquals(3, read);
         assertByteArrayEquals("zabcz", bytes);
     }
+
+    @Test
+    public void inputStreamSkip() throws Exception {
+        sink.writeUtf8("abcde");
+        InputStream in = source.inputStream();
+        assertEquals(4, in.skip(4));
+        assertEquals('e', in.read());
+
+        sink.writeUtf8("abcde");
+        assertEquals(5, in.skip(10)); // Try to skip too much.
+        assertEquals(0, in.skip(1)); // Try to skip when exhausted.
+    }
+
+    @Test
+    public void inputStreamCharByChar() throws Exception {
+        sink.writeUtf8("abc");
+        InputStream in = source.inputStream();
+        assertEquals('a', in.read());
+        assertEquals('b', in.read());
+        assertEquals('c', in.read());
+        assertEquals(-1, in.read());
+    }
+
+    @Test
+    public void inputStreamBounds() throws IOException {
+        sink.writeUtf8(repeat('a', 100));
+        InputStream in = source.inputStream();
+        try {
+            in.read(new byte[100], 50, 51);
+            fail();
+        } catch (IndexOutOfBoundsException expected) {
+        }
+    }
 }
 
 

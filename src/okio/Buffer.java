@@ -1,10 +1,15 @@
 package okio;
 
+import org.junit.Test;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Created by pc on 2018/1/20.
