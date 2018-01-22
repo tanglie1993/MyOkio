@@ -74,4 +74,6 @@ public interface BufferedSource extends Source {
     void require(int count) throws EOFException;
 
     InputStream inputStream();
+
+    long readHexadecimalUnsignedLong();
 }

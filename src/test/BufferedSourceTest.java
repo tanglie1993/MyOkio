@@ -644,6 +644,49 @@ public class BufferedSourceTest {
         } catch (IndexOutOfBoundsException expected) {
         }
     }
+
+    @Test
+    public void hexStringWithManyLeadingZeros() throws IOException {
+        assertLongHexString("00000000000000001", 0x1);
+        assertLongHexString("0000000000000000ffffffffffffffff", 0xffffffffffffffffL);
+        assertLongHexString("00000000000000007fffffffffffffff", 0x7fffffffffffffffL);
+        assertLongHexString(TestUtil.repeat('0', SEGMENT_SIZE + 1) + "1", 0x1);
+    }
+
+    private void assertLongHexString(String s, long expected) throws IOException {
+        sink.writeUtf8(s);
+        long actual = source.readHexadecimalUnsignedLong();
+        assertEquals(s + " --> " + expected, expected, actual);
+    }
+
+    @Test
+    public void longHexStringAcrossSegment() throws IOException {
+        sink.writeUtf8(repeat('a', SEGMENT_SIZE - 8)).writeUtf8("FFFFFFFFFFFFFFFF");
+        source.skip(SEGMENT_SIZE - 8);
+        assertEquals(-1, source.readHexadecimalUnsignedLong());
+    }
+
+    @Test
+    public void longHexStringTooLongThrows() throws IOException {
+        try {
+            sink.writeUtf8("fffffffffffffffff");
+            source.readHexadecimalUnsignedLong();
+            fail();
+        } catch (NumberFormatException e) {
+            assertEquals("Number too large", e.getMessage());
+        }
+    }
+
+    @Test
+    public void longHexStringTooShortThrows() throws IOException {
+        try {
+            sink.writeUtf8(" ");
+            source.readHexadecimalUnsignedLong();
+            fail();
+        } catch (NumberFormatException e) {
+            assertEquals("Expected leading [0-9a-fA-F] character but was 0x20", e.getMessage());
+        }
+    }
 }
 
 

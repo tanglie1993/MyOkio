@@ -377,6 +377,34 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         };
     }
 
+    @Override
+    public long readHexadecimalUnsignedLong() {
+        long result = 0;
+
+        while(buffer.size() > 0){
+            if ((result & 0xf000000000000000L) != 0) {
+                throw new NumberFormatException("Number too large");
+            }
+            int digit=0;
+            byte b = buffer.remove(0);
+            if (b >= '0' && b <= '9') {
+                digit = b - '0';
+            } else if (b >= 'a' && b <= 'f') {
+                digit = b - 'a' + 10;
+            } else if (b >= 'A' && b <= 'F') {
+                digit = b - 'A' + 10; // We never write uppercase, but we support reading it.
+            } else {
+                throw new NumberFormatException(
+                        "Expected leading [0-9a-fA-F] character but was 0x" + Integer.toHexString(b));
+            }
+
+            result <<= 4;
+            result |= digit;
+        }
+
+        return result;
+    }
+
     private List<Byte> toList(byte[] sink) {
         if(sink == null){
             return new ArrayList<>();

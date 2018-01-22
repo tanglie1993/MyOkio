@@ -248,4 +248,9 @@ public class RealBufferedSource implements BufferedSource {
             }
         };
     }
+
+    @Override
+    public long readHexadecimalUnsignedLong() {
+        return buffer.readHexadecimalUnsignedLong();
+    }
 }
