@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -587,6 +588,28 @@ public class BufferedSourceTest {
             fail();
         } catch (EOFException expected) {
         }
+    }
+
+    @Test
+    public void inputStream() throws Exception {
+        sink.writeUtf8("abc");
+        InputStream in = source.inputStream();
+        byte[] bytes = { 'z', 'z', 'z' };
+        int read = in.read(bytes);
+        assertEquals(3, read);
+        assertByteArrayEquals("abc", bytes);
+
+        assertEquals(-1, in.read());
+    }
+
+    @Test
+    public void inputStreamOffsetCount() throws Exception {
+        sink.writeUtf8("abcde");
+        InputStream in = source.inputStream();
+        byte[] bytes = { 'z', 'z', 'z', 'z', 'z' };
+        int read = in.read(bytes, 1, 3);
+        assertEquals(3, read);
+        assertByteArrayEquals("zabcz", bytes);
     }
 }
 

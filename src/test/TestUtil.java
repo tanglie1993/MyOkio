@@ -22,4 +22,8 @@ public class TestUtil {
     static void assertByteArraysEquals(byte[] a, byte[] b) {
         assertEquals(Arrays.toString(a), Arrays.toString(b));
     }
+
+    static void assertByteArrayEquals(String expectedUtf8, byte[] b) {
+        assertEquals(expectedUtf8, new String(b, UTF_8));
+    }
 }

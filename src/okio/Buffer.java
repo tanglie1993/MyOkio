@@ -2,6 +2,7 @@ package okio;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -359,6 +360,16 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         if(buffer.size() < count){
             throw new EOFException();
         }
+    }
+
+    @Override
+    public InputStream inputStream() {
+        return new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return readByte();
+            }
+        };
     }
 
     private List<Byte> toList(byte[] sink) {

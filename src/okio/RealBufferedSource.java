@@ -238,4 +238,14 @@ public class RealBufferedSource implements BufferedSource {
     public void require(int count) {
         buffer.request(count);
     }
+
+    @Override
+    public InputStream inputStream() {
+        return new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return buffer.readInt();
+            }
+        };
+    }
 }

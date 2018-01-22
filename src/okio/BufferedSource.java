@@ -2,6 +2,7 @@ package okio;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 
 /**
@@ -71,4 +72,6 @@ public interface BufferedSource extends Source {
     boolean request(int count);
 
     void require(int count) throws EOFException;
+
+    InputStream inputStream();
 }
