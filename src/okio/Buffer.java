@@ -336,7 +336,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public int indexOfElement(ByteString byteString, int fromIndex) {
         if(byteString == null || byteString.getData().length == 0){
-            throw new IllegalArgumentException("bytes is empty");
+            return -1;
         }
         Set<Byte> set = new HashSet<>();
         for (byte b : byteString.getData()){
