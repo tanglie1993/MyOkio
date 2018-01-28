@@ -31,20 +31,19 @@ public class SegmentList implements Cloneable {
         return new SegmentList(newSegmentList);
     }
 
-    private void add(LinkedList<Segment> newSegmentList, Segment toAdd) {
+    private void add(LinkedList<Segment> segmentList, Segment toAdd) {
         if(segmentList.size() > 0){
             toAdd.prev = segmentList.getLast();
             segmentList.getLast().next = toAdd;
         }
-        newSegmentList.add(toAdd);
+        segmentList.add(toAdd);
     }
 
     void write(byte[] bytes) {
         int nextWrite = 0;
         while(nextWrite < bytes.length){
             Segment toWrite;
-            Segment lastSegment = segmentList.getLast();
-            if(segmentList.size() == 0 || lastSegment.front >= lastSegment.rear || lastSegment.rear >= Segment.SIZE){
+            if(segmentList.size() == 0 || segmentList.getLast().front >= segmentList.getLast().rear || segmentList.getLast().rear >= Segment.SIZE){
                 toWrite = new Segment();
                 add(segmentList, toWrite);
             }else{
@@ -83,7 +82,7 @@ public class SegmentList implements Cloneable {
     byte read() {
         while(true){
             if(segmentList.size() == 0){
-                return -1;
+                throw new IllegalStateException("size == 0");
             }
             Segment first = segmentList.getFirst();
             if(first.rear <= first.front){
@@ -125,30 +124,26 @@ public class SegmentList implements Cloneable {
             }
             Segment first = segmentList.getFirst();
             int canRemove = first.rear - first.front;
-            if(canRemove >= sink.length){
+            if(canRemove >= sink.length - removed){
                 System.arraycopy(first.data, first.front, sink, removed, sink.length - removed);
                 first.front += sink.length - removed;
                 return sink.length;
+            }else{
+                System.arraycopy(first.data, first.front, sink, removed, canRemove);
+                removed += canRemove;
+                remove();
             }
-            remove();
-            removed += canRemove;
         }
         return sink.length;
     }
 
     public int read(byte[] sink, final int offset, final int byteCount) {
-        if(offset + byteCount >= sink.length){
+        if(offset + byteCount > sink.length){
             throw new ArrayIndexOutOfBoundsException();
         }
         int sinkWriteIndex = offset;
         while(true){
-            if(sinkWriteIndex >= sink.length){
-                return sinkWriteIndex - offset;
-            }
-            if(sinkWriteIndex - offset >= byteCount){
-                return byteCount;
-            }
-            if(segmentList.size() == 0){
+            if(sinkWriteIndex >= sink.length || sinkWriteIndex - offset >= byteCount || segmentList.size() == 0){
                 return sinkWriteIndex - offset;
             }
             Segment first = segmentList.getFirst();
@@ -165,6 +160,9 @@ public class SegmentList implements Cloneable {
     }
 
     private void remove() {
+        if(segmentList.size() == 0){
+            return;
+        }
         segmentList.removeFirst();
         if(segmentList.size() > 0){
             segmentList.getFirst().prev = null;
@@ -213,12 +211,12 @@ public class SegmentList implements Cloneable {
 
     private boolean match(Segment segment, final int startIndex, ByteString byteString, final int byteStringStartIndex) {
         for (int i = startIndex; i < segment.rear && byteString.getData().length > i - startIndex + byteStringStartIndex; i++) {
-            if( byteString.getData().length == i - startIndex + byteStringStartIndex){
-                return true;
-            }
             if (segment.data[i] != byteString.getData()[i - startIndex + byteStringStartIndex]) {
                 return false;
             }
+        }
+        if(byteString.getData().length == byteStringStartIndex + segment.rear - startIndex){
+            return true;
         }
         if(segment.next == null){
             return false;
