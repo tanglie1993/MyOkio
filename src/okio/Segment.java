@@ -5,12 +5,15 @@ package okio;
  */
 public class Segment {
 
+
+
     public static final int SIZE = 8192;
 
     final byte[] data;
 
-    /** The next byte of application data byte to read in this segment. */
-    int pos;
+    int front = 0;
+
+    int rear;
 
     Segment prev;
 
@@ -20,20 +23,8 @@ public class Segment {
         this.data = new byte[SIZE];
     }
 
-    public Segment pop() {
-        Segment result = next != this ? next : null;
-        prev.next = next;
-        next.prev = prev;
-        next = null;
-        prev = null;
-        return result;
-    }
-
-    public Segment push(Segment segment) {
-        segment.prev = this;
-        segment.next = next;
-        next.prev = segment;
-        next = segment;
-        return segment;
+    public Segment(Segment segment) {
+        this();
+        System.arraycopy(segment.data, 0, this.data, 0, segment.front);
     }
 }

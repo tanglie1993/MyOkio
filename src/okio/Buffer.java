@@ -16,14 +16,18 @@ import static org.junit.Assert.fail;
  */
 public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
-    private List<Byte> buffer = new ArrayList<>();
+    SegmentList segmentList = new SegmentList();
+
+    public Buffer(SegmentList segmentList) {
+        this.segmentList = new SegmentList(segmentList);
+    }
 
     @Override
     public Buffer writeUtf8(String a) {
-        for(byte b : a.getBytes()){
-            buffer.add(b);
-        }
+        write(a.getBytes());
         return this;
+
+
     }
 
     public int write(Source source, int length) throws IOException {
@@ -34,7 +38,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public void writeAll(Source source) throws IOException {
         if (source == null) throw new IllegalArgumentException("source == null");
         while(true){
-            if(source.read(this, 20) <= 0){
+            if(source.read(this, 1) <= 0){
                 break;
             }
         }
@@ -42,9 +46,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public void write(byte[] bytes) {
-        for(byte b : bytes){
-            buffer.add(b);
-        }
+        segmentList.write(bytes);
     }
 
     @Override
@@ -54,26 +56,17 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public String readUtf8(int length) {
-        if(length > buffer.size()){
-            length = buffer.size();
-        }
-        String result = new String(toArray(buffer.subList(0, length)));
-        remove(0, length);
-        return result;
+        return new String(readByteArray(length));
     }
 
     @Override public Buffer clone() {
-        Buffer result = new Buffer();
-        result.buffer = new ArrayList<>(buffer);
-        return result;
+        return new Buffer(this.segmentList.clone());
     }
 
-    private void remove(int start, int length) {
-//        buffer.removeAll(buffer.subList(start, start + length));
-        for(int i = 0; i < length && start < buffer.size(); i++){
-            buffer.remove(start);
-        }
+    private void remove(int length) {
+        segmentList.remove(length);
     }
+
 
     private byte[] toArray(List<Byte> bytes) {
         byte[] result = new byte[bytes.size()];
@@ -121,10 +114,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public void skip(int count) throws IOException {
         if(buffer.size() < count){
-            remove(0, count);
+            remove(count);
             throw new EOFException();
         }
-        remove(0, count);
+        remove(count);
     }
 
     @Override
@@ -432,7 +425,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             return -1;
         }
         data.writeUtf8(new String(toArray(buffer.subList(0, length))));
-        remove(0, length);
+        remove(length);
         return length;
     }
 
@@ -468,7 +461,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             length = buffer.size();
         }
         String result = new String(toArray(buffer.subList(0, length)));
-        remove(0, length);
+        remove(length);
         return result;
     }
 }
