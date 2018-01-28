@@ -180,11 +180,14 @@ public class SegmentList implements Cloneable {
             return -1;
         }
         int currentSearchIndex = 0;
-        for (Segment segment : segmentList) {
+        outer: for (Segment segment : segmentList) {
             for (int i = segment.front; i < segment.rear; i++) {
                 if(segment.rear - segment.front + currentSearchIndex < fromIndex){
                     currentSearchIndex += segment.rear - segment.front;
-                    continue;
+                    continue outer;
+                }
+                if(currentSearchIndex >= toIndex){
+                    return -1;
                 }
                 if (segment.data[i] == target && currentSearchIndex >= fromIndex) {
                     return currentSearchIndex;
