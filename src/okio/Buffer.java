@@ -254,7 +254,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int indexOf(byte target, int fromIndex, int toIndex) {
-        return segmentList.indexOf(target, 0, segmentList.available());
+        return segmentList.indexOf(target, fromIndex, toIndex);
     }
 
     @Override

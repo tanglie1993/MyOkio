@@ -82,7 +82,7 @@ public class SegmentList implements Cloneable {
     byte read() {
         while(true){
             if(segmentList.size() == 0){
-                throw new IllegalStateException("size == 0");
+                return -1;
             }
             Segment first = segmentList.getFirst();
             if(first.rear <= first.front){
@@ -148,7 +148,7 @@ public class SegmentList implements Cloneable {
             }
             Segment first = segmentList.getFirst();
             if(first.rear - first.front >= byteCount - sinkWriteIndex){
-                System.arraycopy(first.data, first.front, sink, sinkWriteIndex, byteCount - sinkWriteIndex);
+                System.arraycopy(first.data, first.front, sink, sinkWriteIndex, byteCount - (sinkWriteIndex - offset));
                 first.front += byteCount - sinkWriteIndex;
                 return byteCount;
             }else{
