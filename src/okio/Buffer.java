@@ -22,6 +22,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         this.segmentList = new SegmentList(segmentList);
     }
 
+    public Buffer() {
+
+    }
+
     @Override
     public Buffer writeUtf8(String a) {
         write(a.getBytes());
@@ -80,40 +84,37 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public byte readByte() {
-        if(buffer.size() == 0){
-            return -1;
-        }
-        return buffer.remove(0);
+        return segmentList.read();
     }
 
     @Override
     public boolean exhausted() {
-        return buffer.size() == 0;
+        return segmentList.available() == 0;
     }
 
     @Override
     public short readShort() throws IOException {
-        if(buffer.size() < 2){
-            return -1;
+        if(!segmentList.has(2)){
+            throw new IllegalStateException("size < 2");
         }
-        byte first = buffer.remove(0);
-        byte second = buffer.remove(0);
+        byte first = segmentList.read();
+        byte second = segmentList.read();
         return (short) ((first & 0xff) << 8 |  (second & 0xff));
     }
 
     @Override
     public short readShortLe() throws IOException {
-        if(buffer.size() < 2){
-            return -1;
+        if(!segmentList.has(2)){
+            throw new IllegalStateException("size < 2");
         }
-        byte first = buffer.remove(0);
-        byte second = buffer.remove(0);
+        byte first = segmentList.read();
+        byte second = segmentList.read();
         return (short) ((second & 0xff) << 8 |  (first & 0xff));
     }
 
     @Override
     public void skip(int count) throws IOException {
-        if(buffer.size() < count){
+        if(!segmentList.has(count)){
             remove(count);
             throw new EOFException();
         }
@@ -122,42 +123,42 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int readInt() throws IOException {
-        if(buffer.size() < 4){
-            return -1;
+        if(!segmentList.has(4)){
+            throw new IllegalStateException("size < 4");
         }
-        return ((buffer.remove(0) & 0xff) << 24 |  (buffer.remove(0) & 0xff) << 16
-                |  (buffer.remove(0) & 0xff) << 8 |  (buffer.remove(0) & 0xff));
+        return ((segmentList.read() & 0xff) << 24 |  (segmentList.read() & 0xff) << 16
+                |  (segmentList.read() & 0xff) << 8 |  (segmentList.read() & 0xff));
     }
 
     @Override
     public int readIntLe() throws IOException {
-        if(buffer.size() < 4){
+        if(!segmentList.has(4)){
             return -1;
         }
-        return ((buffer.remove(0) & 0xff) |  (buffer.remove(0) & 0xff) << 8
-                |  (buffer.remove(0) & 0xff) << 16 |  (buffer.remove(0) & 0xff) << 24 );
+        return ((segmentList.read() & 0xff) |  (segmentList.read() & 0xff) << 8
+                |  (segmentList.read() & 0xff) << 16 |  (segmentList.read() & 0xff) << 24 );
     }
 
     @Override
     public long readLong() throws IOException {
-        if(buffer.size() < 8){
+        if(!segmentList.has(8)){
             return -1;
         }
         long result = 0;
         for(int i = 0; i < 8; i++){
-            result |= (buffer.remove(0) & 0xffL) << (8 * (7 - i));
+            result |= (segmentList.read() & 0xffL) << (8 * (7 - i));
         }
         return result;
     }
 
     @Override
     public long readLongLe() throws IOException {
-        if(buffer.size() < 8){
+        if(!segmentList.has(8)){
             return -1;
         }
         long result = 0;
         for(int i = 0; i < 8; i++){
-            result |= (buffer.remove(0) & 0xffL) << (8 * i);
+            result |= (segmentList.read() & 0xffL) << (8 * i);
         }
         return result;
     }
@@ -169,12 +170,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int readAll(Sink sink) throws IOException {
-        int result = buffer.size();
-        if(result == 0){
+        int available = segmentList.available();
+        if(available == 0){
             return 0;
         }
-        sink.write(this, buffer.size());
-        return result;
+        sink.write(this, available);
+        return available;
     }
 
     @Override
@@ -197,55 +198,38 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int read(byte[] sink) {
-        int result = Math.min(buffer.size(), sink.length);
-        for(int i = 0; i < result; i++){
-            sink[i] = buffer.get(0);
-            buffer.remove(0);
-        }
+        int result = Math.min(segmentList.available(), sink.length);
+        segmentList.read(sink);
         return result;
     }
 
     @Override
     public byte[] readByteArray() {
-        byte[] result = toArray(buffer);
-        buffer.clear();
-        return result;
+        byte[] bytes = new byte[segmentList.available()];
+        segmentList.read(bytes);
+        return bytes;
     }
 
     @Override
     public int read(byte[] sink, int offset, int byteCount) {
-        int count = 0;
-        for(int i = offset; i < offset + byteCount && i < sink.length && buffer.size() > 0; i++){
-            count++;
-            sink[i] = buffer.get(0);
-            buffer.remove(0);
-        }
-        return count;
+        return segmentList.read(sink, offset, byteCount);
     }
 
     @Override
     public byte[] readByteArray(int count) {
-        byte[] result = new byte[count];
-        for(int i = 0; i < count && buffer.size() > 0; i++){
-            result[i] = buffer.remove(0);
-        }
-        return result;
+        byte[] bytes = new byte[count];
+        segmentList.read(bytes);
+        return bytes;
     }
 
     @Override
     public ByteString readByteString() {
-        ByteString result = new ByteString(toArray(buffer));
-        buffer.clear();
-        return result;
+        return new ByteString(readByteArray());
     }
 
     @Override
     public ByteString readByteString(int count) {
-        count = Math.min(buffer.size(), count);
-        List<Byte> toRemove = buffer.subList(0, count);
-        byte[] result = toArray(toRemove);
-        buffer.removeAll(toRemove);
-        return new ByteString(result);
+        return new ByteString(readByteArray(count));
     }
 
     @Override
@@ -259,45 +243,18 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public int indexOf(byte a) {
-        int i = 0;
-        for(byte b : buffer){
-            if(b == a){
-                return i;
-            }
-            i++;
-        }
-        return -1;
+    public int indexOf(byte target) {
+        return segmentList.indexOf(target, 0, segmentList.available());
     }
 
     @Override
-    public int indexOf(byte a, int fromIndex) {
-        if(fromIndex < 0){
-            throw new IllegalArgumentException("fromIndex < 0");
-        }
-        for(int i = fromIndex; i < buffer.size(); i++){
-            if(buffer.get(i) == a){
-                return i;
-            }
-            i++;
-        }
-        return -1;
+    public int indexOf(byte target, int fromIndex) {
+        return segmentList.indexOf(target, fromIndex, segmentList.available());
     }
 
     @Override
-    public int indexOf(byte b, int fromIndex, int toIndex) {
-        if(fromIndex < 0){
-            throw new IllegalArgumentException("fromIndex < 0");
-        }
-        if(fromIndex > toIndex){
-            throw new IllegalArgumentException("Expected failure: fromIndex > toIndex");
-        }
-        for(int i = fromIndex; i < buffer.size() && i < toIndex; i++){
-            if(buffer.get(i) == b){
-                return i;
-            }
-        }
-        return -1;
+    public int indexOf(byte target, int fromIndex, int toIndex) {
+        return segmentList.indexOf(target, 0, segmentList.available());
     }
 
     @Override
@@ -307,23 +264,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int indexOf(ByteString byteString, int fromIndex) {
-        if(byteString == null || byteString.getData().length == 0){
-            throw new IllegalArgumentException("bytes is empty");
-        }
-        if(fromIndex < 0){
-            throw new IllegalArgumentException("fromIndex < 0");
-        }
-        outer: for(int i = fromIndex; i <= buffer.size() - byteString.getData().length; i++){
-            if(buffer.get(i) == byteString.getData()[0]){
-                for(int j = i + 1; j < i + byteString.getData().length; j++){
-                    if(buffer.get(j) != byteString.getData()[j - i]){
-                        continue outer;
-                    }
-                }
-                return i;
-            }
-        }
-        return -1;
+        return segmentList.indexOf(byteString, fromIndex);
     }
 
     @Override
@@ -333,29 +274,17 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public int indexOfElement(ByteString byteString, int fromIndex) {
-        if(byteString == null || byteString.getData().length == 0){
-            return -1;
-        }
-        Set<Byte> set = new HashSet<>();
-        for (byte b : byteString.getData()){
-            set.add(b);
-        }
-        for(int i = fromIndex; i < buffer.size(); i++){
-            if(set.contains(buffer.get(i))){
-                return i;
-            }
-        }
-        return -1;
+        return segmentList.indexOfElement(byteString, fromIndex);
     }
 
     @Override
     public boolean request(int count) {
-        return buffer.size() >= count;
+        return segmentList.available() >= count;
     }
 
     @Override
     public void require(int count) throws EOFException {
-        if(buffer.size() < count){
+        if(!segmentList.has(count)){
             throw new EOFException();
         }
     }
@@ -374,12 +303,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public long readHexadecimalUnsignedLong() {
         long result = 0;
 
-        while(buffer.size() > 0){
+        while(segmentList.has(1)){
             if ((result & 0xf000000000000000L) != 0) {
                 throw new NumberFormatException("Number too large");
             }
             int digit=0;
-            byte b = buffer.remove(0);
+            byte b = segmentList.read();
             if (b >= '0' && b <= '9') {
                 digit = b - '0';
             } else if (b >= 'a' && b <= 'f') {
@@ -411,21 +340,23 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public String readUtf8() throws IOException {
-        String result = new String(toArray(buffer));
-        buffer.clear();
-        return result;
+        byte[] bytes = new byte[segmentList.available()];
+        segmentList.read(bytes);
+        return new String(bytes);
     }
 
     @Override
     public int read(Buffer data, int length) throws IOException {
-        if(length > buffer.size()){
-            length = buffer.size();
+        int available = segmentList.available();
+        if(length > available){
+            length = available;
         }
         if(length == 0){
             return -1;
         }
-        data.writeUtf8(new String(toArray(buffer.subList(0, length))));
-        remove(length);
+        byte[] bytes = new byte[length];
+        segmentList.read(bytes);
+        data.writeUtf8(new String(bytes));
         return length;
     }
 
@@ -435,8 +366,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void write(Buffer data, int i) {
-        buffer.addAll(toList(data.pop(i)));
+    public void write(Buffer data, int length) {
+        byte[] bytes = new byte[Math.min(data.size(), length)];
+        data.read(bytes);
+        write(bytes);
     }
 
     private List<Byte> toList(String string) {
@@ -453,14 +386,17 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     public int size() {
-        return buffer.size();
+        return segmentList.available();
     }
 
     public String pop(int length) {
-        if(length > buffer.size()){
-            length = buffer.size();
+        int available = segmentList.available();
+        if(length > segmentList.available()){
+            length = available;
         }
-        String result = new String(toArray(buffer.subList(0, length)));
+        byte[] bytes = new byte[length];
+        segmentList.read(bytes);
+        String result = new String(bytes);
         remove(length);
         return result;
     }
