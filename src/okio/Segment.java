@@ -25,6 +25,8 @@ public class Segment {
 
     public Segment(Segment segment) {
         this();
-        System.arraycopy(segment.data, 0, this.data, 0, segment.front);
+        System.arraycopy(segment.data, 0, this.data, 0, Segment.SIZE);
+        this.front = segment.front;
+        this.rear = segment.rear;
     }
 }

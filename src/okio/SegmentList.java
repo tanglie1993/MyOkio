@@ -176,10 +176,17 @@ public class SegmentList implements Cloneable {
         if(fromIndex > toIndex){
             throw new IllegalArgumentException("Expected failure: fromIndex > toIndex");
         }
+        if(fromIndex == toIndex){
+            return -1;
+        }
         int currentSearchIndex = 0;
         for (Segment segment : segmentList) {
             for (int i = segment.front; i < segment.rear; i++) {
-                if (segment.data[i] == target) {
+                if(segment.rear - segment.front + currentSearchIndex < fromIndex){
+                    currentSearchIndex += segment.rear - segment.front;
+                    continue;
+                }
+                if (segment.data[i] == target && currentSearchIndex >= fromIndex) {
                     return currentSearchIndex;
                 }
                 currentSearchIndex++;
@@ -197,8 +204,12 @@ public class SegmentList implements Cloneable {
         }
         int currentSearchIndex = 0;
         for (Segment segment : segmentList) {
+            if(segment.rear - segment.front + currentSearchIndex < fromIndex){
+                currentSearchIndex += segment.rear - segment.front;
+                continue;
+            }
             for (int i = segment.front; i < segment.rear; i++) {
-                if (segment.data[i] == byteString.getData()[0]) {
+                if (segment.data[i] == byteString.getData()[0] && currentSearchIndex >= fromIndex) {
                     if (match(segment, i, byteString, 0)) {
                         return currentSearchIndex;
                     }
@@ -210,10 +221,16 @@ public class SegmentList implements Cloneable {
     }
 
     private boolean match(Segment segment, final int startIndex, ByteString byteString, final int byteStringStartIndex) {
+        int matchedCount = 0;
         for (int i = startIndex; i < segment.rear && byteString.getData().length > i - startIndex + byteStringStartIndex; i++) {
             if (segment.data[i] != byteString.getData()[i - startIndex + byteStringStartIndex]) {
                 return false;
+            }else{
+                matchedCount++;
             }
+        }
+        if(matchedCount + byteStringStartIndex == byteString.getData().length){
+            return true;
         }
         if(byteString.getData().length == byteStringStartIndex + segment.rear - startIndex){
             return true;
@@ -221,7 +238,7 @@ public class SegmentList implements Cloneable {
         if(segment.next == null){
             return false;
         }
-        return match(segment.next, segment.next.front, byteString, byteStringStartIndex + segment.rear - startIndex);
+        return match(segment.next, segment.next.front, byteString, byteStringStartIndex + matchedCount);
     }
 
     public int indexOfElement(ByteString byteString, int fromIndex) {
