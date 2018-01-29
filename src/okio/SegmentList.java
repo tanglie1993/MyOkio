@@ -2,8 +2,6 @@ package okio;
 
 import java.util.*;
 
-import static okio.Segment.SIZE;
-
 /**
  * Created by pc on 2018/1/28.
  */

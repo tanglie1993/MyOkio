@@ -685,6 +685,16 @@ public class BufferedSourceTest {
             assertEquals("Expected leading [0-9a-fA-F] character but was 0x20", e.getMessage());
         }
     }
+
+    @Test
+    public void longHexEmptySourceThrows() throws IOException {
+        try {
+            sink.writeUtf8("");
+            source.readHexadecimalUnsignedLong();
+            fail();
+        } catch (IllegalStateException | EOFException expected) {
+        }
+    }
 }
 
 

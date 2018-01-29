@@ -300,9 +300,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public long readHexadecimalUnsignedLong() {
+    public long readHexadecimalUnsignedLong() throws EOFException {
         long result = 0;
-
+        require(1);
         while(segmentList.has(1)){
             if ((result & 0xf000000000000000L) != 0) {
                 throw new NumberFormatException("Number too large");

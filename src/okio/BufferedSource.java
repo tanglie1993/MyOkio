@@ -75,5 +75,5 @@ public interface BufferedSource extends Source {
 
     InputStream inputStream();
 
-    long readHexadecimalUnsignedLong();
+    long readHexadecimalUnsignedLong() throws EOFException;
 }

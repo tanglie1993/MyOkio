@@ -250,7 +250,7 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public long readHexadecimalUnsignedLong() {
+    public long readHexadecimalUnsignedLong() throws EOFException {
         return buffer.readHexadecimalUnsignedLong();
     }
 }
