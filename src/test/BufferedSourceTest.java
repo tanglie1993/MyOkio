@@ -778,6 +778,29 @@ public class BufferedSourceTest {
         } catch (IllegalStateException | EOFException expected) {
         }
     }
+
+//    @Test
+//    public void codePoints() throws IOException {
+//        sink.write(ByteString.decodeHex("7f"));
+//        assertEquals(0x7f, source.readUtf8CodePoint());
+//
+//        sink.write(ByteString.decodeHex("dfbf"));
+//        assertEquals(0x07ff, source.readUtf8CodePoint());
+//
+//        sink.write(ByteString.decodeHex("efbfbf"));
+//        assertEquals(0xffff, source.readUtf8CodePoint());
+//
+//        sink.write(ByteString.decodeHex("f48fbfbf"));
+//        assertEquals(0x10ffff, source.readUtf8CodePoint());
+//    }
+
+    @Test
+    public void decimalStringWithManyLeadingZeros() throws IOException {
+        assertLongDecimalString("00000000000000001", 1);
+        assertLongDecimalString("00000000000000009223372036854775807", 9223372036854775807L);
+        assertLongDecimalString("-00000000000000009223372036854775808", -9223372036854775808L);
+        assertLongDecimalString(TestUtil.repeat('0', Segment.SIZE + 1) + "1", 1);
+    }
 }
 
 

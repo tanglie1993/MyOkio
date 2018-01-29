@@ -337,8 +337,8 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         long underflowZone = Long.MIN_VALUE / 10;
         long underflowDigit = (Long.MIN_VALUE % 10) + 1;
 
-        long overflowZone = Long.MIN_VALUE / 10;
-        long overflowDigit = (Long.MIN_VALUE % 10) + 1;
+        long overflowZone = Long.MAX_VALUE / 10;
+        long overflowDigit = (Long.MAX_VALUE % 10) - 1;
 
         while(segmentList.has(1)){
             int digit = 0;
