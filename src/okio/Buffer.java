@@ -334,6 +334,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         long sign = 1;
         boolean isFirst = true;
 
+        long underflowZone = Long.MIN_VALUE / 10;
+        long underflowDigit = (Long.MIN_VALUE % 10) + 1;
+
         long overflowZone = Long.MIN_VALUE / 10;
         long overflowDigit = (Long.MIN_VALUE % 10) + 1;
 
@@ -344,7 +347,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
                 sign = -1;
             } else if (b >= '0' && b <= '9') {
                 digit = b - '0';
-                if (result < overflowZone || result == overflowZone && digit < overflowDigit) {
+                if (result < underflowZone || result == underflowZone && digit < underflowDigit) {
+                    throw new NumberFormatException("Number too small");
+                }
+                if (result > overflowZone || result == overflowZone && digit > overflowDigit) {
                     throw new NumberFormatException("Number too large");
                 }
             } else {

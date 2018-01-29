@@ -715,6 +715,26 @@ public class BufferedSourceTest {
         assertEquals(s + " --> " + expected, expected, actual);
         assertEquals("zzz", source.readUtf8());
     }
+
+    @Test
+    public void longDecimalStringAcrossSegment() throws IOException {
+        sink.writeUtf8(repeat('a', Segment.SIZE - 8)).writeUtf8("1234567890123456");
+        sink.writeUtf8("zzz");
+        source.skip(Segment.SIZE - 8);
+        assertEquals(1234567890123456L, source.readDecimalLong());
+        assertEquals("zzz", source.readUtf8());
+    }
+
+    @Test
+    public void longDecimalStringTooLongThrows() throws IOException {
+        try {
+            sink.writeUtf8("12345678901234567890"); // Too many digits.
+            source.readDecimalLong();
+            fail();
+        } catch (NumberFormatException e) {
+            assertEquals("Number too large", e.getMessage());
+        }
+    }
 }
 
 
