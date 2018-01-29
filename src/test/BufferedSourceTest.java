@@ -735,6 +735,49 @@ public class BufferedSourceTest {
             assertEquals("Number too large", e.getMessage());
         }
     }
+
+    @Test
+    public void longDecimalStringTooHighThrows() throws IOException {
+        try {
+            sink.writeUtf8("9223372036854775808"); // Right size but cannot fit.
+            source.readDecimalLong();
+            fail();
+        } catch (NumberFormatException e) {
+            assertEquals("Number too large", e.getMessage());
+        }
+    }
+
+    @Test
+    public void longDecimalStringTooLowThrows() throws IOException {
+        try {
+            sink.writeUtf8("-9223372036854775809"); // Right size but cannot fit.
+            source.readDecimalLong();
+            fail();
+        } catch (NumberFormatException e) {
+            assertEquals("Number too large", e.getMessage());
+        }
+    }
+
+    @Test
+    public void longDecimalStringTooShortThrows() throws IOException {
+        try {
+            sink.writeUtf8(" ");
+            source.readDecimalLong();
+            fail();
+        } catch (NumberFormatException e) {
+            assertEquals("Expected leading [0-9] or '-' character but was 0x20", e.getMessage());
+        }
+    }
+
+    @Test
+    public void longDecimalEmptyThrows() throws IOException {
+        try {
+            sink.writeUtf8("");
+            source.readDecimalLong();
+            fail();
+        } catch (IllegalStateException | EOFException expected) {
+        }
+    }
 }
 
 
