@@ -695,6 +695,26 @@ public class BufferedSourceTest {
         } catch (IllegalStateException | EOFException expected) {
         }
     }
+
+    @Test
+    public void longDecimalString() throws IOException {
+        assertLongDecimalString("-9223372036854775808", -9223372036854775808L);
+        assertLongDecimalString("-1", -1L);
+        assertLongDecimalString("0", 0L);
+        assertLongDecimalString("1", 1L);
+        assertLongDecimalString("9223372036854775807", 9223372036854775807L);
+
+        assertLongDecimalString("00000001", 1L);
+        assertLongDecimalString("-000001", -1L);
+    }
+
+    private void assertLongDecimalString(String s, long expected) throws IOException {
+        sink.writeUtf8(s);
+        sink.writeUtf8("zzz");
+        long actual = source.readDecimalLong();
+        assertEquals(s + " --> " + expected, expected, actual);
+        assertEquals("zzz", source.readUtf8());
+    }
 }
 
 

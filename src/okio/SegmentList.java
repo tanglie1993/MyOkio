@@ -265,4 +265,19 @@ public class SegmentList implements Cloneable {
         }
         return -1;
     }
+
+    public byte peek() {
+        if(segmentList.size() == 0){
+            return -1;
+        }
+        Segment segment = segmentList.getFirst();
+        while(segment != null){
+            if(segment.rear <= segment.front){
+                segment = segment.next;
+                continue;
+            }
+            return segment.data[segment.front];
+        }
+        return -1;
+    }
 }

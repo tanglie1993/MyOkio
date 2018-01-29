@@ -327,6 +327,43 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return result;
     }
 
+    @Override
+    public long readDecimalLong() throws EOFException {
+        long result = 0;
+        require(1);
+        long sign = 1;
+        boolean isFirst = true;
+
+        long overflowZone = Long.MIN_VALUE / 10;
+        long overflowDigit = (Long.MIN_VALUE % 10) + 1;
+
+        while(segmentList.has(1)){
+            int digit = 0;
+            byte b = segmentList.peek();
+            if(isFirst && b == '-'){
+                sign = -1;
+            } else if (b >= '0' && b <= '9') {
+                digit = b - '0';
+                if (result < overflowZone || result == overflowZone && digit < overflowDigit) {
+                    throw new NumberFormatException("Number too large");
+                }
+            } else {
+                if (isFirst) {
+                    throw new NumberFormatException(
+                            "Expected leading [0-9] or '-' character but was 0x" + Integer.toHexString(b));
+                } else {
+                    break;
+                }
+            }
+            segmentList.read();
+            isFirst = false;
+            result *= 10;
+            result += digit;
+        }
+
+        return result * sign;
+    }
+
     private List<Byte> toList(byte[] sink) {
         if(sink == null){
             return new ArrayList<>();

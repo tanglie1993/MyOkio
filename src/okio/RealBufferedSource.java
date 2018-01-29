@@ -253,4 +253,9 @@ public class RealBufferedSource implements BufferedSource {
     public long readHexadecimalUnsignedLong() throws EOFException {
         return buffer.readHexadecimalUnsignedLong();
     }
+
+    @Override
+    public long readDecimalLong() throws EOFException {
+        return buffer.readDecimalLong();
+    }
 }
