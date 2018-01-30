@@ -69,7 +69,7 @@ public interface BufferedSource extends Source {
 
     int indexOfElement(ByteString byteString, int index);
 
-    boolean request(int count);
+    boolean request(int count) throws IOException;
 
     void require(int count) throws EOFException;
 
@@ -78,4 +78,8 @@ public interface BufferedSource extends Source {
     long readHexadecimalUnsignedLong() throws EOFException;
 
     long readDecimalLong() throws EOFException;
+
+    boolean rangeEquals(int offset, ByteString byteString);
+
+    boolean rangeEquals(int offset, ByteString byteString, int start, int end);
 }

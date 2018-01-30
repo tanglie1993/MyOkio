@@ -278,8 +278,8 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public boolean request(int count) {
-        return segmentList.available() >= count;
+    public boolean request(int byteCount) {
+        return segmentList.available() >= byteCount;
     }
 
     @Override
@@ -370,6 +370,24 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return result * sign;
     }
 
+    @Override
+    public boolean rangeEquals(int offset, ByteString byteString) {
+        return rangeEquals(offset, byteString, 0, byteString.getData().length);
+    }
+
+    @Override
+    public boolean rangeEquals(int offset, ByteString byteString, int start, int end) {
+        if(!request(offset + end - start)){
+            return false;
+        }
+        for(int i = start; i < end; i++){
+            if(getByte(i - start + offset) != byteString.getData()[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private List<Byte> toList(byte[] sink) {
         if(sink == null){
             return new ArrayList<>();
@@ -442,5 +460,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         String result = new String(bytes);
         remove(length);
         return result;
+    }
+
+    public byte getByte(int index) {
+        return segmentList.getByte(index);
     }
 }

@@ -11,6 +11,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 import static test.TestUtil.*;
 
 /**
@@ -801,6 +802,31 @@ public class BufferedSourceTest {
         assertLongDecimalString("-00000000000000009223372036854775808", -9223372036854775808L);
         assertLongDecimalString(TestUtil.repeat('0', Segment.SIZE + 1) + "1", 1);
     }
+
+    @Test
+    public void rangeEquals() throws IOException {
+        sink.writeUtf8("A man, a plan, a canal. Panama.");
+        assertTrue(source.rangeEquals(7 , ByteString.encodeUtf8("a plan")));
+        assertTrue(source.rangeEquals(0 , ByteString.encodeUtf8("A man")));
+        assertTrue(source.rangeEquals(24, ByteString.encodeUtf8("Panama")));
+        assertFalse(source.rangeEquals(24, ByteString.encodeUtf8("Panama. Panama. Panama.")));
+    }
+
+
+    @Test
+    public void rangeEqualsWithOffsetAndCount() throws IOException {
+        sink.writeUtf8("A man, a plan, a canal. Panama.");
+        assertTrue(source.rangeEquals(7 , ByteString.encodeUtf8("aaa plannn"), 2, 6));
+        assertTrue(source.rangeEquals(0 , ByteString.encodeUtf8("AAA mannn"), 2, 5));
+        assertTrue(source.rangeEquals(24, ByteString.encodeUtf8("PPPanamaaa"), 2, 6));
+    }
+
+//    @Test
+//    public void rangeEqualsOnlyReadsUntilMismatch() throws IOException {
+//        sink.writeUtf8("A man, a plan, a canal. Panama.");
+//        assertFalse(source.rangeEquals(0, ByteString.encodeUtf8("A man.")));
+//        assertEquals("A man,", source.buffer().readUtf8());
+//    }
 }
 
 

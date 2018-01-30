@@ -230,8 +230,8 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public boolean request(int count) {
-        return buffer.request(count);
+    public boolean request(int byteCount) throws IOException {
+        return buffer.request(byteCount);
     }
 
     @Override
@@ -257,5 +257,15 @@ public class RealBufferedSource implements BufferedSource {
     @Override
     public long readDecimalLong() throws EOFException {
         return buffer.readDecimalLong();
+    }
+
+    @Override
+    public boolean rangeEquals(int offset, ByteString byteString) {
+        return buffer.rangeEquals(offset, byteString);
+    }
+
+    @Override
+    public boolean rangeEquals(int offset, ByteString byteString, int start, int end) {
+        return buffer.rangeEquals(offset, byteString, start, end);
     }
 }

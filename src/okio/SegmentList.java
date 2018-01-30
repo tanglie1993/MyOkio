@@ -114,7 +114,7 @@ public class SegmentList implements Cloneable {
         return result;
     }
 
-    public int read(byte[] sink) {
+    int read(byte[] sink) {
         int removed = 0;
         while(removed < sink.length){
             if(segmentList.size() == 0){
@@ -135,7 +135,7 @@ public class SegmentList implements Cloneable {
         return sink.length;
     }
 
-    public int read(byte[] sink, final int offset, final int byteCount) {
+    int read(byte[] sink, final int offset, final int byteCount) {
         if(offset + byteCount > sink.length){
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -167,7 +167,7 @@ public class SegmentList implements Cloneable {
         }
     }
 
-    public int indexOf(byte target, int fromIndex, int toIndex) {
+    int indexOf(byte target, int fromIndex, int toIndex) {
         if(fromIndex < 0){
             throw new IllegalArgumentException("fromIndex < 0");
         }
@@ -196,7 +196,7 @@ public class SegmentList implements Cloneable {
         return -1;
     }
 
-    public int indexOf(ByteString byteString, int fromIndex) {
+    int indexOf(ByteString byteString, int fromIndex) {
         if(byteString == null || byteString.getData().length == 0){
             throw new IllegalArgumentException("bytes is empty");
         }
@@ -242,7 +242,7 @@ public class SegmentList implements Cloneable {
         return match(segment.next, segment.next.front, byteString, byteStringStartIndex + matchedCount);
     }
 
-    public int indexOfElement(ByteString byteString, int fromIndex) {
+    int indexOfElement(ByteString byteString, int fromIndex) {
         if(byteString == null || byteString.getData().length == 0){
             return -1;
         }
@@ -266,7 +266,7 @@ public class SegmentList implements Cloneable {
         return -1;
     }
 
-    public byte peek() {
+    byte peek() {
         if(segmentList.size() == 0){
             return -1;
         }
@@ -277,6 +277,18 @@ public class SegmentList implements Cloneable {
                 continue;
             }
             return segment.data[segment.front];
+        }
+        return -1;
+    }
+
+    byte getByte(int index) {
+        int accumulatedIndex = 0;
+        for(Segment segment : segmentList){
+            if(accumulatedIndex + segment.rear - segment.front <= index){
+                accumulatedIndex += segment.rear - segment.front;
+            }else{
+                return segment.data[segment.front + index - accumulatedIndex];
+            }
         }
         return -1;
     }
