@@ -79,7 +79,7 @@ public interface BufferedSource extends Source {
 
     long readDecimalLong() throws IOException;
 
-    boolean rangeEquals(int offset, ByteString byteString);
+    boolean rangeEquals(int offset, ByteString byteString) throws IOException;
 
-    boolean rangeEquals(int offset, ByteString byteString, int start, int end);
+    boolean rangeEquals(int offset, ByteString byteString, int start, int end) throws IOException;
 }

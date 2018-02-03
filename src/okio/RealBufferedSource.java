@@ -300,22 +300,30 @@ public class RealBufferedSource implements BufferedSource {
         return new InputStream() {
             @Override
             public int read() throws IOException {
-                return buffer.readInt();
+                return buffer.readByte();
             }
         };
     }
 
     @Override
     public long readHexadecimalUnsignedLong() throws IOException {
-        require(8);
+        require(1);
+        for (int pos = 0; request(pos + 1); pos++) {
+            byte b = buffer.getByte(pos);
+            if ((b < '0' || b > '9') && (b < 'a' || b > 'f') && (b < 'A' || b > 'F')) {
+                if (pos == 0) {
+                    throw new NumberFormatException(String.format(
+                            "Expected leading [0-9a-fA-F] character but was %#x", b));
+                }
+                break;
+            }
+        }
         return buffer.readHexadecimalUnsignedLong();
     }
 
     @Override
     public long readDecimalLong() throws IOException {
-
         require(1);
-
         for (int pos = 0; request(pos + 1); pos++) {
             byte b = buffer.getByte(pos);
             if ((b < '0' || b > '9') && (pos != 0 || b != '-')) {
@@ -330,12 +338,14 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public boolean rangeEquals(int offset, ByteString byteString) {
-        return rangeEquals(offset, byteString, 0, byteString.getData().length);
+    public boolean rangeEquals(int offset, ByteString byteString) throws IOException {
+        loadAllSourceIntoBuffer();
+        return buffer.rangeEquals(offset, byteString);
     }
 
     @Override
-    public boolean rangeEquals(int offset, ByteString byteString, int start, int end) {
+    public boolean rangeEquals(int offset, ByteString byteString, int start, int end) throws IOException {
+        loadAllSourceIntoBuffer();
         return buffer.rangeEquals(offset, byteString, start, end);
     }
 }
