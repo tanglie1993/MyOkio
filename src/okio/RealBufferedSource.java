@@ -23,8 +23,8 @@ public class RealBufferedSource implements BufferedSource {
         buffer = new Buffer();
         source = new Source() {
             @Override
-            public int read(Buffer data, int length) throws IOException {
-                int size = length;
+            public long read(Buffer data, long length) throws IOException {
+                long size = length;
                 if(inputStream.available() < 0){
                     return -1;
                 }
@@ -50,11 +50,11 @@ public class RealBufferedSource implements BufferedSource {
 
 
     @Override
-    public int read(Buffer data, int length) throws IOException {
+    public long read(Buffer data, long length) throws IOException {
         if (length < 0) {
             throw new IllegalArgumentException("byteCount < 0: " + length);
         }
-        int result = buffer.write(source, length);
+        long result = buffer.write(source, length);
         buffer.read(data, length);
         return result;
     }
@@ -103,7 +103,7 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public void skip(int count) throws IOException {
+    public void skip(long count) throws IOException {
         buffer.write(source, count);
         buffer.pop(count);
     }
@@ -261,7 +261,7 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public boolean rangeEquals(int offset, ByteString byteString) {
-        return buffer.rangeEquals(offset, byteString);
+        return rangeEquals(offset, byteString, 0, byteString.getData().length);
     }
 
     @Override

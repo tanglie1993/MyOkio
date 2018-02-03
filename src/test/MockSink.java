@@ -46,22 +46,25 @@ final class MockSink implements Sink {
     if (exception != null) throw exception;
   }
 
-  @Override
-  public void flush() throws IOException {
+  @Override public void write(Buffer source, long byteCount) throws IOException {
+    log.add("write(" + source + ", " + byteCount + ")");
+    source.skip(byteCount);
+    throwIfScheduled();
+  }
+
+  @Override public void flush() throws IOException {
     log.add("flush()");
     throwIfScheduled();
   }
 
-  @Override
-  public void close() throws IOException {
-    log.add("close()");
-    throwIfScheduled();
-  }
+//  @Override
+//  public Timeout timeout() {
+//    log.add("timeout()");
+//    return Timeout.NONE;
+//  }
 
-  @Override
-  public void write(Buffer source, int length) throws IOException {
-    log.add("write(" + source + ", " + length + ")");
-    source.skip(length);
+  @Override public void close() throws IOException {
+    log.add("close()");
     throwIfScheduled();
   }
 }

@@ -7,7 +7,7 @@ import java.io.IOException;
  */
 public interface Source {
 
-    int read(Buffer sink, int length) throws IOException;
+    long read(Buffer sink, long length) throws IOException;
 
     void close() throws IOException;
 }

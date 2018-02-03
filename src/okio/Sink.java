@@ -10,7 +10,7 @@ public interface Sink {
     void close() throws IOException;
 
 
-    void write(Buffer data, int length) throws IOException;
+    void write(Buffer data, long length) throws IOException;
 
     void flush() throws IOException;
 }

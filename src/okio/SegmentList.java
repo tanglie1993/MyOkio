@@ -60,7 +60,7 @@ public class SegmentList implements Cloneable {
         }
     }
 
-    void remove(int length) {
+    void remove(long length) {
         int removed = 0;
         while(removed < length){
             if(segmentList.size() == 0){
@@ -95,7 +95,7 @@ public class SegmentList implements Cloneable {
         }
     }
 
-    boolean has(int count) {
+    boolean has(long count) {
         int counted = 0;
         for(Segment segment : segmentList){
             counted += segment.rear - segment.front;

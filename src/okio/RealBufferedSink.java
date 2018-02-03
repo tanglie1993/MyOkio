@@ -25,8 +25,8 @@ public class RealBufferedSink implements BufferedSink {
             }
 
             @Override
-            public void write(Buffer data, int i) throws IOException {
-                outputStream.write(data.pop(i).getBytes());
+            public void write(Buffer data, long length) throws IOException {
+                outputStream.write(data.pop(length).getBytes());
             }
 
             @Override
@@ -44,8 +44,8 @@ public class RealBufferedSink implements BufferedSink {
     }
 
     @Override
-    public void write(Buffer data, int i) throws IOException {
-        buffer.write(data, i);
+    public void write(Buffer data, long length) throws IOException {
+        buffer.write(data, length);
         flush();
     }
 

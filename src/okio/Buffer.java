@@ -34,7 +34,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     }
 
-    public int write(Source source, int length) throws IOException {
+    public long write(Source source, long length) throws IOException {
         return source.read(this, length);
     }
 
@@ -67,7 +67,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return new Buffer(this.segmentList.clone());
     }
 
-    private void remove(int length) {
+    private void remove(long length) {
         segmentList.remove(length);
     }
 
@@ -113,7 +113,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void skip(int count) throws IOException {
+    public void skip(long count) throws IOException {
         if(!segmentList.has(count)){
             remove(count);
             throw new EOFException();
@@ -407,7 +407,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public int read(Buffer data, int length) throws IOException {
+    public long read(Buffer data, long length) throws IOException {
         int available = segmentList.available();
         if(length > available){
             length = available;
@@ -427,7 +427,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void write(Buffer data, int length) {
+    public void write(Buffer data, long length) {
         byte[] bytes = new byte[Math.min(data.size(), length)];
         data.read(bytes);
         write(bytes);
@@ -450,7 +450,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return segmentList.available();
     }
 
-    public String pop(int length) {
+    public String pop(long length) {
         int available = segmentList.available();
         if(length > segmentList.available()){
             length = available;
