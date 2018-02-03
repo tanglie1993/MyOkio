@@ -145,13 +145,26 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int readAll(Sink sink) throws IOException {
+        while (true) {
+            if(source.read(buffer, Segment.SIZE) == -1){
+                break;
+            }
+        }
         int result = buffer.size();
         sink.write(buffer, buffer.size());
         return result;
     }
 
+
+
     @Override
     public void readFully(Buffer sink, int length) throws IOException {
+        while (buffer.size() < length){
+            if(source.read(buffer, Segment.SIZE) == -1){
+                buffer.readFully(sink, length);
+                throw new EOFException();
+            }
+        }
         buffer.readFully(sink, length);
     }
 
