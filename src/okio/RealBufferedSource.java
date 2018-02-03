@@ -182,7 +182,13 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int read(byte[] sink) throws IOException {
-        return 0;
+        while(buffer.size() < sink.length){
+            if(source.read(buffer, Segment.SIZE) == -1){
+                buffer.read(sink);
+                throw new EOFException();
+            }
+        }
+        return buffer.read(sink);
     }
 
     @Override
