@@ -415,6 +415,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         if(length == 0){
             return -1;
         }
+        // TODO
         byte[] bytes = new byte[(int) length];
         segmentList.read(bytes);
         data.write(bytes);
@@ -428,6 +429,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public void write(Buffer data, long length) {
+        // TODO
         byte[] bytes = new byte[(int) Math.min(data.size(), length)];
         data.read(bytes);
         write(bytes);
@@ -455,6 +457,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         if(length > segmentList.available()){
             length = available;
         }
+        // TODO
         byte[] bytes = new byte[(int) length];
         segmentList.read(bytes);
         String result = new String(bytes);
