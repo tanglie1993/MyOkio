@@ -104,8 +104,14 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public void skip(long count) throws IOException {
-        buffer.write(source, count);
-        buffer.pop(count);
+        while (count > 0) {
+            if (buffer.size() == 0 && source.read(buffer, Segment.SIZE) == -1) {
+                throw new EOFException();
+            }
+            long toSkip = Math.min(count, buffer.size());
+            buffer.skip(toSkip);
+            count -= toSkip;
+        }
     }
 
     @Override
@@ -267,7 +273,19 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public long readDecimalLong() throws IOException {
-        require(8);
+
+        require(1);
+
+        for (int pos = 0; request(pos + 1); pos++) {
+            byte b = buffer.getByte(pos);
+            if ((b < '0' || b > '9') && (pos != 0 || b != '-')) {
+                if (pos == 0) {
+                    throw new NumberFormatException(String.format(
+                            "Expected leading [0-9] or '-' character but was %#x", b));
+                }
+                break;
+            }
+        }
         return buffer.readDecimalLong();
     }
 
