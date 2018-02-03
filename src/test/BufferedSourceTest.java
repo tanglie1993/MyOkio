@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 import static test.TestUtil.*;
 
-@RunWith(Parameterized.class)
+@RunWith(IDECompatibleParameterized.class)
 public final class BufferedSourceTest {
     interface Factory {
         Factory BUFFER = new Factory() {
@@ -63,8 +63,7 @@ public final class BufferedSourceTest {
                 Pipe result = new Pipe();
                 result.sink = buffer;
                 result.source = new RealBufferedSource(new ForwardingSource(buffer) {
-                    @Override
-                    public long read(Buffer sink, long byteCount) throws IOException {
+                    @Override public long read(Buffer sink, long byteCount) throws IOException {
                         // This reads a byte into a new buffer, then clones it so that the segments are shared.
                         // Shared segments cannot be compacted so we'll get a long chain of short segments.
                         Buffer box = new Buffer();
@@ -843,7 +842,7 @@ public final class BufferedSourceTest {
         }
     }
 
-//    @Test public void codePoints() throws IOException {
+//    @Test public void codePoints(codePoints) throws IOException {
 //        sink.write(ByteString.decodeHex("7f"));
 //        assertEquals(0x7f, source.readUtf8CodePoint());
 //
@@ -1007,4 +1006,3 @@ public final class BufferedSourceTest {
         assertFalse(source.rangeEquals(0, ByteString.encodeUtf8("A"), 1, 1));
     }
 }
-
