@@ -252,22 +252,26 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public int indexOf(ByteString byteString) {
+    public int indexOf(ByteString byteString) throws IOException {
+        loadAllSourceIntoBuffer();
         return buffer.indexOf(byteString);
     }
 
     @Override
-    public int indexOf(ByteString byteString, int fromIndex) {
+    public int indexOf(ByteString byteString, int fromIndex) throws IOException {
+        loadAllSourceIntoBuffer();
         return buffer.indexOf(byteString, fromIndex);
     }
 
     @Override
-    public int indexOfElement(ByteString byteString) {
+    public int indexOfElement(ByteString byteString) throws IOException {
+        loadAllSourceIntoBuffer();
         return buffer.indexOfElement(byteString);
     }
 
     @Override
-    public int indexOfElement(ByteString byteString, int index) {
+    public int indexOfElement(ByteString byteString, int index) throws IOException {
+        loadAllSourceIntoBuffer();
         return buffer.indexOfElement(byteString, index);
     }
 

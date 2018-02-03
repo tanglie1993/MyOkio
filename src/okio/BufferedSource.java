@@ -61,13 +61,13 @@ public interface BufferedSource extends Source {
 
     int indexOf(byte b, int fromIndex, int toIndex) throws IOException;
 
-    int indexOf(ByteString byteString);
+    int indexOf(ByteString byteString) throws IOException;
 
-    int indexOf(ByteString byteString, int fromIndex);
+    int indexOf(ByteString byteString, int fromIndex) throws IOException;
 
-    int indexOfElement(ByteString byteString);
+    int indexOfElement(ByteString byteString) throws IOException;
 
-    int indexOfElement(ByteString byteString, int index);
+    int indexOfElement(ByteString byteString, int index) throws IOException;
 
     boolean request(long count) throws IOException;
 
