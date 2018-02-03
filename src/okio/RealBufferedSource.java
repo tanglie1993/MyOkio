@@ -145,16 +145,19 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int readAll(Sink sink) throws IOException {
-        while (true) {
-            if(source.read(buffer, Segment.SIZE) == -1){
-                break;
-            }
-        }
+        loadAllSourceIntoBuffer();
         int result = buffer.size();
         sink.write(buffer, buffer.size());
         return result;
     }
 
+    private void loadAllSourceIntoBuffer() throws IOException {
+        while (true) {
+            if(source.read(buffer, Segment.SIZE) == -1){
+                break;
+            }
+        }
+    }
 
 
     @Override
@@ -169,7 +172,11 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public void readFully(byte[] sink) throws EOFException {
+    public void readFully(byte[] sink) throws IOException {
+        loadAllSourceIntoBuffer();
+        if(buffer.size() < sink.length){
+            throw new EOFException();
+        }
         buffer.readFully(sink);
     }
 
@@ -180,6 +187,7 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public byte[] readByteArray() {
+
         return buffer.readByteArray();
     }
 
@@ -189,8 +197,10 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public byte[] readByteArray(int count) {
-        return new byte[0];
+    public byte[] readByteArray(int count) throws IOException {
+        byte[] result = new byte[count];
+        read(result);
+        return result;
     }
 
     @Override
@@ -199,12 +209,12 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public ByteString readByteString(int count) {
+    public ByteString readByteString(int count) throws IOException {
         return new ByteString(readByteArray(count));
     }
 
     @Override
-    public String readString(int count, Charset charset) {
+    public String readString(int count, Charset charset) throws IOException {
         return new ByteString(readByteArray(count)).toString(charset);
     }
 

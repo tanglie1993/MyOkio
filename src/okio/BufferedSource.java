@@ -37,7 +37,7 @@ public interface BufferedSource extends Source {
 
     void readFully(Buffer sink, int length) throws IOException;
 
-    void readFully(byte[] sink) throws EOFException;
+    void readFully(byte[] sink) throws IOException;
 
     int read(byte[] sink) throws IOException;
 
@@ -45,13 +45,13 @@ public interface BufferedSource extends Source {
 
     int read(byte[] sink, int offset, int byteCount);
 
-    byte[] readByteArray(int count);
+    byte[] readByteArray(int count) throws IOException;
 
     ByteString readByteString();
 
-    ByteString readByteString(int count);
+    ByteString readByteString(int count) throws IOException;
 
-    String readString(int count, Charset charset);
+    String readString(int count, Charset charset) throws IOException;
 
     String readString(Charset charset);
 
