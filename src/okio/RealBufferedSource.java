@@ -81,7 +81,7 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public byte readByte() throws IOException {
-        buffer.write(source, 1);
+        require(1);
         return buffer.readByte();
     }
 
@@ -231,12 +231,22 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public boolean request(int byteCount) throws IOException {
-        return buffer.request(byteCount);
+        if (byteCount < 0) {
+            throw new IllegalArgumentException("byteCount < 0: " + byteCount);
+        }
+        while (buffer.size() < byteCount) {
+            if (source.read(buffer, Segment.SIZE) == -1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
-    public void require(int count) {
-        buffer.request(count);
+    public void require(int count) throws IOException {
+        if (!request(count)) {
+            throw new EOFException();
+        }
     }
 
     @Override

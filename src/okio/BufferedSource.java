@@ -71,7 +71,7 @@ public interface BufferedSource extends Source {
 
     boolean request(int count) throws IOException;
 
-    void require(int count) throws EOFException;
+    void require(int count) throws IOException;
 
     InputStream inputStream();
 

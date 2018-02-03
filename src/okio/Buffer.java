@@ -417,7 +417,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         }
         byte[] bytes = new byte[(int) length];
         segmentList.read(bytes);
-        data.writeUtf8(new String(bytes));
+        data.write(bytes);
         return length;
     }
 
