@@ -41,19 +41,19 @@ public interface BufferedSource extends Source {
 
     int read(byte[] sink) throws IOException;
 
-    byte[] readByteArray();
+    byte[] readByteArray() throws IOException;
 
     int read(byte[] sink, int offset, int byteCount);
 
     byte[] readByteArray(int count) throws IOException;
 
-    ByteString readByteString();
+    ByteString readByteString() throws IOException;
 
     ByteString readByteString(int count) throws IOException;
 
     String readString(int count, Charset charset) throws IOException;
 
-    String readString(Charset charset);
+    String readString(Charset charset) throws IOException;
 
     int indexOf(byte b);
 
@@ -69,9 +69,9 @@ public interface BufferedSource extends Source {
 
     int indexOfElement(ByteString byteString, int index);
 
-    boolean request(int count) throws IOException;
+    boolean request(long count) throws IOException;
 
-    void require(int count) throws IOException;
+    void require(long count) throws IOException;
 
     InputStream inputStream();
 

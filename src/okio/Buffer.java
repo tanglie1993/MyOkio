@@ -278,12 +278,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public boolean request(int byteCount) {
+    public boolean request(long byteCount) {
         return segmentList.available() >= byteCount;
     }
 
     @Override
-    public void require(int count) throws EOFException {
+    public void require(long count) throws EOFException {
         if(!segmentList.has(count)){
             throw new EOFException();
         }

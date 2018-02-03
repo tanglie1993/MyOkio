@@ -34,12 +34,7 @@ public class RealBufferedSource implements BufferedSource {
                 // TODO
                 byte[] bytes = new byte[(int) size];
                 inputStream.read(bytes);
-                String string = new String(bytes);
-                if(length > string.length()){
-                    length = string.length();
-                }
-                // TODO
-                data.writeUtf8(string.substring(0, (int) length));
+                data.write(bytes);
                 return buffer.size();
             }
 
@@ -106,14 +101,9 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public void skip(long count) throws IOException {
-        while (count > 0) {
-            if (buffer.size() == 0 && source.read(buffer, Segment.SIZE) == -1) {
-                throw new EOFException();
-            }
-            long toSkip = Math.min(count, buffer.size());
-            buffer.skip(toSkip);
-            count -= toSkip;
-        }
+        require(count);
+        long toSkip = Math.min(count, buffer.size());
+        buffer.skip(toSkip);
     }
 
     @Override
@@ -194,8 +184,8 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public byte[] readByteArray() {
-
+    public byte[] readByteArray() throws IOException {
+        loadAllSourceIntoBuffer();
         return buffer.readByteArray();
     }
 
@@ -212,7 +202,7 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public ByteString readByteString() {
+    public ByteString readByteString() throws IOException {
         return new ByteString(readByteArray());
     }
 
@@ -227,7 +217,7 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public String readString(Charset charset) {
+    public String readString(Charset charset) throws IOException {
         return new ByteString(readByteArray()).toString(charset);
     }
 
@@ -267,7 +257,7 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public boolean request(int byteCount) throws IOException {
+    public boolean request(long byteCount) throws IOException {
         if (byteCount < 0) {
             throw new IllegalArgumentException("byteCount < 0: " + byteCount);
         }
@@ -280,7 +270,7 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public void require(int count) throws IOException {
+    public void require(long count) throws IOException {
         if (!request(count)) {
             throw new EOFException();
         }
