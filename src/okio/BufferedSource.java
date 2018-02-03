@@ -43,7 +43,7 @@ public interface BufferedSource extends Source {
 
     byte[] readByteArray() throws IOException;
 
-    int read(byte[] sink, int offset, int byteCount);
+    int read(byte[] sink, int offset, int byteCount) throws IOException;
 
     byte[] readByteArray(int count) throws IOException;
 
@@ -55,11 +55,11 @@ public interface BufferedSource extends Source {
 
     String readString(Charset charset) throws IOException;
 
-    int indexOf(byte b);
+    int indexOf(byte b) throws IOException;
 
-    int indexOf(byte b, int fromIndex);
+    int indexOf(byte b, int fromIndex) throws IOException;
 
-    int indexOf(byte b, int fromIndex, int toIndex);
+    int indexOf(byte b, int fromIndex, int toIndex) throws IOException;
 
     int indexOf(ByteString byteString);
 

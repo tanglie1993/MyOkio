@@ -151,7 +151,6 @@ public class RealBufferedSource implements BufferedSource {
         }
     }
 
-
     @Override
     public void readFully(Buffer sink, int length) throws IOException {
         while (buffer.size() < length){
@@ -190,7 +189,8 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public int read(byte[] sink, int offset, int byteCount) {
+    public int read(byte[] sink, int offset, int byteCount) throws IOException {
+        require(Math.min(sink.length - offset, byteCount));
         return buffer.read(sink, offset, byteCount);
     }
 
@@ -222,18 +222,33 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public int indexOf(byte b) {
-        return buffer.indexOf(b);
+    public int indexOf(byte b) throws IOException {
+        return indexOf(b, 0, Integer.MAX_VALUE);
     }
 
     @Override
-    public int indexOf(byte b, int fromIndex) {
-        return buffer.indexOf(b, fromIndex);
+    public int indexOf(byte b, int fromIndex) throws IOException {
+        return indexOf(b, fromIndex, Integer.MAX_VALUE);
     }
 
     @Override
-    public int indexOf(byte b, int fromIndex, int toIndex) {
-        return buffer.indexOf(b, fromIndex, toIndex);
+    public int indexOf(byte b, int fromIndex, int toIndex) throws IOException {
+        final int initialBufferSize = buffer.size();
+        for(int i = fromIndex; i < toIndex && i < initialBufferSize; i++){
+            if(buffer.getByte(i) == b){
+                return i - fromIndex;
+            }
+        }
+        int searchIndex = initialBufferSize - fromIndex - 1;
+        while(true){
+            if(source.read(buffer, 1) == -1){
+                return -1;
+            }
+            searchIndex++;
+            if(buffer.getByte(buffer.size() - 1) == b){
+                return searchIndex;
+            }
+        }
     }
 
     @Override
