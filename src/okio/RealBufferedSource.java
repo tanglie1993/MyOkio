@@ -92,13 +92,13 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public short readShort() throws IOException {
-        buffer.write(source, 2);
+        require(2);
         return buffer.readShort();
     }
 
     @Override
     public short readShortLe() throws IOException {
-        buffer.write(source, 2);
+        require(2);
         return buffer.readShortLe();
     }
 
@@ -110,25 +110,25 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int readInt() throws IOException {
-        buffer.write(source, 4);
+        require(4);
         return buffer.readInt();
     }
 
     @Override
     public int readIntLe() throws IOException {
-        buffer.write(source, 4);
+        require(4);
         return buffer.readIntLe();
     }
 
     @Override
     public long readLong() throws IOException {
-        buffer.write(source, 8);
+        require(8);
         return buffer.readLong();
     }
 
     @Override
     public long readLongLe() throws IOException {
-        buffer.write(source, 8);
+        require(8);
         return buffer.readLongLe();
     }
 
@@ -260,12 +260,14 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public long readHexadecimalUnsignedLong() throws EOFException {
+    public long readHexadecimalUnsignedLong() throws IOException {
+        require(8);
         return buffer.readHexadecimalUnsignedLong();
     }
 
     @Override
-    public long readDecimalLong() throws EOFException {
+    public long readDecimalLong() throws IOException {
+        require(8);
         return buffer.readDecimalLong();
     }
 

@@ -75,9 +75,9 @@ public interface BufferedSource extends Source {
 
     InputStream inputStream();
 
-    long readHexadecimalUnsignedLong() throws EOFException;
+    long readHexadecimalUnsignedLong() throws IOException;
 
-    long readDecimalLong() throws EOFException;
+    long readDecimalLong() throws IOException;
 
     boolean rangeEquals(int offset, ByteString byteString);
 
