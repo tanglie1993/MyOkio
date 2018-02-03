@@ -31,13 +31,13 @@ public class RealBufferedSource implements BufferedSource {
                 if(length > inputStream.available()){
                     size = inputStream.available();
                 }
-                byte[] bytes = new byte[size];
+                byte[] bytes = new byte[(int) size];
                 inputStream.read(bytes);
                 String string = new String(bytes);
                 if(length > string.length()){
                     length = string.length();
                 }
-                data.writeUtf8(string.substring(0, length));
+                data.writeUtf8(string.substring(0, (int) length));
                 return buffer.size();
             }
 
