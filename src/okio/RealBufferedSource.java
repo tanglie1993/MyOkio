@@ -147,7 +147,9 @@ public class RealBufferedSource implements BufferedSource {
     public int readAll(Sink sink) throws IOException {
         loadAllSourceIntoBuffer();
         int result = buffer.size();
-        sink.write(buffer, buffer.size());
+        if(buffer.size() > 0){
+            sink.write(buffer, buffer.size());
+        }
         return result;
     }
 
@@ -280,6 +282,12 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int indexOf(ByteString byteString, int fromIndex) throws IOException {
+        if(byteString == null || byteString.getData().length == 0){
+            throw new IllegalArgumentException("bytes is empty");
+        }
+        if(fromIndex < 0){
+            throw new IllegalArgumentException("fromIndex < 0");
+        }
         if(!request(byteString.getData().length)){
             return -1;
         }
@@ -436,6 +444,9 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public boolean rangeEquals(int offset, ByteString bytes, int bytesOffset, int byteCount) throws IOException {
+        if(bytesOffset < 0 || byteCount < 0){
+            return false;
+        }
         if(byteCount > bytes.getData().length - bytesOffset){
             return false;
         }

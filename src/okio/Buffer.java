@@ -110,10 +110,6 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public void skip(long count) throws IOException {
-        if(!segmentList.has(count)){
-            remove(count);
-            throw new EOFException();
-        }
         remove(count);
     }
 
@@ -376,6 +372,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public boolean rangeEquals(int offset, ByteString bytes, int bytesOffset, int byteCount) {
+        if(bytesOffset < 0 || byteCount <0){
+            return false;
+        }
         if(byteCount > bytes.getData().length - bytesOffset){
             return false;
         }
