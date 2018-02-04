@@ -35,7 +35,7 @@ public interface BufferedSource extends Source {
 
     int readAll(Sink sink) throws IOException;
 
-    void readFully(Buffer sink, int length) throws IOException;
+    void readFully(Buffer sink, long length) throws IOException;
 
     void readFully(byte[] sink) throws IOException;
 

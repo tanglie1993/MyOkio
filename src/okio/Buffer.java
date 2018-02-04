@@ -30,8 +30,6 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public Buffer writeUtf8(String a) {
         write(a.getBytes());
         return this;
-
-
     }
 
     public long write(Source source, long length) throws IOException {
@@ -54,8 +52,8 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void write(Buffer clone, boolean result) {
-
+    public void write(Buffer clone, long byteCount) throws IOException {
+        clone.readFully(this, byteCount);
     }
 
     @Override
@@ -69,17 +67,6 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     private void remove(long length) {
         segmentList.remove(length);
-    }
-
-
-    private byte[] toArray(List<Byte> bytes) {
-        byte[] result = new byte[bytes.size()];
-        int index = 0;
-        for(Byte b : bytes){
-            result[index] = b;
-            index++;
-        }
-        return result;
     }
 
     @Override
@@ -179,7 +166,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void readFully(Buffer sink, int length) throws IOException {
+    public void readFully(Buffer sink, long length) throws IOException {
         if(size() < length){
             read(sink, size());
             throw new EOFException();
@@ -425,14 +412,6 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public void close() throws IOException {
 
-    }
-
-    @Override
-    public void write(Buffer data, long length) {
-        // TODO
-        byte[] bytes = new byte[(int) Math.min(data.size(), length)];
-        data.read(bytes);
-        write(bytes);
     }
 
     private List<Byte> toList(String string) {

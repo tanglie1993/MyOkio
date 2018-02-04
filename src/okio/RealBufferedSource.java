@@ -154,7 +154,7 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public void readFully(Buffer sink, int length) throws IOException {
+    public void readFully(Buffer sink, long length) throws IOException {
         while (buffer.size() < length){
             if(source.read(buffer, Segment.SIZE) == -1){
                 buffer.readFully(sink, length);

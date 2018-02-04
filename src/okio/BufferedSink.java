@@ -11,6 +11,4 @@ public interface BufferedSink extends Sink {
     void writeAll(Source source) throws IOException;
 
     void write(byte[] bytes);
-
-    void write(Buffer clone, boolean result);
 }
