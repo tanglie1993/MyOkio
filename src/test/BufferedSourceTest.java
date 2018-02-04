@@ -820,7 +820,7 @@ public final class BufferedSourceTest {
             source.readDecimalLong();
             fail();
         } catch (NumberFormatException e) {
-            assertEquals("Number too large: -9223372036854775809", e.getMessage());
+            assertEquals("Number too small", e.getMessage());
         }
     }
 

@@ -359,7 +359,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             } else if (b >= '0' && b <= '9') {
                 digit = b - '0';
                 if(sign == -1){
-                    if (result < underflowZone || result == underflowZone && digit < underflowDigit) {
+                    if (-result < underflowZone || -result == underflowZone && digit >= underflowDigit) {
                         throw new NumberFormatException("Number too small");
                     }
                 }else if(!isFirst){
