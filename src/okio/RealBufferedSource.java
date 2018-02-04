@@ -251,13 +251,14 @@ public class RealBufferedSource implements BufferedSource {
         if(fromIndex == toIndex){
             return -1;
         }
+        require(fromIndex);
         final int initialBufferSize = buffer.size();
         for(int i = fromIndex; i < toIndex && i < initialBufferSize; i++){
             if(buffer.getByte(i) == b){
-                return i - fromIndex;
+                return i;
             }
         }
-        int searchIndex = initialBufferSize - fromIndex - 1;
+        int searchIndex = initialBufferSize - 1;
         while(true){
             if(source.read(buffer, 1) == -1){
                 return -1;
