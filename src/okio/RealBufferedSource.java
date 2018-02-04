@@ -8,6 +8,8 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
+import static okio.Util.checkOffsetAndCount;
+
 /**
  * Created by pc on 2018/1/20.
  */
@@ -15,6 +17,7 @@ public class RealBufferedSource implements BufferedSource {
 
     private Source source;
     private Buffer buffer;
+    boolean closed;
 
     public RealBufferedSource(Source source) {
         buffer = new Buffer();
@@ -61,6 +64,7 @@ public class RealBufferedSource implements BufferedSource {
     @Override
     public void close() throws IOException {
         source.close();
+        closed = true;
     }
 
     @Override
@@ -113,6 +117,8 @@ public class RealBufferedSource implements BufferedSource {
         require(4);
         return buffer.readInt();
     }
+
+
 
     @Override
     public int readIntLe() throws IOException {
@@ -344,9 +350,41 @@ public class RealBufferedSource implements BufferedSource {
     @Override
     public InputStream inputStream() {
         return new InputStream() {
-            @Override
-            public int read() throws IOException {
-                return buffer.readByte();
+            @Override public int read() throws IOException {
+                if (closed) {
+                    throw new IOException("closed");
+                }
+                if(!request(1)){
+                    return -1;
+                }
+                return buffer.readByte() & 0xff;
+            }
+
+            @Override public int read(byte[] data, int offset, int byteCount) throws IOException {
+                if (closed) {
+                    throw new IOException("closed");
+                }
+                checkOffsetAndCount(data.length, offset, byteCount);
+                if(!request(1)){
+                    return -1;
+                }
+
+                return buffer.read(data, offset, byteCount);
+            }
+
+            @Override public int available() throws IOException {
+                if (closed) {
+                    throw new IOException("closed");
+                }
+                return buffer.size();
+            }
+
+            @Override public void close() throws IOException {
+                RealBufferedSource.this.close();
+            }
+
+            @Override public String toString() {
+                return RealBufferedSource.this + ".inputStream()";
             }
         };
     }
