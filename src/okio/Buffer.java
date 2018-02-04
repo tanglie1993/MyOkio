@@ -286,7 +286,26 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return new InputStream() {
             @Override
             public int read() throws IOException {
-                return readByte();
+                if (size() > 0) {
+                    return readByte() & 0xff;
+                }
+                return -1;
+            }
+
+            @Override
+            public int read(byte[] sink, int offset, int byteCount) {
+                return Buffer.this.read(sink, offset, byteCount);
+            }
+
+            @Override public int available() {
+                return (int) Math.min(size(), Integer.MAX_VALUE);
+            }
+
+            @Override public void close() {
+            }
+
+            @Override public String toString() {
+                return Buffer.this + ".inputStream()";
             }
         };
     }
