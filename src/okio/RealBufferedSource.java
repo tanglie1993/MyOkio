@@ -182,13 +182,7 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int read(byte[] sink) throws IOException {
-        while(buffer.size() < sink.length){
-            if(source.read(buffer, Segment.SIZE) == -1){
-                buffer.read(sink);
-                throw new EOFException();
-            }
-        }
-        return buffer.read(sink);
+        return read(sink, 0, sink.length);
     }
 
     @Override
@@ -199,7 +193,16 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int read(byte[] sink, int offset, int byteCount) throws IOException {
-        require(Math.min(sink.length - offset, byteCount));
+        if (closed) {
+            throw new IOException("closed");
+        }
+        checkOffsetAndCount(sink.length, offset, byteCount);
+
+        if (buffer.size() == 0) {
+            long count = source.read(buffer, Segment.SIZE);
+            if (count == -1) return -1;
+        }
+
         return buffer.read(sink, offset, byteCount);
     }
 
