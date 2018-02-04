@@ -285,7 +285,8 @@ public final class BufferedSourceTest {
         assertByteArraysEquals(new byte[] { 'H', 'e', 'l', 'l', 'o', 0 }, sink);
     }
 
-    @Test public void readIntoByteArray() throws IOException {
+    @Test
+    public void readIntoByteArray() throws IOException {
         sink.writeUtf8("abcd");
 
         byte[] sink = new byte[3];

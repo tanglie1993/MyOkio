@@ -292,4 +292,15 @@ public class SegmentList implements Cloneable {
         }
         return -1;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for(Segment segment : segmentList){
+            for(int i = segment.front; i < segment.rear; i++){
+                builder.append(segment.data[i]).append(",");
+            }
+        }
+        return builder.toString();
+    }
 }

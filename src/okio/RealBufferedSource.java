@@ -438,4 +438,13 @@ public class RealBufferedSource implements BufferedSource {
         }
         return buffer.rangeEqualsChecked(offset, bytes, bytesOffset, byteCount);
     }
+
+    @Override
+    public String toString() {
+        return "RealBufferedSource{" +
+                "source=" + source +
+                ", buffer=" + buffer +
+                ", closed=" + closed +
+                '}';
+    }
 }

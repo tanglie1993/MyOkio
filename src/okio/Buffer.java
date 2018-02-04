@@ -450,4 +450,11 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public byte getByte(int index) {
         return segmentList.getByte(index);
     }
+
+    @Override
+    public String toString() {
+        return "Buffer{" +
+                "segmentList=" + segmentList +
+                '}';
+    }
 }
