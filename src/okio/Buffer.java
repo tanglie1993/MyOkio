@@ -61,7 +61,8 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return new String(readByteArray(length));
     }
 
-    @Override public Buffer clone() {
+    @Override
+    public Buffer clone() {
         return new Buffer(this.segmentList.clone());
     }
 
@@ -322,10 +323,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         boolean isFirst = true;
 
         long underflowZone = Long.MIN_VALUE / 10;
-        long underflowDigit = (Long.MIN_VALUE % 10) + 1;
+        long underflowDigit = (Long.MIN_VALUE % 10);
 
         long overflowZone = Long.MAX_VALUE / 10;
-        long overflowDigit = (Long.MAX_VALUE % 10) - 1;
+        long overflowDigit = (Long.MAX_VALUE % 10);
 
         while(segmentList.has(1)){
             int digit = 0;
@@ -334,11 +335,14 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
                 sign = -1;
             } else if (b >= '0' && b <= '9') {
                 digit = b - '0';
-                if (result < underflowZone || result == underflowZone && digit < underflowDigit) {
-                    throw new NumberFormatException("Number too small");
-                }
-                if (result > overflowZone || result == overflowZone && digit > overflowDigit) {
-                    throw new NumberFormatException("Number too large");
+                if(sign == -1){
+                    if (result < underflowZone || result == underflowZone && digit < underflowDigit) {
+                        throw new NumberFormatException("Number too small");
+                    }
+                }else if(!isFirst){
+                    if (result > overflowZone || result == overflowZone && digit > overflowDigit) {
+                        throw new NumberFormatException("Number too large");
+                    }
                 }
             } else {
                 if (isFirst) {
@@ -363,27 +367,26 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public boolean rangeEquals(int offset, ByteString byteString, int start, int end) {
-        if(!request(offset + end - start)){
+    public boolean rangeEquals(int offset, ByteString bytes, int bytesOffset, int byteCount) {
+        if(byteCount > bytes.getData().length - bytesOffset){
             return false;
         }
-        for(int i = start; i < end; i++){
-            if(getByte(i - start + offset) != byteString.getData()[i]){
+        if(!request(offset + byteCount)){
+            return false;
+        }
+        return rangeEqualsChecked(offset, bytes, bytesOffset, byteCount);
+    }
+
+    boolean rangeEqualsChecked(int offset, ByteString bytes, int bytesOffset, int byteCount) {
+        for(int i = offset; i < offset + byteCount; i++){
+            if(i - offset + bytesOffset >= bytes.getData().length){
+                return false;
+            }
+            if(getByte(i) != bytes.getData()[i - offset + bytesOffset]){
                 return false;
             }
         }
         return true;
-    }
-
-    private List<Byte> toList(byte[] sink) {
-        if(sink == null){
-            return new ArrayList<>();
-        }
-        List<Byte> result = new ArrayList<>();
-        for(byte b : sink){
-            result.add(b);
-        }
-        return result;
     }
 
     @Override
@@ -412,14 +415,6 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public void close() throws IOException {
 
-    }
-
-    private List<Byte> toList(String string) {
-        List<Byte> result = new ArrayList<>();
-        if(string == null){
-            return result;
-        }
-        return toList(string.getBytes());
     }
 
     @Override

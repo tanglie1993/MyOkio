@@ -387,14 +387,6 @@ public class RealBufferedSource implements BufferedSource {
         if(!request(offset + byteCount)){
             return false;
         }
-        for(int i = offset; i < offset + byteCount; i++){
-            if(i - offset + bytesOffset >= bytes.getData().length){
-                return false;
-            }
-            if(buffer.getByte(i) != bytes.getData()[i - offset + bytesOffset]){
-                return false;
-            }
-        }
-        return true;
+        return buffer.rangeEqualsChecked(offset, bytes, bytesOffset, byteCount);
     }
 }

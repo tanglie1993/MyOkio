@@ -743,7 +743,7 @@ public final class BufferedSourceTest {
             source.readHexadecimalUnsignedLong();
             fail();
         } catch (NumberFormatException e) {
-            assertEquals("Number too large: fffffffffffffffff", e.getMessage());
+            assertEquals("Number too large", e.getMessage());
         }
     }
 
