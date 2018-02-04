@@ -5,6 +5,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by pc on 2018/1/20.
@@ -285,14 +287,29 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int indexOfElement(ByteString byteString) throws IOException {
-        loadAllSourceIntoBuffer();
-        return buffer.indexOfElement(byteString);
+        return indexOfElement(byteString, 0);
     }
 
     @Override
-    public int indexOfElement(ByteString byteString, int index) throws IOException {
-        loadAllSourceIntoBuffer();
-        return buffer.indexOfElement(byteString, index);
+    public int indexOfElement(ByteString byteString, int fromIndex) throws IOException {
+        if(!request(fromIndex)){
+            return -1;
+        }
+        Set<Byte> bytesSet = new HashSet<>();
+        for(byte b : byteString.getData()){
+            bytesSet.add(b);
+        }
+        for(int i = fromIndex; i < buffer.size(); i++){
+            if(bytesSet.contains(buffer.getByte(i))){
+                return i;
+            }
+        }
+        while(source.read(buffer, 1) != -1){
+            if(bytesSet.contains(buffer.getByte(buffer.size() - 1))){
+                return buffer.size() - 1;
+            }
+        }
+        return -1;
     }
 
     @Override
