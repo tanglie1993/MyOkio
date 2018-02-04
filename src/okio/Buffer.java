@@ -33,7 +33,15 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     public long write(Source source, long length) throws IOException {
-        return source.read(this, length);
+        long accumulatedRead = 0;
+        while(accumulatedRead < length){
+            long read = source.read(this, length);
+            if(read == -1){
+                return accumulatedRead;
+            }
+            accumulatedRead += read;
+        }
+        return length;
     }
 
     @Override
