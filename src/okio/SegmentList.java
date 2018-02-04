@@ -145,9 +145,9 @@ public class SegmentList implements Cloneable {
                 return sinkWriteIndex - offset;
             }
             Segment first = segmentList.getFirst();
-            if(first.rear - first.front >= byteCount - sinkWriteIndex){
-                System.arraycopy(first.data, first.front, sink, sinkWriteIndex, byteCount - sinkWriteIndex);
-                first.front += byteCount - sinkWriteIndex;
+            if(first.rear - first.front >= byteCount - (sinkWriteIndex - offset)){
+                System.arraycopy(first.data, first.front, sink, sinkWriteIndex, byteCount - (sinkWriteIndex - offset));
+                first.front += byteCount - (sinkWriteIndex - offset);
                 return byteCount;
             }else{
                 System.arraycopy(first.data, first.front, sink, sinkWriteIndex, first.rear - first.front);
