@@ -253,14 +253,34 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int indexOf(ByteString byteString) throws IOException {
-        loadAllSourceIntoBuffer();
-        return buffer.indexOf(byteString);
+        return indexOf(byteString, 0);
     }
 
     @Override
     public int indexOf(ByteString byteString, int fromIndex) throws IOException {
-        loadAllSourceIntoBuffer();
-        return buffer.indexOf(byteString, fromIndex);
+        if(!request(byteString.getData().length)){
+            return -1;
+        }
+        for(int i = fromIndex; i <= buffer.size() - byteString.getData().length; i++){
+            if(bufferMatchIndex(byteString, i)){
+                return i - fromIndex;
+            }
+        }
+        while(source.read(buffer, 1) != -1){
+            if(bufferMatchIndex(byteString, buffer.size() - byteString.getData().length)){
+                return buffer.size() - byteString.getData().length;
+            }
+        }
+        return -1;
+    }
+
+    private boolean bufferMatchIndex(ByteString byteString, int index) {
+        for(int i = index; i < buffer.size(); i++){
+            if(buffer.getByte(i) != byteString.getData()[i - index]){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
