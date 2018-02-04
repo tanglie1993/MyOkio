@@ -4,6 +4,7 @@ import test.TestUtil;
 
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 /**
  * Created by pc on 2018/1/21.
@@ -39,5 +40,12 @@ public class ByteString {
     public static ByteString of(byte... data) {
         if (data == null) throw new IllegalArgumentException("data == null");
         return new ByteString(data.clone());
+    }
+
+    @Override
+    public String toString() {
+        return "ByteString{" +
+                "data=" + Arrays.toString(data) +
+                '}';
     }
 }

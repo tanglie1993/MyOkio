@@ -285,7 +285,7 @@ public class RealBufferedSource implements BufferedSource {
         }
         for(int i = fromIndex; i <= buffer.size() - byteString.getData().length; i++){
             if(bufferMatchIndex(byteString, i)){
-                return i - fromIndex;
+                return i;
             }
         }
         while(source.read(buffer, 1) != -1){
@@ -298,6 +298,9 @@ public class RealBufferedSource implements BufferedSource {
 
     private boolean bufferMatchIndex(ByteString byteString, int index) {
         for(int i = index; i < buffer.size(); i++){
+            if(i - index >= byteString.getData().length){
+                return true;
+            }
             if(buffer.getByte(i) != byteString.getData()[i - index]){
                 return false;
             }
