@@ -235,6 +235,15 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public int indexOf(byte b, int fromIndex, int toIndex) throws IOException {
+        if(fromIndex < 0){
+            throw new IllegalArgumentException("fromIndex < 0");
+        }
+        if(fromIndex > toIndex){
+            throw new IllegalArgumentException("Expected failure: fromIndex > toIndex");
+        }
+        if(fromIndex == toIndex){
+            return -1;
+        }
         final int initialBufferSize = buffer.size();
         for(int i = fromIndex; i < toIndex && i < initialBufferSize; i++){
             if(buffer.getByte(i) == b){
