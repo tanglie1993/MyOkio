@@ -376,13 +376,25 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public boolean rangeEquals(int offset, ByteString byteString) throws IOException {
-        loadAllSourceIntoBuffer();
-        return buffer.rangeEquals(offset, byteString);
+        return rangeEquals(offset, byteString, 0, byteString.getData().length);
     }
 
     @Override
-    public boolean rangeEquals(int offset, ByteString byteString, int start, int end) throws IOException {
-        loadAllSourceIntoBuffer();
-        return buffer.rangeEquals(offset, byteString, start, end);
+    public boolean rangeEquals(int offset, ByteString bytes, int bytesOffset, int byteCount) throws IOException {
+        if(byteCount > bytes.getData().length - bytesOffset){
+            return false;
+        }
+        if(!request(offset + byteCount)){
+            return false;
+        }
+        for(int i = offset; i < offset + byteCount; i++){
+            if(i - offset + bytesOffset >= bytes.getData().length){
+                return false;
+            }
+            if(buffer.getByte(i) != bytes.getData()[i - offset + bytesOffset]){
+                return false;
+            }
+        }
+        return true;
     }
 }
