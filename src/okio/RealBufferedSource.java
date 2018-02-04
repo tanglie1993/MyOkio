@@ -174,6 +174,7 @@ public class RealBufferedSource implements BufferedSource {
     public void readFully(byte[] sink) throws IOException {
         loadAllSourceIntoBuffer();
         if(buffer.size() < sink.length){
+            buffer.read(sink);
             throw new EOFException();
         }
         buffer.readFully(sink);
