@@ -202,7 +202,9 @@ public class RealBufferedSource implements BufferedSource {
 
         if (buffer.size() == 0) {
             long count = source.read(buffer, Segment.SIZE);
-            if (count == -1) return -1;
+            if (count == -1) {
+                return -1;
+            }
         }
 
         return buffer.read(sink, offset, byteCount);
@@ -211,6 +213,7 @@ public class RealBufferedSource implements BufferedSource {
     @Override
     public byte[] readByteArray(int count) throws IOException {
         byte[] result = new byte[count];
+        request(count);
         read(result);
         return result;
     }
