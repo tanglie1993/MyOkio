@@ -60,6 +60,11 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public void writeByte(byte b) {
+        segmentList.write(b);
+    }
+
+    @Override
     public void write(Buffer clone, long byteCount) throws IOException {
         clone.readFully(this, byteCount);
     }
@@ -471,8 +476,6 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public String toString() {
-        return "Buffer{" +
-                "segmentList=" + segmentList +
-                '}';
+        return "[hex=" + segmentList + ']';
     }
 }

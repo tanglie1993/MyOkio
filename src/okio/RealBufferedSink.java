@@ -68,4 +68,9 @@ public class RealBufferedSink implements BufferedSink {
     public void write(byte[] bytes) {
         buffer.write(bytes);
     }
+
+    @Override
+    public void writeByte(byte b) {
+        buffer.writeByte(b);
+    }
 }

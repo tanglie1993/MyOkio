@@ -65,12 +65,13 @@ public final class BufferedSinkTest {
         assertEquals(0, data.size());
     }
 
-//    @Test public void writeBytes() throws Exception {
-//        sink.writeByte(0xab);
-//        sink.writeByte(0xcd);
-//        sink.flush();
-//        assertEquals("[hex=abcd]", data.toString());
-//    }
+    @Test
+    public void writeBytes() throws Exception {
+        sink.writeByte((byte) 0xab);
+        sink.writeByte((byte) 0xcd);
+        sink.flush();
+        assertEquals("[hex=abcd]", data.toString());
+    }
 //
 //    @Test public void writeLastByteInSegment() throws Exception {
 //        sink.writeUtf8(repeat('a', Segment.SIZE - 1));
