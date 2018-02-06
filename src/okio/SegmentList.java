@@ -318,4 +318,14 @@ public class SegmentList implements Cloneable {
         }
         toWrite.data[toWrite.rear++] = b;
     }
+
+    public List<Integer> segmentSizes() {
+        List<Integer> result = new ArrayList<>();
+        for(Segment segment : segmentList){
+            if(segment.rear - segment.front > 0){
+                result.add(segment.rear - segment.front);
+            }
+        }
+        return result;
+    }
 }

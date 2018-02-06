@@ -478,4 +478,8 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public String toString() {
         return "[hex=" + segmentList + ']';
     }
+
+    public List<Integer> segmentSizes() {
+        return segmentList.segmentSizes();
+    }
 }

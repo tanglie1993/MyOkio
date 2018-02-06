@@ -75,16 +75,16 @@ public final class BufferedSinkTest {
         assertEquals("[hex=abcd]", data.toString());
     }
 
-//    @Test
-//    public void writeLastByteInSegment() throws Exception {
-//        sink.writeUtf8(repeat('a', Segment.SIZE - 1));
-//        sink.writeByte((byte) 0x20);
-//        sink.writeByte((byte) 0x21);
-//        sink.flush();
-//        assertEquals(asList(Segment.SIZE, 1), data.segmentSizes());
-//        assertEquals(repeat('a', Segment.SIZE - 1), data.readUtf8(Segment.SIZE - 1));
+    @Test
+    public void writeLastByteInSegment() throws Exception {
+        sink.writeUtf8(repeat('a', Segment.SIZE - 1));
+        sink.writeByte((byte) 0x20);
+        sink.writeByte((byte) 0x21);
+        sink.flush();
+        assertEquals(Arrays.asList(Segment.SIZE, 1), data.segmentSizes());
+        assertEquals(repeat('a', Segment.SIZE - 1), data.readUtf8(Segment.SIZE - 1));
 //        assertEquals("[text= !]", data.toString());
-//    }
+    }
 //
 //    @Test public void writeShort() throws Exception {
 //        sink.writeShort(0xabcd);
