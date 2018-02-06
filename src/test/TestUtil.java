@@ -12,7 +12,7 @@ public class TestUtil {
 
     public static final Charset UTF_8 = Charset.forName("UTF-8");
 
-    static String repeat(char c, int count) {
+    public static String repeat(char c, int count) {
         char[] array = new char[count];
         Arrays.fill(array, c);
         return new String(array);

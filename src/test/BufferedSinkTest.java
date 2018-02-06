@@ -13,9 +13,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import test.IDECompatibleParameterized;
+import test.TestUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static test.TestUtil.repeat;
 
 @RunWith(IDECompatibleParameterized.class)
 public final class BufferedSinkTest {
@@ -72,11 +74,12 @@ public final class BufferedSinkTest {
         sink.flush();
         assertEquals("[hex=abcd]", data.toString());
     }
-//
-//    @Test public void writeLastByteInSegment() throws Exception {
+
+//    @Test
+//    public void writeLastByteInSegment() throws Exception {
 //        sink.writeUtf8(repeat('a', Segment.SIZE - 1));
-//        sink.writeByte(0x20);
-//        sink.writeByte(0x21);
+//        sink.writeByte((byte) 0x20);
+//        sink.writeByte((byte) 0x21);
 //        sink.flush();
 //        assertEquals(asList(Segment.SIZE, 1), data.segmentSizes());
 //        assertEquals(repeat('a', Segment.SIZE - 1), data.readUtf8(Segment.SIZE - 1));
