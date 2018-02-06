@@ -89,6 +89,14 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public void writeIntLe(int i) {
+        segmentList.write((byte) (i & 0xff));
+        segmentList.write((byte) (i >> 8 & 0xff));
+        segmentList.write((byte) (i >> 16 & 0xff));
+        segmentList.write((byte) (i >> 24 & 0xff));
+    }
+
+    @Override
     public void write(Buffer clone, long byteCount) throws IOException {
         clone.readFully(this, byteCount);
     }

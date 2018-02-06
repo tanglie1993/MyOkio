@@ -88,4 +88,9 @@ public class RealBufferedSink implements BufferedSink {
     public void writeInt(int i) {
         buffer.writeInt(i);
     }
+
+    @Override
+    public void writeIntLe(int i) {
+        buffer.writeIntLe(i);
+    }
 }
