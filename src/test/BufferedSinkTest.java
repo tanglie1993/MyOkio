@@ -85,13 +85,14 @@ public final class BufferedSinkTest {
         assertEquals(repeat('a', Segment.SIZE - 1), data.readUtf8(Segment.SIZE - 1));
 //        assertEquals("[text= !]", data.toString());
     }
-//
-//    @Test public void writeShort() throws Exception {
-//        sink.writeShort(0xabcd);
-//        sink.writeShort(0x4321);
-//        sink.flush();
-//        assertEquals("[hex=abcd4321]", data.toString());
-//    }
+
+    @Test
+    public void writeLastByteInSegmenthort() throws Exception {
+        sink.writeShort((short) 0xabcd);
+        sink.writeShort((short) 0x4321);
+        sink.flush();
+        assertEquals("[hex=abcd4321]", data.toString());
+    }
 //
 //    @Test public void writeShortLe() throws Exception {
 //        sink.writeShortLe(0xcdab);
