@@ -94,19 +94,21 @@ public final class BufferedSinkTest {
         assertEquals("[hex=abcd4321]", data.toString());
     }
 //
-//    @Test public void writeShortLe() throws Exception {
-//        sink.writeShortLe(0xcdab);
-//        sink.writeShortLe(0x2143);
-//        sink.flush();
-//        assertEquals("[hex=abcd4321]", data.toString());
-//    }
+    @Test
+    public void writeShortLe() throws Exception {
+        sink.writeShortLe((short) 0xcdab);
+        sink.writeShortLe((short) 0x2143);
+        sink.flush();
+        assertEquals("[hex=abcd4321]", data.toString());
+    }
 //
-//    @Test public void writeInt() throws Exception {
-//        sink.writeInt(0xabcdef01);
-//        sink.writeInt(0x87654321);
-//        sink.flush();
-//        assertEquals("[hex=abcdef0187654321]", data.toString());
-//    }
+    @Test
+    public void writeInt() throws Exception {
+        sink.writeInt(0xabcdef01);
+        sink.writeInt(0x87654321);
+        sink.flush();
+        assertEquals("[hex=abcdef0187654321]", data.toString());
+    }
 //
 //    @Test public void writeLastIntegerInSegment() throws Exception {
 //        sink.writeUtf8(repeat('a', Segment.SIZE - 4));

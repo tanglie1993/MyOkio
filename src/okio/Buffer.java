@@ -66,7 +66,26 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public void writeShort(short s) {
-        segmentList.write(s);
+        byte second = (byte) (s & 0xff);
+        byte first = (byte) (s >> 8 & 0xff);
+        segmentList.write(first);
+        segmentList.write(second);
+    }
+
+    @Override
+    public void writeShortLe(short s) {
+        byte first = (byte) (s & 0xff);
+        byte second = (byte) (s >> 8 & 0xff);
+        segmentList.write(first);
+        segmentList.write(second);
+    }
+
+    @Override
+    public void writeInt(int i) {
+        segmentList.write((byte) (i >> 24 & 0xff));
+        segmentList.write((byte) (i >> 16 & 0xff));
+        segmentList.write((byte) (i >> 8 & 0xff));
+        segmentList.write((byte) (i & 0xff));
     }
 
     @Override

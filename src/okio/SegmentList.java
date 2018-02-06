@@ -302,7 +302,11 @@ public class SegmentList implements Cloneable {
         StringBuilder builder = new StringBuilder();
         for(Segment segment : segmentList){
             for(int i = segment.front; i < segment.rear; i++){
-                builder.append(Integer.toHexString(segment.data[i] & 0xFF));
+                String string = Integer.toHexString(segment.data[i] & 0xFF);
+                if(string.length() == 1){
+                    builder.append("0");
+                }
+                builder.append(string);
             }
         }
         return builder.toString();
@@ -327,12 +331,5 @@ public class SegmentList implements Cloneable {
             }
         }
         return result;
-    }
-
-    public void write(short s) {
-        byte second = (byte) (s & 0xff);
-        byte first = (byte) (s >> 8 & 0xff);
-        write(first);
-        write(second);
     }
 }
