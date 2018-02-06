@@ -140,19 +140,21 @@ public final class BufferedSinkTest {
         assertEquals("[hex=01efcdab21436587]", data.toString());
     }
 //
-//    @Test public void writeLong() throws Exception {
-//        sink.writeLong(0xabcdef0187654321L);
-//        sink.writeLong(0xcafebabeb0b15c00L);
-//        sink.flush();
-//        assertEquals("[hex=abcdef0187654321cafebabeb0b15c00]", data.toString());
-//    }
+    @Test
+    public void writeLong() throws Exception {
+        sink.writeLong(0xabcdef0187654321L);
+        sink.writeLong(0xcafebabeb0b15c00L);
+        sink.flush();
+        assertEquals("[hex=abcdef0187654321cafebabeb0b15c00]", data.toString());
+    }
 //
-//    @Test public void writeLongLe() throws Exception {
-//        sink.writeLongLe(0xabcdef0187654321L);
-//        sink.writeLongLe(0xcafebabeb0b15c00L);
-//        sink.flush();
-//        assertEquals("[hex=2143658701efcdab005cb1b0bebafeca]", data.toString());
-//    }
+    @Test
+    public void writeLongLe() throws Exception {
+        sink.writeLongLe(0xabcdef0187654321L);
+        sink.writeLongLe(0xcafebabeb0b15c00L);
+        sink.flush();
+        assertEquals("[hex=2143658701efcdab005cb1b0bebafeca]", data.toString());
+    }
 //
 //    @Test public void writeStringUtf8() throws IOException {
 //        sink.writeUtf8("təˈranəˌsôr");

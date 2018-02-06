@@ -21,4 +21,8 @@ public interface BufferedSink extends Sink {
     void writeInt(int i);
 
     void writeIntLe(int i);
+
+    void writeLong(long l);
+
+    void writeLongLe(long l);
 }

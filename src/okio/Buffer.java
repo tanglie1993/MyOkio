@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -94,6 +95,18 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         segmentList.write((byte) (i >> 8 & 0xff));
         segmentList.write((byte) (i >> 16 & 0xff));
         segmentList.write((byte) (i >> 24 & 0xff));
+    }
+
+    @Override
+    public void writeLong(long l) {
+        for(int i = 8; i > 0; i--){
+            segmentList.write((byte) ((l >>> 8 * (i - 1)) & 0xff));
+        }
+    }
+
+    @Override
+    public void writeLongLe(long l) {
+        writeLong(Util.reverseBytesLong(l));
     }
 
     @Override
