@@ -265,11 +265,12 @@ public final class BufferedSinkTest {
         assertEquals(0, source.size());
     }
 
-//    @Test public void closeEmitsBufferedBytes() throws IOException {
-//        sink.writeByte('a');
-//        sink.close();
-//        assertEquals('a', data.readByte());
-//    }
+    @Test
+    public void closeEmitsBufferedBytes() throws IOException {
+        sink.writeByte((byte) 0x56);
+        sink.close();
+        assertEquals((byte) 0x56, data.readByte());
+    }
 //
 //    @Test public void outputStream() throws Exception {
 //        OutputStream out = sink.outputStream();
