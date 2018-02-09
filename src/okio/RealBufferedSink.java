@@ -2,6 +2,7 @@ package okio;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 /**
  * Created by pc on 2018/1/20.
@@ -102,5 +103,25 @@ public class RealBufferedSink implements BufferedSink {
     @Override
     public void writeLongLe(long l) {
         buffer.writeLongLe(l);
+    }
+
+    @Override
+    public void write(ByteString byteString) {
+        buffer.write(byteString.getData());
+    }
+
+    @Override
+    public void writeUtf8(String string, int startIndex, int endIndex) {
+        buffer.writeUtf8(string, startIndex, endIndex);
+    }
+
+    @Override
+    public void writeString(String string, Charset charset) {
+        buffer.write(string.getBytes(charset));
+    }
+
+    @Override
+    public void writeString(String string, int start, int end, Charset charset) {
+        buffer.write(string.substring(start, end).getBytes(charset));
     }
 }

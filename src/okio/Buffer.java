@@ -110,6 +110,26 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
+    public void write(ByteString byteString) {
+        segmentList.write(byteString.getData());
+    }
+
+    @Override
+    public void writeUtf8(String string, int startIndex, int endIndex) {
+        segmentList.write(string.getBytes(), startIndex, endIndex);
+    }
+
+    @Override
+    public void writeString(String string, Charset charset) {
+        write(string.getBytes(charset));
+    }
+
+    @Override
+    public void writeString(String string, int start, int end, Charset charset) {
+        write(string.substring(start, end).getBytes(charset));
+    }
+
+    @Override
     public void write(Buffer clone, long byteCount) throws IOException {
         clone.readFully(this, byteCount);
     }

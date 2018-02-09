@@ -21,10 +21,6 @@ public class ByteString {
         return new String(data);
     }
 
-    public static byte[] decodeHex(String s) {
-        return DatatypeConverter.parseHexBinary(s);
-    }
-
     public String toString(Charset charset) {
         return new String(data, charset);
     }
@@ -38,8 +34,34 @@ public class ByteString {
     }
 
     public static ByteString of(byte... data) {
-        if (data == null) throw new IllegalArgumentException("data == null");
+        if (data == null) {
+            throw new IllegalArgumentException("data == null");
+        }
         return new ByteString(data.clone());
+    }
+
+    public static ByteString decodeHex(String hex) {
+        if (hex == null) {
+            throw new IllegalArgumentException("hex == null");
+        }
+        if (hex.length() % 2 != 0) {
+            throw new IllegalArgumentException("Unexpected hex string: " + hex);
+        }
+
+        byte[] result = new byte[hex.length() / 2];
+        for (int i = 0; i < result.length; i++) {
+            int d1 = decodeHexDigit(hex.charAt(i * 2)) << 4;
+            int d2 = decodeHexDigit(hex.charAt(i * 2 + 1));
+            result[i] = (byte) (d1 + d2);
+        }
+        return of(result);
+    }
+
+    private static int decodeHexDigit(char c) {
+        if (c >= '0' && c <= '9') return c - '0';
+        if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+        if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+        throw new IllegalArgumentException("Unexpected hex digit: " + c);
     }
 
     @Override
@@ -47,5 +69,20 @@ public class ByteString {
         return "ByteString{" +
                 "data=" + Arrays.toString(data) +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ByteString that = (ByteString) o;
+
+        return Arrays.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(data);
     }
 }

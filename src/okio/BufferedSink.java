@@ -1,6 +1,7 @@
 package okio;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 /**
  * Created by pc on 2018/1/18.
@@ -25,4 +26,12 @@ public interface BufferedSink extends Sink {
     void writeLong(long l);
 
     void writeLongLe(long l);
+
+    void write(ByteString byteString);
+
+    void writeUtf8(String string, int startIndex, int endIndex);
+
+    void writeString(String string, Charset charset);
+
+    void writeString(String string, int start, int end, Charset charset);
 }

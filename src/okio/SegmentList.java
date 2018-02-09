@@ -332,4 +332,8 @@ public class SegmentList implements Cloneable {
         }
         return result;
     }
+
+    public void write(byte[] bytes, int startIndex, int endIndex) {
+
+    }
 }
