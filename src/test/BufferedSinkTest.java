@@ -228,20 +228,21 @@ public final class BufferedSinkTest {
         sink.flush();
         assertEquals("abcdabcd", data.readUtf8());
     }
-//
-//    @Test public void writeSourcePropagatesEof() throws IOException {
-//        Source source = new Buffer().writeUtf8("abcd");
-//
-//        try {
-//            sink.write(source, 8);
-//            fail();
-//        } catch (EOFException expected) {
-//        }
-//
-//        // Ensure that whatever was available was correctly written.
-//        sink.flush();
-//        assertEquals("abcd", data.readUtf8());
-//    }
+
+    @Test
+    public void writeSourcePropagatesEof() throws IOException {
+        Source source = new Buffer().writeUtf8("abcd");
+
+        try {
+            sink.write(source, 8);
+            fail();
+        } catch (EOFException expected) {
+        }
+
+        // Ensure that whatever was available was correctly written.
+        sink.flush();
+        assertEquals("abcd", data.readUtf8());
+    }
 //
 //    @Test public void writeSourceWithZeroIsNoOp() throws IOException {
 //        // This test ensures that a zero byte count never calls through to read the source. It may be

@@ -38,6 +38,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         while(accumulatedRead < length){
             long read = source.read(this, length);
             if(read == -1){
+                if(accumulatedRead < length){
+                    throw new EOFException();
+                }
                 return accumulatedRead;
             }
             accumulatedRead += read;
