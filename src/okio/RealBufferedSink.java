@@ -65,7 +65,9 @@ public class RealBufferedSink implements BufferedSink {
         long result = 0;
         while(true){
             long increment = source.read(buffer, Segment.SIZE);
-            result += increment;
+            if(increment > 0){
+                result += increment;
+            }
             if(increment < Segment.SIZE){
                 return result;
             }

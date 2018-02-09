@@ -59,6 +59,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
                 result++;
             }
         }
+//        if(result == 0){
+//            return -1;
+//        }
         return result;
     }
 

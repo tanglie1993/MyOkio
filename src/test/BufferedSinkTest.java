@@ -258,12 +258,13 @@ public final class BufferedSinkTest {
         assertEquals(0, data.size());
     }
 
-//    @Test public void writeAllExhausted() throws Exception {
-//        Buffer source = new Buffer();
-//        assertEquals(0, sink.writeAll(source));
-//        assertEquals(0, source.size());
-//    }
-//
+    @Test
+    public void writeAllExhausted() throws Exception {
+        Buffer source = new Buffer();
+        assertEquals(0, sink.writeAll(source));
+        assertEquals(0, source.size());
+    }
+
 //    @Test public void closeEmitsBufferedBytes() throws IOException {
 //        sink.writeByte('a');
 //        sink.close();
