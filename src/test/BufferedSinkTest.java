@@ -193,15 +193,16 @@ public final class BufferedSinkTest {
         sink.flush();
         assertEquals(ByteString.encodeUtf8("ranə"), data.readByteString());
     }
-//
-//    @Test public void writeAll() throws Exception {
-//        Buffer source = new Buffer().writeUtf8("abcdef");
-//
-//        assertEquals(6, sink.writeAll(source));
-//        assertEquals(0, source.size());
-//        sink.flush();
-//        assertEquals("abcdef", data.readUtf8());
-//    }
+
+    @Test
+    public void writeAll() throws Exception {
+        Buffer source = new Buffer().writeUtf8("abcdef");
+
+        assertEquals(6, sink.writeAll(source));
+        assertEquals(0, source.size());
+        sink.flush();
+        assertEquals("abcdef", data.readUtf8());
+    }
 //
 //    @Test public void writeSource() throws Exception {
 //        Buffer source = new Buffer().writeUtf8("abcdef");

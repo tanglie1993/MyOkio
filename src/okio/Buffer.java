@@ -46,13 +46,17 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void writeAll(Source source) throws IOException {
+    public long writeAll(Source source) throws IOException {
         if (source == null) throw new IllegalArgumentException("source == null");
+        long result = 0;
         while(true){
             if(source.read(this, 1) <= 0){
                 break;
+            }else{
+                result++;
             }
         }
+        return result;
     }
 
     @Override

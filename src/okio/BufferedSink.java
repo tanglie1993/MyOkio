@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 public interface BufferedSink extends Sink {
     Buffer writeUtf8(String s) throws IOException;
 
-    void writeAll(Source source) throws IOException;
+    long writeAll(Source source) throws IOException;
 
     void write(byte[] bytes);
 

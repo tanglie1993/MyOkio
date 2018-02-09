@@ -61,8 +61,15 @@ public class RealBufferedSink implements BufferedSink {
     }
 
     @Override
-    public void writeAll(Source source) throws IOException {
-
+    public long writeAll(Source source) throws IOException {
+        long result = 0;
+        while(true){
+            long increment = source.read(buffer, Segment.SIZE);
+            result += increment;
+            if(increment < Segment.SIZE){
+                return result;
+            }
+        }
     }
 
     @Override
