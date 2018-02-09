@@ -214,19 +214,20 @@ public final class BufferedSinkTest {
         assertEquals("abcd", data.readUtf8());
         assertEquals("ef", source.readUtf8());
     }
-//
-//    @Test public void writeSourceReadsFully() throws Exception {
-//        Source source = new ForwardingSource(new Buffer()) {
-//            @Override public long read(Buffer sink, long byteCount) throws IOException {
-//                sink.writeUtf8("abcd");
-//                return 4;
-//            }
-//        };
-//
-//        sink.write(source, 8);
-//        sink.flush();
-//        assertEquals("abcdabcd", data.readUtf8());
-//    }
+
+    @Test
+    public void writeSourceReadsFully() throws Exception {
+        Source source = new ForwardingSource(new Buffer()) {
+            @Override public long read(Buffer sink, long byteCount) throws IOException {
+                sink.writeUtf8("abcd");
+                return 4;
+            }
+        };
+
+        sink.write(source, 8);
+        sink.flush();
+        assertEquals("abcdabcd", data.readUtf8());
+    }
 //
 //    @Test public void writeSourcePropagatesEof() throws IOException {
 //        Source source = new Buffer().writeUtf8("abcd");
