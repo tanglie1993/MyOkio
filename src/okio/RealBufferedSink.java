@@ -131,4 +131,9 @@ public class RealBufferedSink implements BufferedSink {
     public void writeString(String string, int start, int end, Charset charset) {
         buffer.write(string.substring(start, end).getBytes(charset));
     }
+
+    @Override
+    public long write(Source source, long length) throws IOException {
+        return buffer.write(source, length);
+    }
 }
