@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
  * Created by pc on 2018/1/18.
  */
 public interface BufferedSink extends Sink {
-    Buffer writeUtf8(String s) throws IOException;
+    BufferedSink writeUtf8(String s) throws IOException;
 
     long writeAll(Source source) throws IOException;
 
@@ -38,4 +38,8 @@ public interface BufferedSink extends Sink {
     long write(Source source, long length) throws IOException;
 
     OutputStream outputStream();
+
+    BufferedSink writeDecimalLong(long value) throws IOException;
+
+    BufferedSink writeHexadecimalUnsignedLong(long value);
 }

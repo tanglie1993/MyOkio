@@ -336,4 +336,19 @@ public class SegmentList implements Cloneable {
     public void write(byte[] bytes, int startIndex, int endIndex) {
 
     }
+
+    Segment getWritableSegment(int minimumCapacity) {
+        if (segmentList.size() == 0) {
+            Segment segment = new Segment();
+            add(segmentList, segment);
+            return segment;
+        }
+        Segment lastSegment = segmentList.getLast();
+        if (lastSegment.rear + minimumCapacity > Segment.SIZE) {
+            Segment segment = new Segment();
+            add(segmentList, segment);
+            return segment;
+        }
+        return lastSegment;
+    }
 }

@@ -56,8 +56,9 @@ public class RealBufferedSink implements BufferedSink {
     }
 
     @Override
-    public Buffer writeUtf8(String s) throws IOException {
-        return buffer.writeUtf8(s);
+    public BufferedSink writeUtf8(String s) throws IOException {
+        buffer.writeUtf8(s);
+        return this;
     }
 
     @Override
@@ -167,5 +168,18 @@ public class RealBufferedSink implements BufferedSink {
                 }
             }
         };
+    }
+
+    @Override
+    public BufferedSink writeDecimalLong(long value) throws IOException {
+        buffer.writeDecimalLong(value);
+        return this;
+    }
+
+
+    @Override
+    public BufferedSink writeHexadecimalUnsignedLong(long value) {
+        buffer.writeHexadecimalUnsignedLong(value);
+        return this;
     }
 }
