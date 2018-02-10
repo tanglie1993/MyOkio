@@ -249,6 +249,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public String readUtf8(int length) {
+        if(segmentList.available() < length){
+            throw new ArrayIndexOutOfBoundsException();
+        }
         return new String(readByteArray(length));
     }
 
