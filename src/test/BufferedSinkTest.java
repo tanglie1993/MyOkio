@@ -282,15 +282,16 @@ public final class BufferedSinkTest {
         out.flush();
         assertEquals("a" + repeat('b', 0) + "c", data.readUtf8());
     }
-//
-//    @Test public void outputStreamBounds() throws Exception {
-//        OutputStream out = sink.outputStream();
-//        try {
-//            out.write(new byte[100], 50, 51);
-//            fail();
-//        } catch (ArrayIndexOutOfBoundsException expected) {
-//        }
-//    }
+
+    @Test
+    public void outputStreamBounds() throws Exception {
+        OutputStream out = sink.outputStream();
+        try {
+            out.write(new byte[100], 50, 51);
+            fail();
+        } catch (ArrayIndexOutOfBoundsException expected) {
+        }
+    }
 //
 //    @Test public void longDecimalString() throws IOException {
 //        assertLongDecimalString(0);

@@ -56,6 +56,21 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             public void write(int b) throws IOException {
                 writeByte((byte) b);
             }
+
+            @Override
+            public void write(byte b[], int off, int len) throws IOException {
+                if (b == null) {
+                    throw new NullPointerException();
+                } else if ((off < 0) || (off > b.length) || (len < 0) ||
+                        ((off + len) > b.length) || ((off + len) < 0)) {
+                    throw new ArrayIndexOutOfBoundsException();
+                } else if (len == 0) {
+                    return;
+                }
+                for (int i = 0 ; i < len ; i++) {
+                    write(b[off + i]);
+                }
+            }
         };
     }
 
