@@ -30,7 +30,7 @@ public class RealBufferedSource implements BufferedSource {
             @Override
             public long read(Buffer data, long length) throws IOException {
                 long size = length;
-                if(inputStream.available() < 0){
+                if(inputStream.available() <= 0){
                     return -1;
                 }
                 if(length > inputStream.available()){
@@ -56,7 +56,12 @@ public class RealBufferedSource implements BufferedSource {
         if (length < 0) {
             throw new IllegalArgumentException("byteCount < 0: " + length);
         }
-        long result = buffer.write(source, length);
+        long result = 0;
+        try{
+            result = buffer.write(source, length);
+        }catch (EOFException e){
+
+        }
         buffer.read(data, length);
         return result;
     }
