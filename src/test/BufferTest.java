@@ -97,8 +97,9 @@ public final class BufferTest {
         assertEquals("e" + repeat('f', 50000), buffer.readUtf8(50001)); // ef...f
         assertEquals(0, buffer.size());
     }
-//
-//    @Test public void fillAndDrainPool() throws Exception {
+
+//    @Test
+//    public void fillAndDrainPool() throws Exception {
 //        Buffer buffer = new Buffer();
 //
 //        // Take 2 * MAX_SIZE segments. This will drain the pool, even if other tests filled it.
@@ -122,39 +123,42 @@ public final class BufferTest {
 //        buffer.write(new byte[(int) SegmentPool.MAX_SIZE]);
 //        assertEquals(0, SegmentPool.byteCount);
 //    }
-//
-//    @Test public void moveBytesBetweenBuffersShareSegment() throws Exception {
-//        int size = (Segment.SIZE / 2) - 1;
-//        List<Integer> segmentSizes = moveBytesBetweenBuffers(repeat('a', size), repeat('b', size));
-//        assertEquals(asList(size * 2), segmentSizes);
-//    }
-//
-//    @Test public void moveBytesBetweenBuffersReassignSegment() throws Exception {
+
+    @Test
+    public void moveBytesBetweenBuffersShareSegment() throws Exception {
+        int size = (Segment.SIZE / 2) - 1;
+        List<Integer> segmentSizes = moveBytesBetweenBuffers(repeat('a', size), repeat('b', size));
+        assertEquals(Arrays.asList(size * 2), segmentSizes);
+    }
+
+//    @Test
+//    public void moveBytesBetweenBuffersReassignSegment() throws Exception {
 //        int size = (Segment.SIZE / 2) + 1;
 //        List<Integer> segmentSizes = moveBytesBetweenBuffers(repeat('a', size), repeat('b', size));
-//        assertEquals(asList(size, size), segmentSizes);
+//        assertEquals(Arrays.asList(size, size), segmentSizes);
 //    }
 //
-//    @Test public void moveBytesBetweenBuffersMultipleSegments() throws Exception {
+//    @Test
+//    public void moveBytesBetweenBuffersMultipleSegments() throws Exception {
 //        int size = 3 * Segment.SIZE + 1;
 //        List<Integer> segmentSizes = moveBytesBetweenBuffers(repeat('a', size), repeat('b', size));
-//        assertEquals(asList(Segment.SIZE, Segment.SIZE, Segment.SIZE, 1,
+//        assertEquals(Arrays.asList(Segment.SIZE, Segment.SIZE, Segment.SIZE, 1,
 //                Segment.SIZE, Segment.SIZE, Segment.SIZE, 1), segmentSizes);
 //    }
-//
-//    private List<Integer> moveBytesBetweenBuffers(String... contents) throws IOException {
-//        StringBuilder expected = new StringBuilder();
-//        Buffer buffer = new Buffer();
-//        for (String s : contents) {
-//            Buffer source = new Buffer();
-//            source.writeUtf8(s);
-//            buffer.writeAll(source);
-//            expected.append(s);
-//        }
-//        List<Integer> segmentSizes = buffer.segmentSizes();
-//        assertEquals(expected.toString(), buffer.readUtf8(expected.length()));
-//        return segmentSizes;
-//    }
+
+    private List<Integer> moveBytesBetweenBuffers(String... contents) throws IOException {
+        StringBuilder expected = new StringBuilder();
+        Buffer buffer = new Buffer();
+        for (String s : contents) {
+            Buffer source = new Buffer();
+            source.writeUtf8(s);
+            buffer.writeAll(source);
+            expected.append(s);
+        }
+        List<Integer> segmentSizes = buffer.segmentSizes();
+        assertEquals(expected.toString(), buffer.readUtf8(expected.length()));
+        return segmentSizes;
+    }
 //
 //    /** The big part of source's first segment is being moved. */
 //    @Test public void writeSplitSourceBufferLeft() throws Exception {
