@@ -36,4 +36,6 @@ public interface BufferedSink extends Sink {
     void writeString(String string, int start, int end, Charset charset);
 
     long write(Source source, long length) throws IOException;
+
+    OutputStream outputStream();
 }

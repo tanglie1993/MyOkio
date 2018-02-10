@@ -138,4 +138,19 @@ public class RealBufferedSink implements BufferedSink {
     public long write(Source source, long length) throws IOException {
         return buffer.write(source, length);
     }
+
+    @Override
+    public OutputStream outputStream() {
+        return new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                buffer.writeByte((byte) b);
+            }
+
+            @Override
+            public void flush() throws IOException {
+                sink.write(buffer, buffer.size());
+            }
+        };
+    }
 }

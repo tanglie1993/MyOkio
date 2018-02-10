@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -46,6 +47,16 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             accumulatedRead += read;
         }
         return length;
+    }
+
+    @Override
+    public OutputStream outputStream() {
+        return new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                writeByte((byte) b);
+            }
+        };
     }
 
     @Override

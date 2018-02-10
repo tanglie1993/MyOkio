@@ -17,6 +17,7 @@ import test.TestUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static test.TestUtil.UTF_8;
 import static test.TestUtil.repeat;
 
 @RunWith(IDECompatibleParameterized.class)
@@ -271,15 +272,16 @@ public final class BufferedSinkTest {
         sink.close();
         assertEquals((byte) 0x56, data.readByte());
     }
-//
-//    @Test public void outputStream() throws Exception {
-//        OutputStream out = sink.outputStream();
-//        out.write('a');
-//        out.write(repeat('b', 9998).getBytes(UTF_8));
-//        out.write('c');
-//        out.flush();
-//        assertEquals("a" + repeat('b', 9998) + "c", data.readUtf8());
-//    }
+
+    @Test
+    public void outputStream() throws Exception {
+        OutputStream out = sink.outputStream();
+        out.write('a');
+        out.write(repeat('b', 0).getBytes(UTF_8));
+        out.write('c');
+        out.flush();
+        assertEquals("a" + repeat('b', 0) + "c", data.readUtf8());
+    }
 //
 //    @Test public void outputStreamBounds() throws Exception {
 //        OutputStream out = sink.outputStream();
