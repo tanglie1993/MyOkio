@@ -78,7 +78,10 @@ public class RealBufferedSource implements BufferedSource {
         if (length < 0) {
             throw new IllegalArgumentException("byteCount < 0: " + length);
         }
-        buffer.write(source, length);
+        long extra = length - buffer.size();
+        if(extra > 0){
+            buffer.write(source, extra);
+        }
         return buffer.readUtf8(length);
     }
 
