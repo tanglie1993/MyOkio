@@ -351,4 +351,14 @@ public class SegmentList implements Cloneable {
         }
         return lastSegment;
     }
+
+    public long completeSegmentByteCount() {
+        long result = 0;
+        for(Segment segment : segmentList){
+            if(segment.rear == Segment.SIZE || segment.front >= segment.rear){
+                result += segment.rear - segment.front;
+            }
+        }
+        return result;
+    }
 }

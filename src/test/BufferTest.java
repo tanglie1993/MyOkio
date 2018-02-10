@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static test.TestUtil.repeat;
 
 /**
  * Tests solely for the behavior of Buffer's implementation. For generic BufferedSink or
@@ -42,25 +43,29 @@ public final class BufferTest {
         }
     }
 
-//    @Test public void completeSegmentByteCountOnEmptyBuffer() throws Exception {
-//        Buffer buffer = new Buffer();
-//        assertEquals(0, buffer.completeSegmentByteCount());
-//    }
-//
-//    @Test public void completeSegmentByteCountOnBufferWithFullSegments() throws Exception {
-//        Buffer buffer = new Buffer();
-//        buffer.writeUtf8(repeat('a', Segment.SIZE * 4));
-//        assertEquals(Segment.SIZE * 4, buffer.completeSegmentByteCount());
-//    }
-//
-//    @Test public void completeSegmentByteCountOnBufferWithIncompleteTailSegment() throws Exception {
-//        Buffer buffer = new Buffer();
-//        buffer.writeUtf8(repeat('a', Segment.SIZE * 4 - 10));
-//        assertEquals(Segment.SIZE * 3, buffer.completeSegmentByteCount());
-//    }
-//
+    @Test
+    public void completeSegmentByteCountOnEmptyBuffer() throws Exception {
+        Buffer buffer = new Buffer();
+        assertEquals(0, buffer.completeSegmentByteCount());
+    }
+
+    @Test
+    public void completeSegmentByteCountOnBufferWithFullSegments() throws Exception {
+        Buffer buffer = new Buffer();
+        buffer.writeUtf8(repeat('a', Segment.SIZE * 4));
+        assertEquals(Segment.SIZE * 4, buffer.completeSegmentByteCount());
+    }
+
+    @Test
+    public void completeSegmentByteCountOnBufferWithIncompleteTailSegment() throws Exception {
+        Buffer buffer = new Buffer();
+        buffer.writeUtf8(repeat('a', Segment.SIZE * 4 - 10));
+        assertEquals(Segment.SIZE * 3, buffer.completeSegmentByteCount());
+    }
+
 //    /** Buffer's toString is the same as ByteString's. */
-//    @Test public void bufferToString() throws Exception {
+//    @Test
+//    public void bufferToString() throws Exception {
 //        assertEquals("[size=0]", new Buffer().toString());
 //        assertEquals("[text=a\\r\\nb\\nc\\rd\\\\e]",
 //                new Buffer().writeUtf8("a\r\nb\nc\rd\\e").toString());

@@ -663,4 +663,8 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public List<Integer> segmentSizes() {
         return segmentList.segmentSizes();
     }
+
+    public long completeSegmentByteCount() {
+        return segmentList.completeSegmentByteCount();
+    }
 }
