@@ -63,7 +63,7 @@ public final class BufferTest {
         assertEquals(Segment.SIZE * 3, buffer.completeSegmentByteCount());
     }
 
-//    /** Buffer's toString is the same as ByteString's. */
+    /** Buffer's toString is the same as ByteString's. */
 //    @Test
 //    public void bufferToString() throws Exception {
 //        assertEquals("[size=0]", new Buffer().toString());
@@ -77,25 +77,26 @@ public final class BufferTest {
 //        assertEquals("[hex=0000000000000000000000000000000000000000000000000000000000000000000000000000"
 //                        + "0000000000000000000000000000000000000000000000000000]",
 //                new Buffer().write(new byte[64]).toString());
-//    }
-//
-//    @Test public void multipleSegmentBuffers() throws Exception {
-//        Buffer buffer = new Buffer();
-//        buffer.writeUtf8(repeat('a', 1000));
-//        buffer.writeUtf8(repeat('b', 2500));
-//        buffer.writeUtf8(repeat('c', 5000));
-//        buffer.writeUtf8(repeat('d', 10000));
-//        buffer.writeUtf8(repeat('e', 25000));
-//        buffer.writeUtf8(repeat('f', 50000));
-//
-//        assertEquals(repeat('a', 999), buffer.readUtf8(999)); // a...a
-//        assertEquals("a" + repeat('b', 2500) + "c", buffer.readUtf8(2502)); // ab...bc
-//        assertEquals(repeat('c', 4998), buffer.readUtf8(4998)); // c...c
-//        assertEquals("c" + repeat('d', 10000) + "e", buffer.readUtf8(10002)); // cd...de
-//        assertEquals(repeat('e', 24998), buffer.readUtf8(24998)); // e...e
-//        assertEquals("e" + repeat('f', 50000), buffer.readUtf8(50001)); // ef...f
-//        assertEquals(0, buffer.size());
-//    }
+//    }toString
+
+    @Test
+    public void multipleSegmentBuffers() throws Exception {
+        Buffer buffer = new Buffer();
+        buffer.writeUtf8(repeat('a', 1000));
+        buffer.writeUtf8(repeat('b', 2500));
+        buffer.writeUtf8(repeat('c', 5000));
+        buffer.writeUtf8(repeat('d', 10000));
+        buffer.writeUtf8(repeat('e', 25000));
+        buffer.writeUtf8(repeat('f', 50000));
+
+        assertEquals(repeat('a', 999), buffer.readUtf8(999)); // a...a
+        assertEquals("a" + repeat('b', 2500) + "c", buffer.readUtf8(2502)); // ab...bc
+        assertEquals(repeat('c', 4998), buffer.readUtf8(4998)); // c...c
+        assertEquals("c" + repeat('d', 10000) + "e", buffer.readUtf8(10002)); // cd...de
+        assertEquals(repeat('e', 24998), buffer.readUtf8(24998)); // e...e
+        assertEquals("e" + repeat('f', 50000), buffer.readUtf8(50001)); // ef...f
+        assertEquals(0, buffer.size());
+    }
 //
 //    @Test public void fillAndDrainPool() throws Exception {
 //        Buffer buffer = new Buffer();

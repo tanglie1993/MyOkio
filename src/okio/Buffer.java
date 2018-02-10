@@ -1,12 +1,9 @@
 package okio;
 
-import org.junit.Test;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -169,8 +166,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void write(byte[] bytes) {
+    public BufferedSink write(byte[] bytes) {
         segmentList.write(bytes);
+        return this;
     }
 
     @Override
@@ -223,8 +221,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public void write(ByteString byteString) {
+    public BufferedSink write(ByteString byteString) {
         segmentList.write(byteString.getData());
+        return this;
     }
 
     @Override

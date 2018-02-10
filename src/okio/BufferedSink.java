@@ -11,7 +11,7 @@ public interface BufferedSink extends Sink {
 
     long writeAll(Source source) throws IOException;
 
-    void write(byte[] bytes);
+    BufferedSink write(byte[] bytes);
 
     void writeByte(byte b);
 
@@ -27,7 +27,7 @@ public interface BufferedSink extends Sink {
 
     void writeLongLe(long l);
 
-    void write(ByteString byteString);
+    BufferedSink write(ByteString byteString);
 
     void writeUtf8(String string, int startIndex, int endIndex);
 
