@@ -229,7 +229,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public void writeUtf8(String string, int startIndex, int endIndex) {
-        segmentList.write(string.getBytes(), startIndex, endIndex);
+        segmentList.write(string.substring(startIndex, endIndex).getBytes());
     }
 
     @Override

@@ -38,26 +38,7 @@ public class SegmentList implements Cloneable {
     }
 
     void write(byte[] bytes) {
-        int nextWrite = 0;
-        while(nextWrite < bytes.length){
-            Segment toWrite;
-            if(segmentList.size() == 0 || segmentList.getLast().front >= segmentList.getLast().rear || segmentList.getLast().rear >= Segment.SIZE){
-                toWrite = new Segment();
-                add(segmentList, toWrite);
-            }else{
-                toWrite = segmentList.getLast();
-            }
-            int available = Segment.SIZE - toWrite.rear;
-            if(available >= bytes.length - nextWrite){
-                System.arraycopy(bytes, nextWrite, toWrite.data, toWrite.rear, bytes.length - nextWrite);
-                toWrite.rear += bytes.length - nextWrite;
-                break;
-            }else{
-                System.arraycopy(bytes, nextWrite, toWrite.data, toWrite.rear, available);
-                toWrite.rear = Segment.SIZE;
-                nextWrite += available;
-            }
-        }
+        write(bytes, 0, bytes.length);
     }
 
     void remove(long length) {
@@ -334,7 +315,26 @@ public class SegmentList implements Cloneable {
     }
 
     public void write(byte[] bytes, int startIndex, int endIndex) {
-
+        int nextWrite = startIndex;
+        while(nextWrite < endIndex){
+            Segment toWrite;
+            if(segmentList.size() == 0 || segmentList.getLast().front >= segmentList.getLast().rear || segmentList.getLast().rear >= Segment.SIZE){
+                toWrite = new Segment();
+                add(segmentList, toWrite);
+            }else{
+                toWrite = segmentList.getLast();
+            }
+            int available = Segment.SIZE - toWrite.rear;
+            if(available >= endIndex - nextWrite){
+                System.arraycopy(bytes, nextWrite, toWrite.data, toWrite.rear, endIndex - nextWrite);
+                toWrite.rear += endIndex - nextWrite;
+                break;
+            }else{
+                System.arraycopy(bytes, nextWrite, toWrite.data, toWrite.rear, available);
+                toWrite.rear = Segment.SIZE;
+                nextWrite += available;
+            }
+        }
     }
 
     Segment getWritableSegment(int minimumCapacity) {
