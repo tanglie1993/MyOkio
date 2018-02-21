@@ -513,24 +513,26 @@ public final class BufferTest {
 //        assertEquals(ds + bs + cs, target.readUtf8());
 //    }
 //
-//    @Test public void copyToOffSegmentBoundary() throws Exception {
-//        String as = repeat('a', Segment.SIZE - 1);
-//        String bs = repeat('b', Segment.SIZE + 2);
-//        String cs = repeat('c', Segment.SIZE - 4);
-//        String ds = repeat('d', Segment.SIZE + 8);
-//
-//        Buffer source = new Buffer();
-//        source.writeUtf8(as);
-//        source.writeUtf8(bs);
-//        source.writeUtf8(cs);
-//
-//        Buffer target = new Buffer();
-//        target.writeUtf8(ds);
-//
-//        source.copyTo(target, as.length(), bs.length() + cs.length());
-//        assertEquals(ds + bs + cs, target.readUtf8());
-//    }
-//
+    @Test
+    public void copyToOffSegmentBoundary() throws Exception {
+        String as = repeat('a', Segment.SIZE - 1);
+        String bs = repeat('b', Segment.SIZE + 2);
+        String cs = repeat('c', Segment.SIZE - 4);
+        String ds = repeat('d', Segment.SIZE + 8);
+
+        Buffer source = new Buffer();
+        source.writeUtf8(as);
+        source.writeUtf8(bs);
+        source.writeUtf8(cs);
+
+        Buffer target = new Buffer();
+        target.writeUtf8(ds);
+
+        source.copyTo(target, as.length(), bs.length() + cs.length());
+        String str = target.readUtf8();
+        assertEquals(ds + bs + cs, str);
+    }
+
     @Test
     public void copyToSourceAndTargetCanBeTheSame() throws Exception {
         String as = repeat('a', Segment.SIZE);

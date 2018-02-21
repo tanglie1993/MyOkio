@@ -667,8 +667,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return segmentList.completeSegmentByteCount();
     }
 
-    public void copyTo(Buffer target, long startIndex, long endIndex) {
-        for(long i = startIndex; i < endIndex; i++){
+    public void copyTo(Buffer target, long startIndex, long length) {
+        for(long i = startIndex; i < startIndex + length; i++){
+            byte b = getByte(i);
+            if(b == -1){
+                break;
+            }
             target.writeByte(getByte(i));
         }
     }
