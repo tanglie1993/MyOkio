@@ -457,24 +457,25 @@ public final class BufferTest {
 //     * When writing data that's already buffered, there's no reason to page the
 //     * data by segment.
 //     */
-//    @Test public void readAllWritesAllSegmentsAtOnce() throws Exception {
-//        Buffer write1 = new Buffer().writeUtf8(""
-//                + TestUtil.repeat('a', Segment.SIZE)
-//                + TestUtil.repeat('b', Segment.SIZE)
-//                + TestUtil.repeat('c', Segment.SIZE));
-//
-//        Buffer source = new Buffer().writeUtf8(""
-//                + TestUtil.repeat('a', Segment.SIZE)
-//                + TestUtil.repeat('b', Segment.SIZE)
-//                + TestUtil.repeat('c', Segment.SIZE));
-//
-//        MockSink mockSink = new MockSink();
-//
-//        assertEquals(Segment.SIZE * 3, source.readAll(mockSink));
-//        assertEquals(0, source.size());
-//        mockSink.assertLog("write(" + write1 + ", " + write1.size() + ")");
-//    }
-//
+    @Test
+    public void readAllWritesAllSegmentsAtOnce() throws Exception {
+        Buffer write1 = new Buffer().writeUtf8(""
+                + TestUtil.repeat('a', Segment.SIZE)
+                + TestUtil.repeat('b', Segment.SIZE)
+                + TestUtil.repeat('c', Segment.SIZE));
+
+        Buffer source = new Buffer().writeUtf8(""
+                + TestUtil.repeat('a', Segment.SIZE)
+                + TestUtil.repeat('b', Segment.SIZE)
+                + TestUtil.repeat('c', Segment.SIZE));
+
+        MockSink mockSink = new MockSink();
+
+        assertEquals(Segment.SIZE * 3, source.readAll(mockSink));
+        assertEquals(0, source.size());
+        mockSink.assertLog("write(" + write1 + ", " + write1.size() + ")");
+    }
+
     @Test
     public void writeAllMultipleSegments() throws Exception {
         Buffer source = new Buffer().writeUtf8(TestUtil.repeat('a', Segment.SIZE * 3));
