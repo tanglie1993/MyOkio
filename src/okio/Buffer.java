@@ -650,7 +650,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return result;
     }
 
-    public byte getByte(int index) {
+    public byte getByte(long index) {
         return segmentList.getByte(index);
     }
 
@@ -665,5 +665,11 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     public long completeSegmentByteCount() {
         return segmentList.completeSegmentByteCount();
+    }
+
+    public void copyTo(Buffer target, long startIndex, long endIndex) {
+        for(long i = startIndex; i < endIndex; i++){
+            target.writeByte(getByte(i));
+        }
     }
 }

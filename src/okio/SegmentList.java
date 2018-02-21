@@ -266,13 +266,13 @@ public class SegmentList implements Cloneable {
         return -1;
     }
 
-    byte getByte(int index) {
-        int accumulatedIndex = 0;
+    byte getByte(long index) {
+        long accumulatedIndex = 0;
         for(Segment segment : segmentList){
             if(accumulatedIndex + segment.rear - segment.front <= index){
                 accumulatedIndex += segment.rear - segment.front;
             }else{
-                return segment.data[segment.front + index - accumulatedIndex];
+                return segment.data[(int) (segment.front + index - accumulatedIndex)];
             }
         }
         return -1;

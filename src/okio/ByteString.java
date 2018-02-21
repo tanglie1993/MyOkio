@@ -11,6 +11,8 @@ import java.util.Arrays;
  */
 public class ByteString {
 
+    static final ByteString EMPTY = ByteString.of();
+
     private byte[] data;
 
     public ByteString(byte[] bytes) {

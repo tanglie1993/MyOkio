@@ -551,13 +551,14 @@ public final class BufferTest {
 //        assertEquals("aaa", target.readUtf8());
 //    }
 //
-//    @Test public void copyToEmptyTarget() throws Exception {
-//        Buffer source = new Buffer().writeUtf8("aaa");
-//        Buffer target = new Buffer();
-//        source.copyTo(target, 0L, 3L);
-//        assertEquals("aaa", source.readUtf8());
-//        assertEquals("aaa", target.readUtf8());
-//    }
+    @Test
+    public void copyToEmptyTarget() throws Exception {
+        Buffer source = new Buffer().writeUtf8("aaa");
+        Buffer target = new Buffer();
+        source.copyTo(target, 0L, 3L);
+        assertEquals("aaa", source.readUtf8());
+        assertEquals("aaa", target.readUtf8());
+    }
 //
 //    @Test
 //    public void snapshotReportsAccurateSize() throws Exception {
