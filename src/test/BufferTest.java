@@ -437,26 +437,23 @@ public final class BufferTest {
 //        assertEquals(0, in.available());
 //    }
 //
-//    @Test public void bufferInputStreamBulkReads() throws Exception {
-//        Buffer source = new Buffer();
-//        source.writeUtf8("abc");
-//
-//        byte[] byteArray = new byte[4];
-//
-//        Arrays.fill(byteArray, (byte) -5);
-//        InputStream in = source.inputStream();
-//        assertEquals(3, in.read(byteArray));
-//        assertEquals("[97, 98, 99, -5]", Arrays.toString(byteArray));
-//
-//        Arrays.fill(byteArray, (byte) -7);
-//        assertEquals(-1, in.read(byteArray));
-//        assertEquals("[-7, -7, -7, -7]", Arrays.toString(byteArray));
-//    }
-//
-//    /**
-//     * When writing data that's already buffered, there's no reason to page the
-//     * data by segment.
-//     */
+    @Test
+    public void bufferInputStreamBulkReads() throws Exception {
+        Buffer source = new Buffer();
+        source.writeUtf8("abc");
+
+        byte[] byteArray = new byte[4];
+
+        Arrays.fill(byteArray, (byte) -5);
+        InputStream in = source.inputStream();
+        assertEquals(3, in.read(byteArray));
+        assertEquals("[97, 98, 99, -5]", Arrays.toString(byteArray));
+
+        Arrays.fill(byteArray, (byte) -7);
+        assertEquals(-1, in.read(byteArray));
+        assertEquals("[-7, -7, -7, -7]", Arrays.toString(byteArray));
+    }
+
     @Test
     public void readAllWritesAllSegmentsAtOnce() throws Exception {
         Buffer write1 = new Buffer().writeUtf8(""
