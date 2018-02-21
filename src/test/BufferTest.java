@@ -424,19 +424,20 @@ public final class BufferTest {
 //        assertFalse(a.hashCode() == c.hashCode());
 //    }
 //
-//    @Test public void bufferInputStreamByteByByte() throws Exception {
-//        Buffer source = new Buffer();
-//        source.writeUtf8("abc");
-//
-//        InputStream in = source.inputStream();
-//        assertEquals(3, in.available());
-//        assertEquals('a', in.read());
-//        assertEquals('b', in.read());
-//        assertEquals('c', in.read());
-//        assertEquals(-1, in.read());
-//        assertEquals(0, in.available());
-//    }
-//
+    @Test
+    public void bufferInputStreamByteByByte() throws Exception {
+        Buffer source = new Buffer();
+        source.writeUtf8("abc");
+
+        InputStream in = source.inputStream();
+        assertEquals(3, in.available());
+        assertEquals('a', in.read());
+        assertEquals('b', in.read());
+        assertEquals('c', in.read());
+        assertEquals(-1, in.read());
+        assertEquals(0, in.available());
+    }
+
     @Test
     public void bufferInputStreamBulkReads() throws Exception {
         Buffer source = new Buffer();
