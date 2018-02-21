@@ -543,14 +543,15 @@ public final class BufferTest {
 //        assertEquals(as + bs + as + bs, source.readUtf8());
 //    }
 //
-//    @Test public void copyToEmptySource() throws Exception {
-//        Buffer source = new Buffer();
-//        Buffer target = new Buffer().writeUtf8("aaa");
-//        source.copyTo(target, 0L, 0L);
-//        assertEquals("", source.readUtf8());
-//        assertEquals("aaa", target.readUtf8());
-//    }
-//
+    @Test
+    public void copyToEmptySource() throws Exception {
+        Buffer source = new Buffer();
+        Buffer target = new Buffer().writeUtf8("aaa");
+        source.copyTo(target, 0L, 0L);
+        assertEquals("", source.readUtf8());
+        assertEquals("aaa", target.readUtf8());
+    }
+
     @Test
     public void copyToEmptyTarget() throws Exception {
         Buffer source = new Buffer().writeUtf8("aaa");
