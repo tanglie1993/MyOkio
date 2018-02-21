@@ -531,18 +531,19 @@ public final class BufferTest {
 //        assertEquals(ds + bs + cs, target.readUtf8());
 //    }
 //
-//    @Test public void copyToSourceAndTargetCanBeTheSame() throws Exception {
-//        String as = repeat('a', Segment.SIZE);
-//        String bs = repeat('b', Segment.SIZE);
-//
-//        Buffer source = new Buffer();
-//        source.writeUtf8(as);
-//        source.writeUtf8(bs);
-//
-//        source.copyTo(source, 0, source.size());
-//        assertEquals(as + bs + as + bs, source.readUtf8());
-//    }
-//
+    @Test
+    public void copyToSourceAndTargetCanBeTheSame() throws Exception {
+        String as = repeat('a', Segment.SIZE);
+        String bs = repeat('b', Segment.SIZE);
+
+        Buffer source = new Buffer();
+        source.writeUtf8(as);
+        source.writeUtf8(bs);
+
+        source.copyTo(source, 0, source.size());
+        assertEquals(as + bs + as + bs, source.readUtf8());
+    }
+
     @Test
     public void copyToEmptySource() throws Exception {
         Buffer source = new Buffer();
