@@ -484,17 +484,18 @@ public final class BufferTest {
 //        assertEquals(TestUtil.repeat('a', Segment.SIZE * 3), sink.readUtf8());
 //    }
 //
-//    @Test public void copyTo() throws Exception {
-//        Buffer source = new Buffer();
-//        source.writeUtf8("party");
-//
-//        Buffer target = new Buffer();
-//        source.copyTo(target, 1, 3);
-//
-//        assertEquals("art", target.readUtf8());
-//        assertEquals("party", source.readUtf8());
-//    }
-//
+    @Test
+    public void copyTo() throws Exception {
+        Buffer source = new Buffer();
+        source.writeUtf8("party");
+
+        Buffer target = new Buffer();
+        source.copyTo(target, 1, 3);
+
+        assertEquals("art", target.readUtf8());
+        assertEquals("party", source.readUtf8());
+    }
+
     @Test
     public void copyToOnSegmentBoundary() throws Exception {
         String as = repeat('a', Segment.SIZE);
