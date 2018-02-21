@@ -74,7 +74,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public BufferedSink writeDecimalLong(long v) throws IOException {
+    public Buffer writeDecimalLong(long v) throws IOException {
         if (v == 0) {
             writeByte((byte) '0');
             return this;
@@ -166,7 +166,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public BufferedSink write(byte[] bytes) {
+    public Buffer write(byte[] bytes) {
         segmentList.write(bytes);
         return this;
     }
@@ -221,7 +221,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     @Override
-    public BufferedSink write(ByteString byteString) {
+    public Buffer write(ByteString byteString) {
         segmentList.write(byteString.getData());
         return this;
     }

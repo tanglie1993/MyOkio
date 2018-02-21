@@ -63,22 +63,6 @@ public final class BufferTest {
         assertEquals(Segment.SIZE * 3, buffer.completeSegmentByteCount());
     }
 
-    /** Buffer's toString is the same as ByteString's. */
-//    @Test
-//    public void bufferToString() throws Exception {
-//        assertEquals("[size=0]", new Buffer().toString());
-//        assertEquals("[text=a\\r\\nb\\nc\\rd\\\\e]",
-//                new Buffer().writeUtf8("a\r\nb\nc\rd\\e").toString());
-//        assertEquals("[text=Tyrannosaur]",
-//                new Buffer().writeUtf8("Tyrannosaur").toString());
-//        assertEquals("[text=təˈranəˌsôr]", new Buffer()
-//                .write(ByteString.decodeHex("74c999cb8872616ec999cb8c73c3b472"))
-//                .toString());
-//        assertEquals("[hex=0000000000000000000000000000000000000000000000000000000000000000000000000000"
-//                        + "0000000000000000000000000000000000000000000000000000]",
-//                new Buffer().write(new byte[64]).toString());
-//    }toString
-
     @Test
     public void multipleSegmentBuffers() throws Exception {
         Buffer buffer = new Buffer();
@@ -575,7 +559,8 @@ public final class BufferTest {
 //        assertEquals("aaa", target.readUtf8());
 //    }
 //
-//    @Test public void snapshotReportsAccurateSize() throws Exception {
+//    @Test
+//    public void snapshotReportsAccurateSize() throws Exception {
 //        Buffer buf = new Buffer().write(new byte[] { 0, 1, 2, 3 });
 //        assertEquals(1, buf.snapshot(1).size());
 //    }
