@@ -475,15 +475,16 @@ public final class BufferTest {
 //        mockSink.assertLog("write(" + write1 + ", " + write1.size() + ")");
 //    }
 //
-//    @Test public void writeAllMultipleSegments() throws Exception {
-//        Buffer source = new Buffer().writeUtf8(TestUtil.repeat('a', Segment.SIZE * 3));
-//        Buffer sink = new Buffer();
-//
-//        assertEquals(Segment.SIZE * 3, sink.writeAll(source));
-//        assertEquals(0, source.size());
-//        assertEquals(TestUtil.repeat('a', Segment.SIZE * 3), sink.readUtf8());
-//    }
-//
+    @Test
+    public void writeAllMultipleSegments() throws Exception {
+        Buffer source = new Buffer().writeUtf8(TestUtil.repeat('a', Segment.SIZE * 3));
+        Buffer sink = new Buffer();
+
+        assertEquals(Segment.SIZE * 3, sink.writeAll(source));
+        assertEquals(0, source.size());
+        assertEquals(TestUtil.repeat('a', Segment.SIZE * 3), sink.readUtf8());
+    }
+
     @Test
     public void copyTo() throws Exception {
         Buffer source = new Buffer();
