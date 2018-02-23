@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static test.TestUtil.bufferWithRandomSegmentLayout;
 import static test.TestUtil.repeat;
 
 /**
@@ -408,22 +409,25 @@ public final class BufferTest {
 //        assertTrue(a.hashCode() == b.hashCode());
 //    }
 //
-//    @Test public void equalsAndHashCodeSpanningSegments() throws Exception {
-//        byte[] data = new byte[1024 * 1024];
-//        Random dice = new Random(0);
-//        dice.nextBytes(data);
-//
-//        Buffer a = bufferWithRandomSegmentLayout(dice, data);
-//        Buffer b = bufferWithRandomSegmentLayout(dice, data);
-//        assertTrue(a.equals(b));
-//        assertTrue(a.hashCode() == b.hashCode());
-//
-//        data[data.length / 2]++; // Change a single byte.
-//        Buffer c = bufferWithRandomSegmentLayout(dice, data);
-//        assertFalse(a.equals(c));
-//        assertFalse(a.hashCode() == c.hashCode());
-//    }
-//
+    @Test
+    public void equalsAndHashCodeSpanningSegments() throws Exception {
+        byte[] data = new byte[4 * 4];
+        Random dice = new Random(0);
+        dice.nextBytes(data);
+
+        Buffer a = bufferWithRandomSegmentLayout(dice, data);
+        Buffer b = bufferWithRandomSegmentLayout(dice, data);
+        String sa = a.readUtf8();
+        String sb = b.readUtf8();
+        assertTrue(sa.equals(sb));
+        assertTrue(a.hashCode() == b.hashCode());
+
+        data[data.length / 2]++; // Change a single byte.
+        Buffer c = bufferWithRandomSegmentLayout(dice, data);
+        assertFalse(a.equals(c));
+        assertFalse(a.hashCode() == c.hashCode());
+    }
+
     @Test
     public void bufferInputStreamByteByByte() throws Exception {
         Buffer source = new Buffer();

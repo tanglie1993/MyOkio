@@ -171,6 +171,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return this;
     }
 
+
+    public Buffer write(byte[] data, int pos, int byteCount) {
+        segmentList.write(data, pos, byteCount);
+        return this;
+    }
+
     @Override
     public void writeByte(byte b) {
         segmentList.write(b);
@@ -243,7 +249,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public void write(Buffer clone, long byteCount) throws IOException {
-        clone.readFully(this, byteCount);
+        clone.read(this, Math.min(clone.size(), byteCount));
     }
 
     @Override
