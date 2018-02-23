@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static test.TestUtil.UTF_8;
 import static test.TestUtil.bufferWithRandomSegmentLayout;
 import static test.TestUtil.repeat;
 
@@ -266,14 +267,15 @@ public final class BufferTest {
 //        assertEquals(repeat('a', Segment.SIZE - 10) + "hello, world!", out);
 //    }
 //
-//    @Test public void readFromStreamWithCount() throws Exception {
-//        InputStream in = new ByteArrayInputStream("hello, world!".getBytes(UTF_8));
-//        Buffer buffer = new Buffer();
-//        buffer.readFrom(in, 10);
-//        String out = buffer.readUtf8();
-//        assertEquals("hello, wor", out);
-//    }
-//
+    @Test
+    public void readFromStreamWithCount() throws Exception {
+        InputStream in = new ByteArrayInputStream("hello, world!".getBytes(UTF_8));
+        Buffer buffer = new Buffer();
+        buffer.readFrom(in, 10);
+        String out = buffer.readUtf8();
+        assertEquals("hello, wor", out);
+    }
+
     @Test
     public void moveAllRequestedBytesWithRead() throws Exception {
         Buffer sink = new Buffer();

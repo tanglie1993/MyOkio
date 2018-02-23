@@ -700,4 +700,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     public int hashCode() {
         return segmentList != null ? segmentList.hashCode() : 0;
     }
+
+    public void readFrom(InputStream in, int count) throws IOException {
+        for (int i = 0; i < count; i++) {
+            segmentList.write((byte) in.read());
+        }
+    }
 }
