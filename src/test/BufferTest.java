@@ -317,36 +317,37 @@ public final class BufferTest {
 //        assertEquals(halfSegment * 4 - 1, buffer.indexOf((byte) 'd', halfSegment * 4 - 1));
 //    }
 //
-//    @Test public void byteAt() throws Exception {
-//        Buffer buffer = new Buffer();
-//        buffer.writeUtf8("a");
-//        buffer.writeUtf8(repeat('b', Segment.SIZE));
-//        buffer.writeUtf8("c");
-//        assertEquals('a', buffer.getByte(0));
-//        assertEquals('a', buffer.getByte(0)); // getByte doesn't mutate!
-//        assertEquals('c', buffer.getByte(buffer.size - 1));
-//        assertEquals('b', buffer.getByte(buffer.size - 2));
-//        assertEquals('b', buffer.getByte(buffer.size - 3));
-//    }
-//
-//    @Test
-//    public void getByteOfEmptyBuffer() throws Exception {
-//        Buffer buffer = new Buffer();
-//        try {
-//            buffer.getByte(0);
-//            fail();
-//        } catch (IndexOutOfBoundsException expected) {
-//        }
-//    }
-//
-//    @Test
-//    public void writePrefixToEmptyBuffer() throws IOException {
-//        Buffer sink = new Buffer();
-//        Buffer source = new Buffer();
-//        source.writeUtf8("abcd");
-//        sink.write(source, 2);
-//        assertEquals("ab", sink.readUtf8(2));
-//    }
+    @Test
+    public void byteAt() throws Exception {
+        Buffer buffer = new Buffer();
+        buffer.writeUtf8("a");
+        buffer.writeUtf8(repeat('b', Segment.SIZE));
+        buffer.writeUtf8("c");
+        assertEquals('a', buffer.getByte(0));
+        assertEquals('a', buffer.getByte(0)); // getByte doesn't mutate!
+        assertEquals('c', buffer.getByte(buffer.size() - 1));
+        assertEquals('b', buffer.getByte(buffer.size() - 2));
+        assertEquals('b', buffer.getByte(buffer.size() - 3));
+    }
+
+    @Test
+    public void getByteOfEmptyBuffer() throws Exception {
+        Buffer buffer = new Buffer();
+        try {
+            buffer.getByte(0);
+            fail();
+        } catch (IndexOutOfBoundsException expected) {
+        }
+    }
+
+    @Test
+    public void writePrefixToEmptyBuffer() throws IOException {
+        Buffer sink = new Buffer();
+        Buffer source = new Buffer();
+        source.writeUtf8("abcd");
+        sink.write(source, 2);
+        assertEquals("ab", sink.readUtf8(2));
+    }
 
     @Test
     public void cloneDoesNotObserveWritesToOriginal() throws Exception {

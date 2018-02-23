@@ -657,6 +657,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     public byte getByte(long index) {
+        if(index >= segmentList.available()){
+            throw new IndexOutOfBoundsException();
+        }
         return segmentList.getByte(index);
     }
 
