@@ -329,7 +329,8 @@ public final class BufferTest {
 //        assertEquals('b', buffer.getByte(buffer.size - 3));
 //    }
 //
-//    @Test public void getByteOfEmptyBuffer() throws Exception {
+//    @Test
+//    public void getByteOfEmptyBuffer() throws Exception {
 //        Buffer buffer = new Buffer();
 //        try {
 //            buffer.getByte(0);
@@ -338,46 +339,51 @@ public final class BufferTest {
 //        }
 //    }
 //
-//    @Test public void writePrefixToEmptyBuffer() throws IOException {
+//    @Test
+//    public void writePrefixToEmptyBuffer() throws IOException {
 //        Buffer sink = new Buffer();
 //        Buffer source = new Buffer();
 //        source.writeUtf8("abcd");
 //        sink.write(source, 2);
 //        assertEquals("ab", sink.readUtf8(2));
 //    }
-//
-//    @Test public void cloneDoesNotObserveWritesToOriginal() throws Exception {
-//        Buffer original = new Buffer();
-//        Buffer clone = original.clone();
-//        original.writeUtf8("abc");
-//        assertEquals(0, clone.size());
-//    }
-//
-//    @Test public void cloneDoesNotObserveReadsFromOriginal() throws Exception {
-//        Buffer original = new Buffer();
-//        original.writeUtf8("abc");
-//        Buffer clone = original.clone();
-//        assertEquals("abc", original.readUtf8(3));
-//        assertEquals(3, clone.size());
-//        assertEquals("ab", clone.readUtf8(2));
-//    }
-//
-//    @Test public void originalDoesNotObserveWritesToClone() throws Exception {
-//        Buffer original = new Buffer();
-//        Buffer clone = original.clone();
-//        clone.writeUtf8("abc");
-//        assertEquals(0, original.size());
-//    }
-//
-//    @Test public void originalDoesNotObserveReadsFromClone() throws Exception {
-//        Buffer original = new Buffer();
-//        original.writeUtf8("abc");
-//        Buffer clone = original.clone();
-//        assertEquals("abc", clone.readUtf8(3));
-//        assertEquals(3, original.size());
-//        assertEquals("ab", original.readUtf8(2));
-//    }
-//
+
+    @Test
+    public void cloneDoesNotObserveWritesToOriginal() throws Exception {
+        Buffer original = new Buffer();
+        Buffer clone = original.clone();
+        original.writeUtf8("abc");
+        assertEquals(0, clone.size());
+    }
+
+    @Test
+    public void cloneDoesNotObserveReadsFromOriginal() throws Exception {
+        Buffer original = new Buffer();
+        original.writeUtf8("abc");
+        Buffer clone = original.clone();
+        assertEquals("abc", original.readUtf8(3));
+        assertEquals(3, clone.size());
+        assertEquals("ab", clone.readUtf8(2));
+    }
+
+    @Test
+    public void originalDoesNotObserveWritesToClone() throws Exception {
+        Buffer original = new Buffer();
+        Buffer clone = original.clone();
+        clone.writeUtf8("abc");
+        assertEquals(0, original.size());
+    }
+
+    @Test
+    public void originalDoesNotObserveReadsFromClone() throws Exception {
+        Buffer original = new Buffer();
+        original.writeUtf8("abc");
+        Buffer clone = original.clone();
+        assertEquals("abc", clone.readUtf8(3));
+        assertEquals(3, original.size());
+        assertEquals("ab", original.readUtf8(2));
+    }
+
     @Test
     public void cloneMultipleSegments() throws Exception {
         Buffer original = new Buffer();
