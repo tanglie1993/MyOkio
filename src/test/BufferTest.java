@@ -378,7 +378,8 @@ public final class BufferTest {
 //        assertEquals("ab", original.readUtf8(2));
 //    }
 //
-//    @Test public void cloneMultipleSegments() throws Exception {
+//    @Test
+//    public void cloneMultipleSegments() throws Exception {
 //        Buffer original = new Buffer();
 //        original.writeUtf8(repeat('a', Segment.SIZE * 3));
 //        Buffer clone = original.clone();
@@ -390,25 +391,27 @@ public final class BufferTest {
 //        assertEquals(repeat('a', Segment.SIZE * 3) + repeat('c', Segment.SIZE * 3),
 //                clone.readUtf8(Segment.SIZE * 6));
 //    }
-//
-//    @Test public void equalsAndHashCodeEmpty() throws Exception {
-//        Buffer a = new Buffer();
-//        Buffer b = new Buffer();
-//        assertTrue(a.equals(b));
-//        assertTrue(a.hashCode() == b.hashCode());
-//    }
-//
-//    @Test public void equalsAndHashCode() throws Exception {
-//        Buffer a = new Buffer().writeUtf8("dog");
-//        Buffer b = new Buffer().writeUtf8("hotdog");
-//        assertFalse(a.equals(b));
-//        assertFalse(a.hashCode() == b.hashCode());
-//
-//        b.readUtf8(3); // Leaves b containing 'dog'.
-//        assertTrue(a.equals(b));
-//        assertTrue(a.hashCode() == b.hashCode());
-//    }
-//
+
+    @Test
+    public void equalsAndHashCodeEmpty() throws Exception {
+        Buffer a = new Buffer();
+        Buffer b = new Buffer();
+        assertTrue(a.equals(b));
+        assertTrue(a.hashCode() == b.hashCode());
+    }
+
+    @Test
+    public void equalsAndHashCode() throws Exception {
+        Buffer a = new Buffer().writeUtf8("dog");
+        Buffer b = new Buffer().writeUtf8("hotdog");
+        assertFalse(a.equals(b));
+        assertFalse(a.hashCode() == b.hashCode());
+
+        b.readUtf8(3); // Leaves b containing 'dog'.
+        assertTrue(a.equals(b));
+        assertTrue(a.hashCode() == b.hashCode());
+    }
+
     @Test
     public void equalsAndHashCodeSpanningSegments() throws Exception {
         byte[] data = new byte[4 * 4];

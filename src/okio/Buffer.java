@@ -682,4 +682,19 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             target.writeByte(getByte(i));
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Buffer buffer = (Buffer) o;
+
+        return segmentList != null ? segmentList.equals(buffer.segmentList) : buffer.segmentList == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return segmentList != null ? segmentList.hashCode() : 0;
+    }
 }

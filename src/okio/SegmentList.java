@@ -361,4 +361,38 @@ public class SegmentList implements Cloneable {
         }
         return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SegmentList that = (SegmentList) o;
+
+        long thisAvailable = this.available();
+        long thatAvailable = that.available();
+        if(thisAvailable != thatAvailable){
+            return false;
+        }
+        for(int i = 0; i < thisAvailable; i++){
+            if(i >= thatAvailable){
+                return false;
+            }
+            if(this.getByte(i) != that.getByte(i)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        long available = available();
+        for(long i = 0; i < available; i++){
+            result += getByte(i);
+            result *= 17;
+        }
+        return result;
+    }
 }
