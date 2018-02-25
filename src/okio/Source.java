@@ -10,4 +10,6 @@ public interface Source {
     long read(Buffer sink, long length) throws IOException;
 
     void close() throws IOException;
+
+    Timeout timeout();
 }

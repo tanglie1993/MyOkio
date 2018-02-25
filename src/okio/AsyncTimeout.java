@@ -86,6 +86,44 @@ public class AsyncTimeout extends Timeout {
         return true;
     }
 
+    public final Source source(final Source source) {
+        return new Source() {
+            @Override public long read(Buffer sink, long byteCount) throws IOException {
+                boolean throwOnTimeout = false;
+                enter();
+                try {
+                    long result = source.read(sink, byteCount);
+                    throwOnTimeout = true;
+                    return result;
+                } catch (IOException e) {
+                    throw exit(e);
+                } finally {
+                    exit(throwOnTimeout);
+                }
+            }
+
+            @Override public void close() throws IOException {
+                boolean throwOnTimeout = false;
+                try {
+                    source.close();
+                    throwOnTimeout = true;
+                } catch (IOException e) {
+                    throw exit(e);
+                } finally {
+                    exit(throwOnTimeout);
+                }
+            }
+
+            @Override public Timeout timeout() {
+                return AsyncTimeout.this;
+            }
+
+            @Override public String toString() {
+                return "AsyncTimeout.source(" + source + ")";
+            }
+        };
+    }
+
     private static final class Watchdog extends Thread {
         Watchdog() {
             super("Okio Watchdog");

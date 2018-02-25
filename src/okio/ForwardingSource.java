@@ -23,4 +23,9 @@ public class ForwardingSource implements Source {
     public void close() throws IOException {
         source.close();
     }
+
+    @Override
+    public Timeout timeout() {
+        return Timeout.NONE;
+    }
 }

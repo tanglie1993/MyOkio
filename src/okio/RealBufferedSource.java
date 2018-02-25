@@ -47,6 +47,11 @@ public class RealBufferedSource implements BufferedSource {
             public void close() throws IOException {
                 inputStream.close();
             }
+
+            @Override
+            public Timeout timeout() {
+                return Timeout.NONE;
+            }
         };
     }
 
@@ -70,6 +75,11 @@ public class RealBufferedSource implements BufferedSource {
     public void close() throws IOException {
         source.close();
         closed = true;
+    }
+
+    @Override
+    public Timeout timeout() {
+        return Timeout.NONE;
     }
 
     @Override
