@@ -1,11 +1,14 @@
 package okio;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by pc on 2018/2/25.
  */
 public class Timeout {
+
+    public static final Timeout NONE = new Timeout() {};
 
     private boolean hasDeadline;
     private long deadlineNanoTime;

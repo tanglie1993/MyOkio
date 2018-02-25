@@ -395,4 +395,8 @@ public class SegmentList implements Cloneable {
         }
         return result;
     }
+
+    public Segment getFirst() {
+        return segmentList.getFirst();
+    }
 }

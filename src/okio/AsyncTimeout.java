@@ -1,7 +1,13 @@
 package okio;
 
+import com.sun.istack.internal.Nullable;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static okio.Util.checkOffsetAndCount;
 
 /**
  * Created by pc on 2018/2/25.
@@ -9,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 public class AsyncTimeout extends Timeout {
 
     private static final long IDLE_TIMEOUT_MILLIS = TimeUnit.SECONDS.toMillis(60);
+
+    private static final int TIMEOUT_WRITE_SIZE = 64 * 1024;
 
     private static PriorityQueue<AsyncTimeout> queue;
 
@@ -128,5 +136,92 @@ public class AsyncTimeout extends Timeout {
 
         queue.poll();
         return node;
+    }
+
+    public final Sink sink(final Sink sink) {
+        return new Sink() {
+            @Override
+            public void write(Buffer source, long byteCount) throws IOException {
+                checkOffsetAndCount(source.size(), 0, byteCount);
+
+                while (byteCount > 0L) {
+                    // Count how many bytes to write. This loop guarantees we split on a segment boundary.
+                    long toWrite = 0L;
+                    for (Segment s = source.segmentList.getFirst(); toWrite < TIMEOUT_WRITE_SIZE; s = s.next) {
+                        int segmentSize = s.rear - s.front;
+                        toWrite += segmentSize;
+                        if (toWrite >= byteCount) {
+                            toWrite = byteCount;
+                            break;
+                        }
+                    }
+
+                    // Emit one write. Only this section is subject to the timeout.
+                    boolean throwOnTimeout = false;
+                    enter();
+                    try {
+                        sink.write(source, toWrite);
+                        byteCount -= toWrite;
+                        throwOnTimeout = true;
+                    } catch (IOException e) {
+                        throw exit(e);
+                    } finally {
+                        exit(throwOnTimeout);
+                    }
+                }
+            }
+
+            @Override public void flush() throws IOException {
+                boolean throwOnTimeout = false;
+                enter();
+                try {
+                    sink.flush();
+                    throwOnTimeout = true;
+                } catch (IOException e) {
+                    throw exit(e);
+                } finally {
+                    exit(throwOnTimeout);
+                }
+            }
+
+            @Override public void close() throws IOException {
+                boolean throwOnTimeout = false;
+                enter();
+                try {
+                    sink.close();
+                    throwOnTimeout = true;
+                } catch (IOException e) {
+                    throw exit(e);
+                } finally {
+                    exit(throwOnTimeout);
+                }
+            }
+
+            @Override public Timeout timeout() {
+                return AsyncTimeout.this;
+            }
+
+            @Override public String toString() {
+                return "AsyncTimeout.sink(" + sink + ")";
+            }
+        };
+    }
+
+    final void exit(boolean throwOnTimeout) throws IOException {
+        boolean timedOut = exit();
+        if (timedOut && throwOnTimeout) throw newTimeoutException(null);
+    }
+
+    final IOException exit(IOException cause) throws IOException {
+        if (!exit()) return cause;
+        return newTimeoutException(cause);
+    }
+
+    protected IOException newTimeoutException(@Nullable IOException cause) {
+        InterruptedIOException e = new InterruptedIOException("timeout");
+        if (cause != null) {
+            e.initCause(cause);
+        }
+        return e;
     }
 }

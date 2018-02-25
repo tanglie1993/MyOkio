@@ -34,6 +34,11 @@ public class RealBufferedSink implements BufferedSink {
             public void flush() throws IOException {
                 outputStream.flush();
             }
+
+            @Override
+            public Timeout timeout() {
+                return Timeout.NONE;
+            }
         };
     }
 
@@ -53,6 +58,10 @@ public class RealBufferedSink implements BufferedSink {
     @Override
     public void flush() throws IOException {
         sink.write(buffer, buffer.size());
+    }
+
+    @Override public Timeout timeout() {
+        return sink.timeout();
     }
 
     @Override

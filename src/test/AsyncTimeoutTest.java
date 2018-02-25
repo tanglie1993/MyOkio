@@ -192,28 +192,29 @@ public final class AsyncTimeoutTest {
     assertTrue(timeout.exit());
     assertTimedOut(timeout);
   }
-//
-//  @Test
-//  public void wrappedSinkTimesOut() throws Exception {
-//    Sink sink = new ForwardingSink(new Buffer()) {
-//      @Override public void write(Buffer source, long byteCount) throws IOException {
-//        try {
-//          Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//          throw new AssertionError();
-//        }
-//      }
-//    };
-//    AsyncTimeout timeout = new AsyncTimeout();
-//    timeout.timeout(250, TimeUnit.MILLISECONDS);
-//    Sink timeoutSink = timeout.sink(sink);
-//    Buffer data = new Buffer().writeUtf8("a");
-//    try {
-//      timeoutSink.write(data, 1);
-//      fail();
-//    } catch (InterruptedIOException expected) {
-//    }
-//  }
+
+  @Test
+  public void wrappedSinkTimesOut() throws Exception {
+    Sink sink = new ForwardingSink(new Buffer()) {
+      @Override
+      public void write(Buffer source, long byteCount) throws IOException {
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          throw new AssertionError();
+        }
+      }
+    };
+    AsyncTimeout timeout = new AsyncTimeout();
+    timeout.timeout(250, TimeUnit.MILLISECONDS);
+    Sink timeoutSink = timeout.sink(sink);
+    Buffer data = new Buffer().writeUtf8("a");
+    try {
+      timeoutSink.write(data, 1);
+      fail();
+    } catch (InterruptedIOException expected) {
+    }
+  }
 //
 //  @Test
 //  public void wrappedSourceTimesOut() throws Exception {
@@ -316,7 +317,7 @@ public final class AsyncTimeoutTest {
 //    // The data should all have arrived.
 //    assertEquals(ByteString.of(data), target.readByteString());
 //  }
-//
+
   /** Asserts which timeouts fired, and in which order. */
   private void assertTimedOut(Timeout... expected) {
     assertEquals(Arrays.asList(expected), timedOut);

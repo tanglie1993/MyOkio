@@ -13,4 +13,6 @@ public interface Sink {
     void write(Buffer data, long length) throws IOException;
 
     void flush() throws IOException;
+
+    Timeout timeout();
 }

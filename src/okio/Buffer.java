@@ -636,6 +636,10 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     }
 
+    @Override public Timeout timeout() {
+        return Timeout.NONE;
+    }
+
     public int size() {
         return segmentList.available();
     }

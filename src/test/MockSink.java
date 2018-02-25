@@ -17,6 +17,7 @@ package test;
 
 import okio.Buffer;
 import okio.Sink;
+import okio.Timeout;
 
 import java.io.IOException;
 import java.util.*;
@@ -57,11 +58,11 @@ final class MockSink implements Sink {
     throwIfScheduled();
   }
 
-//  @Override
-//  public Timeout timeout() {
-//    log.add("timeout()");
-//    return Timeout.NONE;
-//  }
+  @Override
+  public Timeout timeout() {
+    log.add("timeout()");
+    return Timeout.NONE;
+  }
 
   @Override public void close() throws IOException {
     log.add("close()");
