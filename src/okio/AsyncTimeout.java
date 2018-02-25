@@ -53,6 +53,7 @@ public class AsyncTimeout extends Timeout {
         }
 
         queue.add(node);
+        AsyncTimeout.class.notify();
     }
 
     public final boolean exit() {
@@ -64,6 +65,9 @@ public class AsyncTimeout extends Timeout {
     }
 
     private static synchronized boolean cancelScheduledTimeout(AsyncTimeout node) {
+        if(queue == null){
+            return true;
+        }
         if(queue.contains(node)){
             queue.remove(node);
             return false;
@@ -83,15 +87,16 @@ public class AsyncTimeout extends Timeout {
                     AsyncTimeout timedOut;
                     synchronized (AsyncTimeout.class) {
                         timedOut = awaitTimeout();
+                        if (timedOut == null) {
+                            continue;
+                        }else{
+                            timedOut.timedOut();
+                        }
                         if (queue.isEmpty()) {
                             queue = null;
                             return;
                         }
-                        if (timedOut == null) {
-                            continue;
-                        }
                     }
-                    timedOut.timedOut();
                 } catch (InterruptedException e) {
                 }
             }
