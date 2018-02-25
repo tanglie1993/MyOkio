@@ -74,34 +74,34 @@ public final class AsyncTimeoutTest {
     assertFalse(b.exit());
     assertTimedOut();
   }
-//
-//  @Test
-//  public void instancesAddedAtEnd() throws Exception {
-//    a.enter();
-//    b.enter();
-//    c.enter();
-//    d.enter();
-//    Thread.sleep(1250);
-//    assertTrue(a.exit());
-//    assertTrue(b.exit());
-//    assertTrue(c.exit());
-//    assertTrue(d.exit());
-//    assertTimedOut(a, b, c, d);
-//  }
-//
-//  @Test
-//  public void instancesAddedAtFront() throws Exception {
-//    d.enter();
-//    c.enter();
-//    b.enter();
-//    a.enter();
-//    Thread.sleep(1250);
-//    assertTrue(d.exit());
-//    assertTrue(c.exit());
-//    assertTrue(b.exit());
-//    assertTrue(a.exit());
-//    assertTimedOut(a, b, c, d);
-//  }
+
+  @Test
+  public void instancesAddedAtEnd() throws Exception {
+    a.enter();
+    b.enter();
+    c.enter();
+    d.enter();
+    Thread.sleep(1250);
+    assertTrue(a.exit());
+    assertTrue(b.exit());
+    assertTrue(c.exit());
+    assertTrue(d.exit());
+    assertTimedOut(a, b, c, d);
+  }
+
+  @Test
+  public void instancesAddedAtFront() throws Exception {
+    d.enter();
+    c.enter();
+    b.enter();
+    a.enter();
+    Thread.sleep(1250);
+    assertTrue(d.exit());
+    assertTrue(c.exit());
+    assertTrue(b.exit());
+    assertTrue(a.exit());
+    assertTimedOut(a, b, c, d);
+  }
 //
 //  @Test
 //  public void instancesRemovedAtFront() throws Exception {
