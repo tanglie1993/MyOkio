@@ -1,9 +1,6 @@
 package okio;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -715,5 +712,20 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             }
             segmentList.write((byte) read);
         }
+    }
+
+    public void writeTo(ByteArrayOutputStream out, int length) {
+        for(int i = 0; i < length; i++){
+            if(!segmentList.has(1)){
+                return;
+            }
+            out.write(segmentList.read());
+        }
+    }
+
+    public void writeTo(ByteArrayOutputStream out) throws IOException {
+        byte[] bytes = new byte[segmentList.available()];
+        segmentList.read(bytes);
+        out.write(bytes);
     }
 }
