@@ -183,7 +183,6 @@ public class AsyncTimeout extends Timeout {
                 checkOffsetAndCount(source.size(), 0, byteCount);
 
                 while (byteCount > 0L) {
-                    // Count how many bytes to write. This loop guarantees we split on a segment boundary.
                     long toWrite = 0L;
                     for (Segment s = source.segmentList.getFirst(); toWrite < TIMEOUT_WRITE_SIZE; s = s.next) {
                         int segmentSize = s.rear - s.front;
@@ -194,7 +193,6 @@ public class AsyncTimeout extends Timeout {
                         }
                     }
 
-                    // Emit one write. Only this section is subject to the timeout.
                     boolean throwOnTimeout = false;
                     enter();
                     try {

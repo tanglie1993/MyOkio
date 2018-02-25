@@ -237,50 +237,50 @@ public final class AsyncTimeoutTest {
     } catch (InterruptedIOException expected) {
     }
   }
-//
-//  @Test
-//  public void wrappedThrowsWithTimeout() throws Exception {
-//    Sink sink = new ForwardingSink(new Buffer()) {
-//      @Override public void write(Buffer source, long byteCount) throws IOException {
-//        try {
-//          Thread.sleep(500);
-//          throw new IOException("exception and timeout");
-//        } catch (InterruptedException e) {
-//          throw new AssertionError();
-//        }
-//      }
-//    };
-//    AsyncTimeout timeout = new AsyncTimeout();
-//    timeout.timeout(250, TimeUnit.MILLISECONDS);
-//    Sink timeoutSink = timeout.sink(sink);
-//    Buffer data = new Buffer().writeUtf8("a");
-//    try {
-//      timeoutSink.write(data, 1);
-//      fail();
-//    } catch (InterruptedIOException expected) {
-//      assertEquals("timeout", expected.getMessage());
-//      assertEquals("exception and timeout", expected.getCause().getMessage());
-//    }
-//  }
-//
-//  @Test
-//  public void wrappedThrowsWithoutTimeout() throws Exception {
-//    Sink sink = new ForwardingSink(new Buffer()) {
-//      @Override public void write(Buffer source, long byteCount) throws IOException {
-//        throw new IOException("no timeout occurred");
-//      }
-//    };
-//    AsyncTimeout timeout = new AsyncTimeout();
-//    timeout.timeout(250, TimeUnit.MILLISECONDS);
-//    Sink timeoutSink = timeout.sink(sink);
-//    Buffer data = new Buffer().writeUtf8("a");
-//    try {
-//      timeoutSink.write(data, 1);
-//      fail();
-//    } catch (IOException expected) {
-//      assertEquals("no timeout occurred", expected.getMessage());
-//    }
-//  }
+
+  @Test
+  public void wrappedThrowsWithTimeout() throws Exception {
+    Sink sink = new ForwardingSink(new Buffer()) {
+      @Override public void write(Buffer source, long byteCount) throws IOException {
+        try {
+          Thread.sleep(500);
+          throw new IOException("exception and timeout");
+        } catch (InterruptedException e) {
+          throw new AssertionError();
+        }
+      }
+    };
+    AsyncTimeout timeout = new AsyncTimeout();
+    timeout.timeout(250, TimeUnit.MILLISECONDS);
+    Sink timeoutSink = timeout.sink(sink);
+    Buffer data = new Buffer().writeUtf8("a");
+    try {
+      timeoutSink.write(data, 1);
+      fail();
+    } catch (InterruptedIOException expected) {
+      assertEquals("timeout", expected.getMessage());
+      assertEquals("exception and timeout", expected.getCause().getMessage());
+    }
+  }
+
+  @Test
+  public void wrappedThrowsWithoutTimeout() throws Exception {
+    Sink sink = new ForwardingSink(new Buffer()) {
+      @Override public void write(Buffer source, long byteCount) throws IOException {
+        throw new IOException("no timeout occurred");
+      }
+    };
+    AsyncTimeout timeout = new AsyncTimeout();
+    timeout.timeout(250, TimeUnit.MILLISECONDS);
+    Sink timeoutSink = timeout.sink(sink);
+    Buffer data = new Buffer().writeUtf8("a");
+    try {
+      timeoutSink.write(data, 1);
+      fail();
+    } catch (IOException expected) {
+      assertEquals("no timeout occurred", expected.getMessage());
+    }
+  }
 //
 //  /**
 //   * We had a bug where writing a very large buffer would fail with an
