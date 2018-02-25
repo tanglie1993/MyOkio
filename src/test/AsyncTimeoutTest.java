@@ -139,59 +139,59 @@ public final class AsyncTimeoutTest {
     } catch (IllegalStateException expected) {
     }
   }
-//
-//  @Test
-//  public void deadlineOnly() throws Exception {
-//    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
-//    timeout.deadline(250, TimeUnit.MILLISECONDS);
-//    timeout.enter();
-//    Thread.sleep(500);
-//    assertTrue(timeout.exit());
-//    assertTimedOut(timeout);
-//  }
-//
-//  @Test
-//  public void deadlineBeforeTimeout() throws Exception {
-//    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
-//    timeout.deadline(250, TimeUnit.MILLISECONDS);
-//    timeout.timeout(750, TimeUnit.MILLISECONDS);
-//    timeout.enter();
-//    Thread.sleep(500);
-//    assertTrue(timeout.exit());
-//    assertTimedOut(timeout);
-//  }
-//
-//  @Test
-//  public void deadlineAfterTimeout() throws Exception {
-//    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
-//    timeout.timeout(250, TimeUnit.MILLISECONDS);
-//    timeout.deadline(750, TimeUnit.MILLISECONDS);
-//    timeout.enter();
-//    Thread.sleep(500);
-//    assertTrue(timeout.exit());
-//    assertTimedOut(timeout);
-//  }
-//
-//  @Test
-//  public void deadlineStartsBeforeEnter() throws Exception {
-//    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
-//    timeout.deadline(500, TimeUnit.MILLISECONDS);
-//    Thread.sleep(500);
-//    timeout.enter();
-//    Thread.sleep(250);
-//    assertTrue(timeout.exit());
-//    assertTimedOut(timeout);
-//  }
-//
-//  @Test
-//  public void deadlineInThePast() throws Exception {
-//    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
-//    timeout.deadlineNanoTime(System.nanoTime() - 1);
-//    timeout.enter();
-//    Thread.sleep(250);
-//    assertTrue(timeout.exit());
-//    assertTimedOut(timeout);
-//  }
+
+  @Test
+  public void deadlineOnly() throws Exception {
+    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
+    timeout.deadline(250, TimeUnit.MILLISECONDS);
+    timeout.enter();
+    Thread.sleep(500);
+    assertTrue(timeout.exit());
+    assertTimedOut(timeout);
+  }
+
+  @Test
+  public void deadlineBeforeTimeout() throws Exception {
+    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
+    timeout.deadline(250, TimeUnit.MILLISECONDS);
+    timeout.timeout(750, TimeUnit.MILLISECONDS);
+    timeout.enter();
+    Thread.sleep(500);
+    assertTrue(timeout.exit());
+    assertTimedOut(timeout);
+  }
+
+  @Test
+  public void deadlineAfterTimeout() throws Exception {
+    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
+    timeout.timeout(250, TimeUnit.MILLISECONDS);
+    timeout.deadline(750, TimeUnit.MILLISECONDS);
+    timeout.enter();
+    Thread.sleep(500);
+    assertTrue(timeout.exit());
+    assertTimedOut(timeout);
+  }
+
+  @Test
+  public void deadlineStartsBeforeEnter() throws Exception {
+    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
+    timeout.deadline(500, TimeUnit.MILLISECONDS);
+    Thread.sleep(500);
+    timeout.enter();
+    Thread.sleep(250);
+    assertTrue(timeout.exit());
+    assertTimedOut(timeout);
+  }
+
+  @Test
+  public void deadlineInThePast() throws Exception {
+    RecordingAsyncTimeout timeout = new RecordingAsyncTimeout();
+    timeout.setDeadlineNanoTime(System.nanoTime() - 1);
+    timeout.enter();
+    Thread.sleep(250);
+    assertTrue(timeout.exit());
+    assertTimedOut(timeout);
+  }
 //
 //  @Test
 //  public void wrappedSinkTimesOut() throws Exception {

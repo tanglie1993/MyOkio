@@ -26,4 +26,14 @@ public class Timeout {
     public long getTimeoutNanos() {
         return timeoutNanos;
     }
+
+    public void deadline(int length, TimeUnit timeUnit) {
+        this.deadlineNanoTime = timeUnit.toNanos(length);
+        this.hasDeadline = true;
+    }
+
+    public void setDeadlineNanoTime(long deadlineNanoTime) {
+        this.deadlineNanoTime = deadlineNanoTime;
+        this.hasDeadline = true;
+    }
 }
