@@ -102,20 +102,20 @@ public final class AsyncTimeoutTest {
     assertTrue(a.exit());
     assertTimedOut(a, b, c, d);
   }
-//
-//  @Test
-//  public void instancesRemovedAtFront() throws Exception {
-//    a.enter();
-//    b.enter();
-//    c.enter();
-//    d.enter();
-//    assertFalse(a.exit());
-//    assertFalse(b.exit());
-//    assertFalse(c.exit());
-//    assertFalse(d.exit());
-//    assertTimedOut();
-//  }
-//
+
+  @Test
+  public void instancesRemovedAtFront() throws Exception {
+    a.enter();
+    b.enter();
+    c.enter();
+    d.enter();
+    assertFalse(a.exit());
+    assertFalse(b.exit());
+    assertFalse(c.exit());
+    assertFalse(d.exit());
+    assertTimedOut();
+  }
+
 //  @Test
 //  public void instancesRemovedAtEnd() throws Exception {
 //    a.enter();
