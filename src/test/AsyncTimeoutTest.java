@@ -128,17 +128,17 @@ public final class AsyncTimeoutTest {
     assertFalse(a.exit());
     assertTimedOut();
   }
-//
-//  /** Detecting double-enters is not guaranteed. */
-//  @Test
-//  public void doubleEnter() throws Exception {
-//    a.enter();
-//    try {
-//      a.enter();
-//      fail();
-//    } catch (IllegalStateException expected) {
-//    }
-//  }
+
+  /** Detecting double-enters is not guaranteed. */
+  @Test
+  public void doubleEnter() throws Exception {
+    a.enter();
+    try {
+      a.enter();
+      fail();
+    } catch (IllegalStateException expected) {
+    }
+  }
 //
 //  @Test
 //  public void deadlineOnly() throws Exception {

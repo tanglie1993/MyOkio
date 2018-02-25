@@ -20,6 +20,9 @@ public class AsyncTimeout extends Timeout {
     }
 
     public final void enter() {
+        if (inQueue) {
+            throw new IllegalStateException("Unbalanced enter/exit");
+        }
         long timeoutNanos = getTimeoutNanos();
         boolean hasDeadline = hasDeadline();
         if (timeoutNanos == 0 && !hasDeadline) {
