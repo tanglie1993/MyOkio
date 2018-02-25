@@ -66,14 +66,14 @@ public final class AsyncTimeoutTest {
     assertTimedOut(a);
   }
 
-//  @Test
-//  public void singleInstanceNotTimedOut() throws Exception {
-//    b.enter();
-//    Thread.sleep(250);
-//    b.exit();
-//    assertFalse(b.exit());
-//    assertTimedOut();
-//  }
+  @Test
+  public void singleInstanceNotTimedOut() throws Exception {
+    b.enter();
+    Thread.sleep(250);
+    b.exit();
+    assertFalse(b.exit());
+    assertTimedOut();
+  }
 //
 //  @Test
 //  public void instancesAddedAtEnd() throws Exception {
