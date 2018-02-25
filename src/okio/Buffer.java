@@ -706,4 +706,14 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             segmentList.write((byte) in.read());
         }
     }
+
+    public void readFrom(InputStream in) throws IOException {
+        while (true){
+            int read = in.read();
+            if(read == -1){
+                return;
+            }
+            segmentList.write((byte) read);
+        }
+    }
 }

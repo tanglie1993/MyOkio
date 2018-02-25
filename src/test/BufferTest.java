@@ -251,22 +251,24 @@ public final class BufferTest {
 //        assertEquals(0, buffer.size());
 //    }
 //
-//    @Test public void readFromStream() throws Exception {
-//        InputStream in = new ByteArrayInputStream("hello, world!".getBytes(UTF_8));
-//        Buffer buffer = new Buffer();
-//        buffer.readFrom(in);
-//        String out = buffer.readUtf8();
-//        assertEquals("hello, world!", out);
-//    }
-//
-//    @Test public void readFromSpanningSegments() throws Exception {
-//        InputStream in = new ByteArrayInputStream("hello, world!".getBytes(UTF_8));
-//        Buffer buffer = new Buffer().writeUtf8(repeat('a', Segment.SIZE - 10));
-//        buffer.readFrom(in);
-//        String out = buffer.readUtf8();
-//        assertEquals(repeat('a', Segment.SIZE - 10) + "hello, world!", out);
-//    }
-//
+    @Test
+    public void readFromStream() throws Exception {
+        InputStream in = new ByteArrayInputStream("hello, world!".getBytes(UTF_8));
+        Buffer buffer = new Buffer();
+        buffer.readFrom(in);
+        String out = buffer.readUtf8();
+        assertEquals("hello, world!", out);
+    }
+
+    @Test
+    public void readFromSpanningSegments() throws Exception {
+        InputStream in = new ByteArrayInputStream("hello, world!".getBytes(UTF_8));
+        Buffer buffer = new Buffer().writeUtf8(repeat('a', Segment.SIZE - 10));
+        buffer.readFrom(in);
+        String out = buffer.readUtf8();
+        assertEquals(repeat('a', Segment.SIZE - 10) + "hello, world!", out);
+    }
+
     @Test
     public void readFromStreamWithCount() throws Exception {
         InputStream in = new ByteArrayInputStream("hello, world!".getBytes(UTF_8));
