@@ -176,21 +176,23 @@ public final class BufferTest {
 //        assertEquals(asList(Segment.SIZE - writeSize, Segment.SIZE), source.segmentSizes());
 //    }
 //
-//    @Test public void writePrefixDoesntSplit() throws Exception {
-//        Buffer sink = new Buffer();
-//        sink.writeUtf8(repeat('b', 10));
+    @Test
+    public void writePrefixDoesntSplit() throws Exception {
+        Buffer sink = new Buffer();
+        sink.writeUtf8(repeat('b', 10));
+
+        Buffer source = new Buffer();
+        source.writeUtf8(repeat('a', Segment.SIZE * 2));
+        sink.write(source, 20);
+
+        assertEquals(Arrays.asList(30), sink.segmentSizes());
+        assertEquals(Arrays.asList(Segment.SIZE - 20, Segment.SIZE), source.segmentSizes());
+        assertEquals(30, sink.size());
+        assertEquals(Segment.SIZE * 2 - 20, source.size());
+    }
 //
-//        Buffer source = new Buffer();
-//        source.writeUtf8(repeat('a', Segment.SIZE * 2));
-//        sink.write(source, 20);
-//
-//        assertEquals(asList(30), sink.segmentSizes());
-//        assertEquals(asList(Segment.SIZE - 20, Segment.SIZE), source.segmentSizes());
-//        assertEquals(30, sink.size());
-//        assertEquals(Segment.SIZE * 2 - 20, source.size());
-//    }
-//
-//    @Test public void writePrefixDoesntSplitButRequiresCompact() throws Exception {
+//    @Test
+//    public void writePrefixDoesntSplitButRequiresCompact() throws Exception {
 //        Buffer sink = new Buffer();
 //        sink.writeUtf8(repeat('b', Segment.SIZE - 10)); // limit = size - 10
 //        sink.readUtf8(Segment.SIZE - 20); // pos = size = 20
@@ -199,35 +201,37 @@ public final class BufferTest {
 //        source.writeUtf8(repeat('a', Segment.SIZE * 2));
 //        sink.write(source, 20);
 //
-//        assertEquals(asList(30), sink.segmentSizes());
-//        assertEquals(asList(Segment.SIZE - 20, Segment.SIZE), source.segmentSizes());
+//        assertEquals(Arrays.asList(30), sink.segmentSizes());
+//        assertEquals(Arrays.asList(Segment.SIZE - 20, Segment.SIZE), source.segmentSizes());
 //        assertEquals(30, sink.size());
 //        assertEquals(Segment.SIZE * 2 - 20, source.size());
 //    }
-//
-//    @Test public void copyToSpanningSegments() throws Exception {
-//        Buffer source = new Buffer();
-//        source.writeUtf8(repeat('a', Segment.SIZE * 2));
-//        source.writeUtf8(repeat('b', Segment.SIZE * 2));
-//
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        source.copyTo(out, 10, Segment.SIZE * 3);
-//
-//        assertEquals(repeat('a', Segment.SIZE * 2 - 10) + repeat('b', Segment.SIZE + 10),
-//                out.toString());
-//        assertEquals(repeat('a', Segment.SIZE * 2) + repeat('b', Segment.SIZE * 2),
-//                source.readUtf8(Segment.SIZE * 4));
-//    }
-//
-//    @Test public void copyToStream() throws Exception {
-//        Buffer buffer = new Buffer().writeUtf8("hello, world!");
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        buffer.copyTo(out);
-//        String outString = new String(out.toByteArray(), UTF_8);
-//        assertEquals("hello, world!", outString);
-//        assertEquals("hello, world!", buffer.readUtf8());
-//    }
-//
+
+    @Test
+    public void copyToSpanningSegments() throws Exception {
+        Buffer source = new Buffer();
+        source.writeUtf8(repeat('a', Segment.SIZE * 2));
+        source.writeUtf8(repeat('b', Segment.SIZE * 2));
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        source.copyTo(out, 10, Segment.SIZE * 3);
+
+        assertEquals(repeat('a', Segment.SIZE * 2 - 10) + repeat('b', Segment.SIZE + 10),
+                out.toString());
+        assertEquals(repeat('a', Segment.SIZE * 2) + repeat('b', Segment.SIZE * 2),
+                source.readUtf8(Segment.SIZE * 4));
+    }
+
+    @Test
+    public void copyToStream() throws Exception {
+        Buffer buffer = new Buffer().writeUtf8("hello, world!");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        buffer.copyTo(out);
+        String outString = new String(out.toByteArray(), UTF_8);
+        assertEquals("hello, world!", outString);
+        assertEquals("hello, world!", buffer.readUtf8());
+    }
+
     @Test
     public void writeToSpanningSegments() throws Exception {
         Buffer buffer = new Buffer();

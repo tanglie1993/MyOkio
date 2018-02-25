@@ -728,4 +728,18 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         segmentList.read(bytes);
         out.write(bytes);
     }
+
+    public void copyTo(ByteArrayOutputStream out) {
+        int available = segmentList.available();
+        for(int i = 0; i < available; i++){
+            out.write(segmentList.getByte(i));
+        }
+    }
+
+    public void copyTo(ByteArrayOutputStream out, int startIndex, int length) {
+        int available = segmentList.available();
+        for(long i = startIndex; i < startIndex + length && i < available; i++){
+            out.write(segmentList.getByte(i));
+        }
+    }
 }
