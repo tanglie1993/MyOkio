@@ -116,18 +116,18 @@ public final class AsyncTimeoutTest {
     assertTimedOut();
   }
 
-//  @Test
-//  public void instancesRemovedAtEnd() throws Exception {
-//    a.enter();
-//    b.enter();
-//    c.enter();
-//    d.enter();
-//    assertFalse(d.exit());
-//    assertFalse(c.exit());
-//    assertFalse(b.exit());
-//    assertFalse(a.exit());
-//    assertTimedOut();
-//  }
+  @Test
+  public void instancesRemovedAtEnd() throws Exception {
+    a.enter();
+    b.enter();
+    c.enter();
+    d.enter();
+    assertFalse(d.exit());
+    assertFalse(c.exit());
+    assertFalse(b.exit());
+    assertFalse(a.exit());
+    assertTimedOut();
+  }
 //
 //  /** Detecting double-enters is not guaranteed. */
 //  @Test
