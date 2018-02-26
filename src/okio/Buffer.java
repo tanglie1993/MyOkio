@@ -170,7 +170,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
 
     public Buffer write(byte[] data, int pos, int byteCount) {
-        segmentList.write(data, pos, byteCount);
+        segmentList.write(data, pos, pos + byteCount);
         return this;
     }
 

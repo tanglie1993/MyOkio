@@ -290,6 +290,7 @@ public final class AsyncTimeoutTest {
    */
   @Test
   public void sinkSplitsLargeWrites() throws Exception {
+    System.out.println("00000000000000");
     byte[] data = new byte[512 * 1024];
     Random dice = new Random(0);
     dice.nextBytes(data);
@@ -299,6 +300,8 @@ public final class AsyncTimeoutTest {
     Sink sink = new ForwardingSink(new Buffer()) {
       @Override public void write(Buffer source, long byteCount) throws IOException {
         try {
+          System.out.println("write " + byteCount);
+          System.out.println("size " + target.size());
           Thread.sleep(byteCount / 500); // ~500 KiB/s.
           target.write(source, byteCount);
         } catch (InterruptedException e) {
@@ -316,7 +319,9 @@ public final class AsyncTimeoutTest {
     timeoutSink.write(source, source.size());
 
     // The data should all have arrived.
-    assertEquals(ByteString.of(data), target.readByteString());
+    ByteString expected = ByteString.of(data);
+    ByteString actual = target.readByteString();
+    assertEquals(expected, actual);
   }
 
   /** Asserts which timeouts fired, and in which order. */

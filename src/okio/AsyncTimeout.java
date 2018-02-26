@@ -198,6 +198,8 @@ public class AsyncTimeout extends Timeout {
                     enter();
                     try {
                         sink.write(source, toWrite);
+                        System.out.println("byteCount " + byteCount);
+                        System.out.println("toWrite " + toWrite);
                         byteCount -= toWrite;
                         throwOnTimeout = true;
                     } catch (IOException e) {

@@ -37,9 +37,9 @@ public class TestUtil {
         // Writing to result directly will yield packed segments. Instead, write to
         // other buffers, then write those buffers to result.
         for (int pos = 0, byteCount; pos < data.length; pos += byteCount) {
-            byteCount = (4 / 2) + dice.nextInt(4 / 2);
+            byteCount = (Segment.SIZE / 2) + dice.nextInt(Segment.SIZE / 2);
             if (byteCount > data.length - pos) byteCount = data.length - pos;
-            int offset = dice.nextInt(4 - byteCount);
+            int offset = dice.nextInt(Segment.SIZE - byteCount);
 
             Buffer segment = new Buffer();
             segment.write(new byte[offset]);
