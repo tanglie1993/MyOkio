@@ -28,6 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
+import static test.TestUtil.bufferWithRandomSegmentLayout;
 
 /**
  * This test uses four timeouts of varying durations: 250ms, 500ms, 750ms and
@@ -281,42 +282,42 @@ public final class AsyncTimeoutTest {
       assertEquals("no timeout occurred", expected.getMessage());
     }
   }
-//
-//  /**
-//   * We had a bug where writing a very large buffer would fail with an
-//   * unexpected timeout because although the sink was making steady forward
-//   * progress, doing it all as a single write caused a timeout.
-//   */
-//  @Test
-//  public void sinkSplitsLargeWrites() throws Exception {
-//    byte[] data = new byte[512 * 1024];
-//    Random dice = new Random(0);
-//    dice.nextBytes(data);
-//    final Buffer source = bufferWithRandomSegmentLayout(dice, data);
-//    final Buffer target = new Buffer();
-//
-//    Sink sink = new ForwardingSink(new Buffer()) {
-//      @Override public void write(Buffer source, long byteCount) throws IOException {
-//        try {
-//          Thread.sleep(byteCount / 500); // ~500 KiB/s.
-//          target.write(source, byteCount);
-//        } catch (InterruptedException e) {
-//          throw new AssertionError();
-//        }
-//      }
-//    };
-//
-//    // Timeout after 250 ms of inactivity.
-//    AsyncTimeout timeout = new AsyncTimeout();
-//    timeout.timeout(250, TimeUnit.MILLISECONDS);
-//    Sink timeoutSink = timeout.sink(sink);
-//
-//    // Transmit 500 KiB of data, which should take ~1 second. But expect no timeout!
-//    timeoutSink.write(source, source.size());
-//
-//    // The data should all have arrived.
-//    assertEquals(ByteString.of(data), target.readByteString());
-//  }
+
+  /**
+   * We had a bug where writing a very large buffer would fail with an
+   * unexpected timeout because although the sink was making steady forward
+   * progress, doing it all as a single write caused a timeout.
+   */
+  @Test
+  public void sinkSplitsLargeWrites() throws Exception {
+    byte[] data = new byte[512 * 1024];
+    Random dice = new Random(0);
+    dice.nextBytes(data);
+    final Buffer source = bufferWithRandomSegmentLayout(dice, data);
+    final Buffer target = new Buffer();
+
+    Sink sink = new ForwardingSink(new Buffer()) {
+      @Override public void write(Buffer source, long byteCount) throws IOException {
+        try {
+          Thread.sleep(byteCount / 500); // ~500 KiB/s.
+          target.write(source, byteCount);
+        } catch (InterruptedException e) {
+          throw new AssertionError();
+        }
+      }
+    };
+
+    // Timeout after 250 ms of inactivity.
+    AsyncTimeout timeout = new AsyncTimeout();
+    timeout.timeout(250, TimeUnit.MILLISECONDS);
+    Sink timeoutSink = timeout.sink(sink);
+
+    // Transmit 500 KiB of data, which should take ~1 second. But expect no timeout!
+    timeoutSink.write(source, source.size());
+
+    // The data should all have arrived.
+    assertEquals(ByteString.of(data), target.readByteString());
+  }
 
   /** Asserts which timeouts fired, and in which order. */
   private void assertTimedOut(Timeout... expected) {

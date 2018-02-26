@@ -140,6 +140,7 @@ public class AsyncTimeout extends Timeout {
                             continue;
                         }else{
                             timedOut.timedOut();
+                            queue.remove(timedOut);
                         }
                         if (queue.isEmpty()) {
                             queue = null;
