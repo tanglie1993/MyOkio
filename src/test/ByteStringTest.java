@@ -320,16 +320,16 @@ public final class ByteStringTest {
     } catch (IllegalArgumentException expected) {
     }
   }
-//
-//  @Test
-//  public void encodeDecodeStringUtf8() throws Exception {
-//    Charset utf8 = Charset.forName("UTF-8");
-//    ByteString byteString = ByteString.encodeString(bronzeHorseman, utf8);
-//    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(utf8));
-//    assertEquals(byteString, ByteString.decodeHex("d09dd0b020d0b1d0b5d180d0b5d0b3d18320d0bfd183d181"
-//        + "d182d18bd0bdd0bdd18bd18520d0b2d0bed0bbd0bd"));
-//    assertEquals(bronzeHorseman, byteString.string(utf8));
-//  }
+
+  @Test
+  public void encodeDecodeStringUtf8() throws Exception {
+    Charset utf8 = Charset.forName("UTF-8");
+    ByteString byteString = ByteString.encodeString(bronzeHorseman, utf8);
+    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(utf8));
+    assertEquals(byteString, ByteString.decodeHex("d09dd0b020d0b1d0b5d180d0b5d0b3d18320d0bfd183d181"
+        + "d182d18bd0bdd0bdd18bd18520d0b2d0bed0bbd0bd"));
+    assertEquals(bronzeHorseman, byteString.string(utf8));
+  }
 //
 //  @Test
 //  public void encodeDecodeStringUtf16be() throws Exception {

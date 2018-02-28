@@ -190,10 +190,11 @@ public class ByteString {
         return -1;
     }
 
-    public static void encodeString(String s, Charset charset) {
+    public static ByteString encodeString(String s, Charset charset) {
         if(s == null || charset == null){
             throw new IllegalArgumentException();
         }
+        return new ByteString(s.getBytes(charset));
     }
 
     public String string(Charset charset) {
