@@ -3,6 +3,8 @@ package okio;
 import test.TestUtil;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -202,5 +204,13 @@ public class ByteString {
             throw new IllegalArgumentException("charset == null");
         }
         return new String(data, charset);
+    }
+
+    public static ByteString read(InputStream in, int count) throws IOException {
+        byte[] bytes = new byte[count];
+        for(int i = 0; i < count; i++){
+            bytes[i] = (byte) in.read();
+        }
+        return new ByteString(bytes);
     }
 }
