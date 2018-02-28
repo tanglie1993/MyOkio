@@ -391,15 +391,15 @@ public final class ByteStringTest {
     assertEquals(ByteString.encodeUtf8("c"), ByteString.read(in, 1).toAsciiLowercase());
     assertEquals(ByteString.EMPTY, ByteString.read(in, 0).toAsciiLowercase());
   }
-//
-//  @Test
-//  public void toAsciiLowerCaseNoUppercase() throws Exception {
-//    ByteString s = factory.encodeUtf8("a1_+");
-//    assertEquals(s, s.toAsciiLowercase());
-//    if (factory == Factory.BYTE_STRING) {
-//      assertSame(s, s.toAsciiLowercase());
-//    }
-//  }
+
+  @Test
+  public void toAsciiLowerCaseNoUppercase() throws Exception {
+    ByteString s = factory.encodeUtf8("a1_+");
+    assertEquals(s, s.toAsciiLowercase());
+    if (factory == Factory.BYTE_STRING) {
+      assertSame(s, s.toAsciiLowercase());
+    }
+  }
 //
 //  @Test
 //  public void toAsciiAllUppercase() throws Exception {
