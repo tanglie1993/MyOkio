@@ -123,16 +123,16 @@ public final class ByteStringTest {
     assertEquals(-85, byteString.getByte(0));
     assertEquals(18, byteString.getByte(1));
   }
-//
-//  @Test
-//  public void getByteOutOfBounds() throws Exception {
-//    ByteString byteString = factory.decodeHex("ab12");
-//    try {
-//      byteString.getByte(2);
-//      fail();
-//    } catch (IndexOutOfBoundsException expected) {
-//    }
-//  }
+
+  @Test
+  public void getByteOutOfBounds() throws Exception {
+    ByteString byteString = factory.decodeHex("ab12");
+    try {
+      byteString.getByte(2);
+      fail();
+    } catch (IndexOutOfBoundsException expected) {
+    }
+  }
 //
 //  @Test
 //  public void startsWithByteString() throws Exception {
