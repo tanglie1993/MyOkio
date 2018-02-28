@@ -109,8 +109,12 @@ public class ByteString {
     }
 
     public boolean startsWith(ByteString byteString) {
-        for(int i = 0; i < byteString.data.length; i++){
-            if(i >= getData().length || getData()[i] != byteString.getData()[i]){
+        return startsWith(byteString.getData());
+    }
+
+    public final boolean startsWith(byte[] prefix) {
+        for(int i = 0; i < prefix.length; i++){
+            if(i >= getData().length || getData()[i] != prefix[i]){
                 return false;
             }
         }
@@ -125,9 +129,18 @@ public class ByteString {
         }
         return true;
     }
+    public final boolean endsWith(byte[] suffix) {
+        for(int i = 0; i < suffix.length; i++){
+            if(getData().length - 1 - i < 0 || getData()[getData().length - 1 - i] != suffix[suffix.length - 1 - i]){
+                return false;
+            }
+        }
+        return true;
+    }
 
-    public ByteString toByteArray() {
-        return this;
+
+    public byte[] toByteArray() {
+        return data.clone();
     }
 
     public int indexOf(ByteString byteString) {
@@ -135,10 +148,18 @@ public class ByteString {
     }
 
     public int indexOf(ByteString byteString, int startIndex) {
+        return indexOf(byteString.getData(), startIndex);
+    }
+
+    public int indexOf(byte[] bytes) {
+        return indexOf(bytes, 0);
+    }
+
+    public int indexOf(byte[] bytes, int startIndex) {
         startIndex = Math.max(startIndex, 0);
-        outer: for(int i = startIndex; i <= getData().length - byteString.getData().length; i++){
-            for(int j = 0; j < byteString.data.length; j++){
-                if(j >= getData().length || getData()[i + j] != byteString.getData()[j]){
+        outer: for(int i = startIndex; i <= getData().length - bytes.length; i++){
+            for(int j = 0; j < bytes.length; j++){
+                if(j >= getData().length || getData()[i + j] != bytes[j]){
                     continue outer;
                 }
             }

@@ -34,6 +34,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 import static test.TestUtil.UTF_8;
+import static test.TestUtil.assertByteArraysEquals;
 
 @RunWith(IDECompatibleParameterized.class)
 public final class ByteStringTest {
@@ -282,16 +283,16 @@ public final class ByteStringTest {
     assertFalse(byteString.equals(new Object()));
     assertFalse(byteString.equals(ByteString.decodeHex("000201")));
   }
-//
-//  private final String bronzeHorseman = "На берегу пустынных волн";
-//
-//  @Test
-//  public void utf8() throws Exception {
-//    ByteString byteString = factory.encodeUtf8(bronzeHorseman);
-//    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(Util.UTF_8));
-//    assertTrue(byteString.equals(ByteString.of(bronzeHorseman.getBytes(Util.UTF_8))));
-//    assertEquals(byteString.utf8(), bronzeHorseman);
-//  }
+
+  private final String bronzeHorseman = "На берегу пустынных волн";
+
+  @Test
+  public void utf8() throws Exception {
+    ByteString byteString = factory.encodeUtf8(bronzeHorseman);
+    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(UTF_8));
+    assertTrue(byteString.equals(ByteString.of(bronzeHorseman.getBytes(UTF_8))));
+    assertEquals(byteString.utf8(), bronzeHorseman);
+  }
 //
 //  @Test
 //  public void encodeNullCharset() throws Exception {
