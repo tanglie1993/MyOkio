@@ -351,16 +351,16 @@ public final class ByteStringTest {
         + "0000044b0000044500000020000004320000043e0000043b0000043d"));
     assertEquals(bronzeHorseman, byteString.string(utf32be));
   }
-//
-//  @Test
-//  public void encodeDecodeStringAsciiIsLossy() throws Exception {
-//    Charset ascii = Charset.forName("US-ASCII");
-//    ByteString byteString = ByteString.encodeString(bronzeHorseman, ascii);
-//    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(ascii));
-//    assertEquals(byteString,
-//        ByteString.decodeHex("3f3f203f3f3f3f3f3f203f3f3f3f3f3f3f3f3f203f3f3f3f"));
-//    assertEquals("?? ?????? ????????? ????", byteString.string(ascii));
-//  }
+
+  @Test
+  public void encodeDecodeStringAsciiIsLossy() throws Exception {
+    Charset ascii = Charset.forName("US-ASCII");
+    ByteString byteString = ByteString.encodeString(bronzeHorseman, ascii);
+    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(ascii));
+    assertEquals(byteString,
+        ByteString.decodeHex("3f3f203f3f3f3f3f3f203f3f3f3f3f3f3f3f3f203f3f3f3f"));
+    assertEquals("?? ?????? ????????? ????", byteString.string(ascii));
+  }
 //
 //  @Test
 //  public void decodeMalformedStringReturnsReplacementCharacter() throws Exception {
