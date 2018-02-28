@@ -368,13 +368,13 @@ public final class ByteStringTest {
     String string = ByteString.decodeHex("04").string(utf16be);
     assertEquals("\ufffd", string);
   }
-//
-//  @Test
-//  public void testHashCode() throws Exception {
-//    ByteString byteString = factory.decodeHex("0102");
-//    assertEquals(byteString.hashCode(), byteString.hashCode());
-//    assertEquals(byteString.hashCode(), ByteString.decodeHex("0102").hashCode());
-//  }
+
+  @Test
+  public void testHashCode() throws Exception {
+    ByteString byteString = factory.decodeHex("0102");
+    assertEquals(byteString.hashCode(), byteString.hashCode());
+    assertEquals(byteString.hashCode(), ByteString.decodeHex("0102").hashCode());
+  }
 //
 //  @Test
 //  public void read() throws Exception {
