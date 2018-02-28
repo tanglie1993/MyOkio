@@ -361,13 +361,13 @@ public final class ByteStringTest {
         ByteString.decodeHex("3f3f203f3f3f3f3f3f203f3f3f3f3f3f3f3f3f203f3f3f3f"));
     assertEquals("?? ?????? ????????? ????", byteString.string(ascii));
   }
-//
-//  @Test
-//  public void decodeMalformedStringReturnsReplacementCharacter() throws Exception {
-//    Charset utf16be = Charset.forName("UTF-16BE");
-//    String string = ByteString.decodeHex("04").string(utf16be);
-//    assertEquals("\ufffd", string);
-//  }
+
+  @Test
+  public void decodeMalformedStringReturnsReplacementCharacter() throws Exception {
+    Charset utf16be = Charset.forName("UTF-16BE");
+    String string = ByteString.decodeHex("04").string(utf16be);
+    assertEquals("\ufffd", string);
+  }
 //
 //  @Test
 //  public void testHashCode() throws Exception {
