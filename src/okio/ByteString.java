@@ -3,6 +3,7 @@ package okio;
 import test.TestUtil;
 
 import javax.xml.bind.DatatypeConverter;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -99,5 +100,9 @@ public class ByteString {
 
     public static ByteString of(byte[] bytes, int startIndex, int length) {
         return new ByteString(bytes, startIndex, length);
+    }
+
+    public static ByteString of(ByteBuffer byteBuffer) {
+        return new ByteString(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit() - byteBuffer.position());
     }
 }

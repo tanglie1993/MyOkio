@@ -106,23 +106,23 @@ public final class ByteStringTest {
     assertEquals("llo, Worl", byteString.utf8());
   }
 
-//  @Test
-//  public void ofByteBuffer() {
-//    byte[] bytes = "Hello, World!".getBytes(Util.UTF_8);
-//    ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
-//    byteBuffer.position(2).limit(11);
-//    ByteString byteString = ByteString.of(byteBuffer);
-//    // Verify that the bytes were copied out.
-//    byteBuffer.put(4, (byte) 'a');
-//    assertEquals("llo, Worl", byteString.utf8());
-//  }
-//
-//  @Test
-//  public void getByte() throws Exception {
-//    ByteString byteString = factory.decodeHex("ab12");
-//    assertEquals(-85, byteString.getByte(0));
-//    assertEquals(18, byteString.getByte(1));
-//  }
+  @Test
+  public void ofByteBuffer() {
+    byte[] bytes = "Hello, World!".getBytes(UTF_8);
+    ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+    byteBuffer.position(2).limit(11);
+    ByteString byteString = ByteString.of(byteBuffer);
+    // Verify that the bytes were copied out.
+    byteBuffer.put(4, (byte) 'a');
+    assertEquals("llo, Worl", byteString.utf8());
+  }
+
+  @Test
+  public void getByte() throws Exception {
+    ByteString byteString = factory.decodeHex("ab12");
+    assertEquals(-85, byteString.getByte(0));
+    assertEquals(18, byteString.getByte(1));
+  }
 //
 //  @Test
 //  public void getByteOutOfBounds() throws Exception {

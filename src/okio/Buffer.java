@@ -753,6 +753,9 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     public ByteString snapshot() {
         byte[] bytes = new byte[segmentList.available()];
+        for(int i = 0; i < bytes.length; i++){
+            bytes[i] = segmentList.getByte(i);
+        }
         return new ByteString(bytes);
     }
 }
