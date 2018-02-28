@@ -105,4 +105,13 @@ public class ByteString {
     public static ByteString of(ByteBuffer byteBuffer) {
         return new ByteString(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit() - byteBuffer.position());
     }
+
+    public boolean startsWith(ByteString byteString) {
+        for(int i = 0; i < byteString.data.length; i++){
+            if(i >= getData().length || getData()[i] != byteString.getData()[i]){
+                return false;
+            }
+        }
+        return true;
+    }
 }

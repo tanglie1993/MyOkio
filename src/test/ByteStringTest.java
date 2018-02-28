@@ -133,18 +133,18 @@ public final class ByteStringTest {
     } catch (IndexOutOfBoundsException expected) {
     }
   }
-//
-//  @Test
-//  public void startsWithByteString() throws Exception {
-//    ByteString byteString = factory.decodeHex("112233");
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("")));
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("11")));
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("1122")));
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("112233")));
-//    assertFalse(byteString.startsWith(ByteString.decodeHex("2233")));
-//    assertFalse(byteString.startsWith(ByteString.decodeHex("11223344")));
-//    assertFalse(byteString.startsWith(ByteString.decodeHex("112244")));
-//  }
+
+  @Test
+  public void startsWithByteString() throws Exception {
+    ByteString byteString = factory.decodeHex("112233");
+    assertTrue(byteString.startsWith(ByteString.decodeHex("")));
+    assertTrue(byteString.startsWith(ByteString.decodeHex("11")));
+    assertTrue(byteString.startsWith(ByteString.decodeHex("1122")));
+    assertTrue(byteString.startsWith(ByteString.decodeHex("112233")));
+    assertFalse(byteString.startsWith(ByteString.decodeHex("2233")));
+    assertFalse(byteString.startsWith(ByteString.decodeHex("11223344")));
+    assertFalse(byteString.startsWith(ByteString.decodeHex("112244")));
+  }
 //
 //  @Test
 //  public void endsWithByteString() throws Exception {
