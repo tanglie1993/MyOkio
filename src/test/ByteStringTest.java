@@ -330,16 +330,16 @@ public final class ByteStringTest {
         + "d182d18bd0bdd0bdd18bd18520d0b2d0bed0bbd0bd"));
     assertEquals(bronzeHorseman, byteString.string(utf8));
   }
-//
-//  @Test
-//  public void encodeDecodeStringUtf16be() throws Exception {
-//    Charset utf16be = Charset.forName("UTF-16BE");
-//    ByteString byteString = ByteString.encodeString(bronzeHorseman, utf16be);
-//    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(utf16be));
-//    assertEquals(byteString, ByteString.decodeHex("041d043000200431043504400435043304430020043f0443"
-//        + "04410442044b043d043d044b044500200432043e043b043d"));
-//    assertEquals(bronzeHorseman, byteString.string(utf16be));
-//  }
+
+  @Test
+  public void encodeDecodeStringUtf16be() throws Exception {
+    Charset utf16be = Charset.forName("UTF-16BE");
+    ByteString byteString = ByteString.encodeString(bronzeHorseman, utf16be);
+    assertByteArraysEquals(byteString.toByteArray(), bronzeHorseman.getBytes(utf16be));
+    assertEquals(byteString, ByteString.decodeHex("041d043000200431043504400435043304430020043f0443"
+        + "04410442044b043d043d044b044500200432043e043b043d"));
+    assertEquals(bronzeHorseman, byteString.string(utf16be));
+  }
 //
 //  @Test
 //  public void encodeDecodeStringUtf32be() throws Exception {
