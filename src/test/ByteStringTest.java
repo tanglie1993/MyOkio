@@ -268,20 +268,20 @@ public final class ByteStringTest {
     assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33").toByteArray()));
     assertEquals(3, byteString.lastIndexOf(ByteString.decodeHex("").toByteArray()));
   }
-//
-//  @SuppressWarnings("SelfEquals")
-//  @Test
-//  public void equals() throws Exception {
-//    ByteString byteString = factory.decodeHex("000102");
-//    assertTrue(byteString.equals(byteString));
-//    assertTrue(byteString.equals(ByteString.decodeHex("000102")));
-//    assertTrue(factory.decodeHex("").equals(ByteString.EMPTY));
-//    assertTrue(factory.decodeHex("").equals(ByteString.of()));
-//    assertTrue(ByteString.EMPTY.equals(factory.decodeHex("")));
-//    assertTrue(ByteString.of().equals(factory.decodeHex("")));
-//    assertFalse(byteString.equals(new Object()));
-//    assertFalse(byteString.equals(ByteString.decodeHex("000201")));
-//  }
+
+  @SuppressWarnings("SelfEquals")
+  @Test
+  public void equals() throws Exception {
+    ByteString byteString = factory.decodeHex("000102");
+    assertTrue(byteString.equals(byteString));
+    assertTrue(byteString.equals(ByteString.decodeHex("000102")));
+    assertTrue(factory.decodeHex("").equals(ByteString.EMPTY));
+    assertTrue(factory.decodeHex("").equals(ByteString.of()));
+    assertTrue(ByteString.EMPTY.equals(factory.decodeHex("")));
+    assertTrue(ByteString.of().equals(factory.decodeHex("")));
+    assertFalse(byteString.equals(new Object()));
+    assertFalse(byteString.equals(ByteString.decodeHex("000201")));
+  }
 //
 //  private final String bronzeHorseman = "На берегу пустынных волн";
 //

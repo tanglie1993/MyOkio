@@ -14,7 +14,7 @@ import static okio.Util.arrayRangeEquals;
  */
 public class ByteString {
 
-    static final ByteString EMPTY = ByteString.of();
+    public static final ByteString EMPTY = ByteString.of();
 
     private byte[] data;
 
