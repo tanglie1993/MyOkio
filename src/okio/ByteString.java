@@ -129,19 +129,12 @@ public class ByteString {
     }
 
     public int indexOf(ByteString byteString) {
-        outer: for(int i = 0; i <= getData().length - byteString.getData().length; i++){
-            for(int j = 0; j < byteString.data.length; j++){
-                if(j >= getData().length || getData()[i + j] != byteString.getData()[j]){
-                    continue outer;
-                }
-            }
-            return i;
-        }
-        return -1;
+        return indexOf(byteString, 0);
     }
 
     public int indexOf(ByteString byteString, int startIndex) {
-        outer: for(int i = 0; i <= getData().length - byteString.getData().length; i++){
+        startIndex = Math.max(startIndex, 0);
+        outer: for(int i = startIndex; i <= getData().length - byteString.getData().length; i++){
             for(int j = 0; j < byteString.data.length; j++){
                 if(j >= getData().length || getData()[i + j] != byteString.getData()[j]){
                     continue outer;
