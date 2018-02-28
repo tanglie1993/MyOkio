@@ -19,6 +19,11 @@ public class ByteString {
         this.data = bytes;
     }
 
+    public ByteString(byte[] bytes, int startIndex, int length) {
+        this.data = new byte[length];
+        System.arraycopy(bytes, startIndex, this.data, 0, length);
+    }
+
     public String utf8() {
         return new String(data);
     }
@@ -86,5 +91,13 @@ public class ByteString {
     @Override
     public int hashCode() {
         return Arrays.hashCode(data);
+    }
+
+    public byte getByte(int index) {
+        return data[index];
+    }
+
+    public static ByteString of(byte[] bytes, int startIndex, int length) {
+        return new ByteString(bytes, startIndex, length);
     }
 }

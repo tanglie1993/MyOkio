@@ -9,11 +9,11 @@ public class Segment {
 
     public static final int SIZE = 8192;
 
-    final byte[] data;
+    public final byte[] data;
 
-    int front = 0;
+    public int front = 0;
 
-    int rear;
+    public int rear;
 
     Segment prev;
 

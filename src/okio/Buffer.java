@@ -746,4 +746,13 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             out.write(segmentList.getByte(i));
         }
     }
+
+    public Segment writableSegment(int size) {
+        return segmentList.getWritableSegment(size);
+    }
+
+    public ByteString snapshot() {
+        byte[] bytes = new byte[segmentList.available()];
+        return new ByteString(bytes);
+    }
 }
