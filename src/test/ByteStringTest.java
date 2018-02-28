@@ -418,11 +418,11 @@ public final class ByteStringTest {
     assertEquals(ByteString.encodeUtf8("C"), ByteString.read(in, 1).toAsciiUppercase());
     assertEquals(ByteString.EMPTY, ByteString.read(in, 0).toAsciiUppercase());
   }
-//
-//  @Test
-//  public void toAsciiStartsUppercaseEndsLowercase() throws Exception {
-//    assertEquals(ByteString.encodeUtf8("ABCD"), factory.encodeUtf8("ABcd").toAsciiUppercase());
-//  }
+
+  @Test
+  public void toAsciiStartsUppercaseEndsLowercase() throws Exception {
+    assertEquals(ByteString.encodeUtf8("ABCD"), factory.encodeUtf8("ABcd").toAsciiUppercase());
+  }
 //
 //  @Test
 //  public void substring() throws Exception {
