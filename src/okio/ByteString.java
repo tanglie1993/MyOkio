@@ -213,4 +213,24 @@ public class ByteString {
         }
         return new ByteString(bytes);
     }
+
+    public ByteString toAsciiLowercase() {
+        // Search for an uppercase character. If we don't find one, return this.
+        for (int i = 0; i < data.length; i++) {
+            byte c = data[i];
+            if (c < 'A' || c > 'Z') continue;
+
+            // If we reach this point, this string is not not lowercase. Create and
+            // return a new byte string.
+            byte[] lowercase = data.clone();
+            lowercase[i++] = (byte) (c - ('A' - 'a'));
+            for (; i < lowercase.length; i++) {
+                c = lowercase[i];
+                if (c < 'A' || c > 'Z') continue;
+                lowercase[i] = (byte) (c - ('A' - 'a'));
+            }
+            return new ByteString(lowercase);
+        }
+        return this;
+    }
 }
