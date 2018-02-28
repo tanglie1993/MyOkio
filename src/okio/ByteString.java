@@ -253,4 +253,22 @@ public class ByteString {
         }
         return this;
     }
+
+    public ByteString substring(int startIndex) {
+        if(startIndex < 0 || startIndex >= data.length){
+            throw new IllegalArgumentException();
+        }
+        byte[] bytes = new byte[data.length - startIndex];
+        System.arraycopy(data, startIndex, bytes, 0, data.length - startIndex);
+        return new ByteString(bytes);
+    }
+
+    public ByteString substring(int startIndex, int endIndex) {
+        if(startIndex < 0 || startIndex >= data.length || endIndex < 0 || endIndex >= data.length || endIndex < startIndex){
+            throw new IllegalArgumentException();
+        }
+        byte[] bytes = new byte[endIndex - startIndex];
+        System.arraycopy(data, startIndex, bytes, 0, endIndex - startIndex);
+        return new ByteString(bytes);
+    }
 }
