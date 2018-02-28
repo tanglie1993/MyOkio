@@ -293,33 +293,33 @@ public final class ByteStringTest {
     assertTrue(byteString.equals(ByteString.of(bronzeHorseman.getBytes(UTF_8))));
     assertEquals(byteString.utf8(), bronzeHorseman);
   }
-//
-//  @Test
-//  public void encodeNullCharset() throws Exception {
-//    try {
-//      ByteString.encodeString("hello", null);
-//      fail();
-//    } catch (IllegalArgumentException expected) {
-//    }
-//  }
-//
-//  @Test
-//  public void encodeNullString() throws Exception {
-//    try {
-//      ByteString.encodeString(null, Charset.forName("UTF-8"));
-//      fail();
-//    } catch (IllegalArgumentException expected) {
-//    }
-//  }
-//
-//  @Test
-//  public void decodeNullCharset() throws Exception {
-//    try {
-//      ByteString.of().string(null);
-//      fail();
-//    } catch (IllegalArgumentException expected) {
-//    }
-//  }
+
+  @Test
+  public void encodeNullCharset() throws Exception {
+    try {
+      ByteString.encodeString("hello", null);
+      fail();
+    } catch (IllegalArgumentException expected) {
+    }
+  }
+
+  @Test
+  public void encodeNullString() throws Exception {
+    try {
+      ByteString.encodeString(null, Charset.forName("UTF-8"));
+      fail();
+    } catch (IllegalArgumentException expected) {
+    }
+  }
+
+  @Test
+  public void decodeNullCharset() throws Exception {
+    try {
+      ByteString.of().string(null);
+      fail();
+    } catch (IllegalArgumentException expected) {
+    }
+  }
 //
 //  @Test
 //  public void encodeDecodeStringUtf8() throws Exception {

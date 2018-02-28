@@ -189,4 +189,17 @@ public class ByteString {
         }
         return -1;
     }
+
+    public static void encodeString(String s, Charset charset) {
+        if(s == null || charset == null){
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public String string(Charset charset) {
+        if (charset == null) {
+            throw new IllegalArgumentException("charset == null");
+        }
+        return new String(data, charset);
+    }
 }
