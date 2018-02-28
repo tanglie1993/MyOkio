@@ -157,18 +157,18 @@ public final class ByteStringTest {
     assertFalse(byteString.endsWith(ByteString.decodeHex("00112233")));
     assertFalse(byteString.endsWith(ByteString.decodeHex("002233")));
   }
-//
-//  @Test
-//  public void startsWithByteArray() throws Exception {
-//    ByteString byteString = factory.decodeHex("112233");
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("").toByteArray()));
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("11").toByteArray()));
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("1122").toByteArray()));
-//    assertTrue(byteString.startsWith(ByteString.decodeHex("112233").toByteArray()));
-//    assertFalse(byteString.startsWith(ByteString.decodeHex("2233").toByteArray()));
-//    assertFalse(byteString.startsWith(ByteString.decodeHex("11223344").toByteArray()));
-//    assertFalse(byteString.startsWith(ByteString.decodeHex("112244").toByteArray()));
-//  }
+
+  @Test
+  public void startsWithByteArray() throws Exception {
+    ByteString byteString = factory.decodeHex("112233");
+    assertTrue(byteString.startsWith(ByteString.decodeHex("").toByteArray()));
+    assertTrue(byteString.startsWith(ByteString.decodeHex("11").toByteArray()));
+    assertTrue(byteString.startsWith(ByteString.decodeHex("1122").toByteArray()));
+    assertTrue(byteString.startsWith(ByteString.decodeHex("112233").toByteArray()));
+    assertFalse(byteString.startsWith(ByteString.decodeHex("2233").toByteArray()));
+    assertFalse(byteString.startsWith(ByteString.decodeHex("11223344").toByteArray()));
+    assertFalse(byteString.startsWith(ByteString.decodeHex("112244").toByteArray()));
+  }
 //
 //  @Test
 //  public void endsWithByteArray() throws Exception {

@@ -123,4 +123,8 @@ public class ByteString {
         }
         return true;
     }
+
+    public ByteString toByteArray() {
+        return this;
+    }
 }
