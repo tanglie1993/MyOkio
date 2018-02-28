@@ -400,17 +400,17 @@ public final class ByteStringTest {
       assertSame(s, s.toAsciiLowercase());
     }
   }
-//
-//  @Test
-//  public void toAsciiAllUppercase() throws Exception {
-//    assertEquals(ByteString.encodeUtf8("ab"), factory.encodeUtf8("AB").toAsciiLowercase());
-//  }
-//
-//  @Test
-//  public void toAsciiStartsLowercaseEndsUppercase() throws Exception {
-//    assertEquals(ByteString.encodeUtf8("abcd"), factory.encodeUtf8("abCD").toAsciiLowercase());
-//  }
-//
+
+  @Test
+  public void toAsciiAllUppercase() throws Exception {
+    assertEquals(ByteString.encodeUtf8("ab"), factory.encodeUtf8("AB").toAsciiLowercase());
+  }
+
+  @Test
+  public void toAsciiStartsLowercaseEndsUppercase() throws Exception {
+    assertEquals(ByteString.encodeUtf8("abcd"), factory.encodeUtf8("abCD").toAsciiLowercase());
+  }
+
 //  @Test
 //  public void readAndToUppercase() throws Exception {
 //    InputStream in = new ByteArrayInputStream("abc".getBytes(Util.UTF_8));
