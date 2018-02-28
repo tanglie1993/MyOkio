@@ -145,18 +145,18 @@ public final class ByteStringTest {
     assertFalse(byteString.startsWith(ByteString.decodeHex("11223344")));
     assertFalse(byteString.startsWith(ByteString.decodeHex("112244")));
   }
-//
-//  @Test
-//  public void endsWithByteString() throws Exception {
-//    ByteString byteString = factory.decodeHex("112233");
-//    assertTrue(byteString.endsWith(ByteString.decodeHex("")));
-//    assertTrue(byteString.endsWith(ByteString.decodeHex("33")));
-//    assertTrue(byteString.endsWith(ByteString.decodeHex("2233")));
-//    assertTrue(byteString.endsWith(ByteString.decodeHex("112233")));
-//    assertFalse(byteString.endsWith(ByteString.decodeHex("1122")));
-//    assertFalse(byteString.endsWith(ByteString.decodeHex("00112233")));
-//    assertFalse(byteString.endsWith(ByteString.decodeHex("002233")));
-//  }
+
+  @Test
+  public void endsWithByteString() throws Exception {
+    ByteString byteString = factory.decodeHex("112233");
+    assertTrue(byteString.endsWith(ByteString.decodeHex("")));
+    assertTrue(byteString.endsWith(ByteString.decodeHex("33")));
+    assertTrue(byteString.endsWith(ByteString.decodeHex("2233")));
+    assertTrue(byteString.endsWith(ByteString.decodeHex("112233")));
+    assertFalse(byteString.endsWith(ByteString.decodeHex("1122")));
+    assertFalse(byteString.endsWith(ByteString.decodeHex("00112233")));
+    assertFalse(byteString.endsWith(ByteString.decodeHex("002233")));
+  }
 //
 //  @Test
 //  public void startsWithByteArray() throws Exception {

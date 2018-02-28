@@ -114,4 +114,13 @@ public class ByteString {
         }
         return true;
     }
+
+    public boolean endsWith(ByteString byteString) {
+        for(int i = 0; i < byteString.getData().length; i++){
+            if(getData().length - 1 - i < 0 || getData()[getData().length - 1 - i] != byteString.getData()[byteString.getData().length - 1 - i]){
+                return false;
+            }
+        }
+        return true;
+    }
 }
