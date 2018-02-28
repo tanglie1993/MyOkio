@@ -22,4 +22,11 @@ public class Util {
                 |  (v & 0x000000000000ff00L)  << 40
                 |  (v & 0x00000000000000ffL)  << 56;
     }
+
+    public static boolean arrayRangeEquals(byte[] a, int aOffset, byte[] b, int bOffset, int byteCount) {
+        for (int i = 0; i < byteCount; i++) {
+            if (a[i + aOffset] != b[i + bOffset]) return false;
+        }
+        return true;
+    }
 }

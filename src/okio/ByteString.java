@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
+import static okio.Util.arrayRangeEquals;
+
 /**
  * Created by pc on 2018/1/21.
  */
@@ -141,6 +143,28 @@ public class ByteString {
                 }
             }
             return i;
+        }
+        return -1;
+    }
+
+    public final int lastIndexOf(ByteString byteString) {
+        return lastIndexOf(byteString.getData(), getData().length);
+    }
+
+    public final int lastIndexOf(ByteString byteString, int fromIndex) {
+        return lastIndexOf(byteString.getData(), fromIndex);
+    }
+
+    public final int lastIndexOf(byte[] other) {
+        return lastIndexOf(other, getData().length);
+    }
+
+    public int lastIndexOf(byte[] other, int fromIndex) {
+        fromIndex = Math.min(fromIndex, data.length - other.length);
+        for (int i = fromIndex; i >= 0; i--) {
+            if (arrayRangeEquals(data, i, other, 0, other.length)) {
+                return i;
+            }
         }
         return -1;
     }

@@ -229,45 +229,45 @@ public final class ByteStringTest {
     assertEquals(2, byteString.indexOf(ByteString.decodeHex("33").toByteArray()));
     assertEquals(-1, byteString.indexOf(ByteString.decodeHex("112244").toByteArray()));
   }
-//
-//  @Test
-//  public void lastIndexOfByteString() throws Exception {
-//    ByteString byteString = factory.decodeHex("112233");
-//    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("112233")));
-//    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("1122")));
-//    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("11")));
-//    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("11"), 3));
-//    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("11"), 0));
-//    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex(""), 0));
-//    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("2233")));
-//    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("22")));
-//    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("22"), 3));
-//    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("22"), 1));
-//    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex(""), 1));
-//    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33")));
-//    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33"), 3));
-//    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33"), 2));
-//    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex(""), 2));
-//    assertEquals(3, byteString.lastIndexOf(ByteString.decodeHex(""), 3));
-//    assertEquals(3, byteString.lastIndexOf(ByteString.decodeHex("")));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("112233"), -1));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("112233"), -2));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("44")));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("11223344")));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("112244")));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("2233"), 0));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("33"), 1));
-//    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex(""), -1));
-//  }
-//
-//  @Test
-//  public void lastIndexOfByteArray() throws Exception {
-//    ByteString byteString = factory.decodeHex("112233");
-//    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("112233").toByteArray()));
-//    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("2233").toByteArray()));
-//    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33").toByteArray()));
-//    assertEquals(3, byteString.lastIndexOf(ByteString.decodeHex("").toByteArray()));
-//  }
+
+  @Test
+  public void lastIndexOfByteString() throws Exception {
+    ByteString byteString = factory.decodeHex("112233");
+    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("112233")));
+    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("1122")));
+    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("11")));
+    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("11"), 3));
+    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("11"), 0));
+    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex(""), 0));
+    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("2233")));
+    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("22")));
+    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("22"), 3));
+    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("22"), 1));
+    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex(""), 1));
+    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33")));
+    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33"), 3));
+    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33"), 2));
+    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex(""), 2));
+    assertEquals(3, byteString.lastIndexOf(ByteString.decodeHex(""), 3));
+    assertEquals(3, byteString.lastIndexOf(ByteString.decodeHex("")));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("112233"), -1));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("112233"), -2));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("44")));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("11223344")));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("112244")));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("2233"), 0));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex("33"), 1));
+    assertEquals(-1, byteString.lastIndexOf(ByteString.decodeHex(""), -1));
+  }
+
+  @Test
+  public void lastIndexOfByteArray() throws Exception {
+    ByteString byteString = factory.decodeHex("112233");
+    assertEquals(0, byteString.lastIndexOf(ByteString.decodeHex("112233").toByteArray()));
+    assertEquals(1, byteString.lastIndexOf(ByteString.decodeHex("2233").toByteArray()));
+    assertEquals(2, byteString.lastIndexOf(ByteString.decodeHex("33").toByteArray()));
+    assertEquals(3, byteString.lastIndexOf(ByteString.decodeHex("").toByteArray()));
+  }
 //
 //  @SuppressWarnings("SelfEquals")
 //  @Test
