@@ -411,13 +411,13 @@ public final class ByteStringTest {
     assertEquals(ByteString.encodeUtf8("abcd"), factory.encodeUtf8("abCD").toAsciiLowercase());
   }
 
-//  @Test
-//  public void readAndToUppercase() throws Exception {
-//    InputStream in = new ByteArrayInputStream("abc".getBytes(Util.UTF_8));
-//    assertEquals(ByteString.encodeUtf8("AB"), ByteString.read(in, 2).toAsciiUppercase());
-//    assertEquals(ByteString.encodeUtf8("C"), ByteString.read(in, 1).toAsciiUppercase());
-//    assertEquals(ByteString.EMPTY, ByteString.read(in, 0).toAsciiUppercase());
-//  }
+  @Test
+  public void readAndToUppercase() throws Exception {
+    InputStream in = new ByteArrayInputStream("abc".getBytes(UTF_8));
+    assertEquals(ByteString.encodeUtf8("AB"), ByteString.read(in, 2).toAsciiUppercase());
+    assertEquals(ByteString.encodeUtf8("C"), ByteString.read(in, 1).toAsciiUppercase());
+    assertEquals(ByteString.EMPTY, ByteString.read(in, 0).toAsciiUppercase());
+  }
 //
 //  @Test
 //  public void toAsciiStartsUppercaseEndsLowercase() throws Exception {
