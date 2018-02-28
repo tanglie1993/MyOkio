@@ -220,15 +220,15 @@ public final class ByteStringTest {
     assertEquals(3, byteString.indexOf(ByteString.decodeHex("112233"), 3));
     assertEquals(-1, byteString.indexOf(ByteString.decodeHex("112233"), 4));
   }
-//
-//  @Test
-//  public void indexOfByteArray() throws Exception {
-//    ByteString byteString = factory.decodeHex("112233");
-//    assertEquals(0, byteString.indexOf(ByteString.decodeHex("112233").toByteArray()));
-//    assertEquals(1, byteString.indexOf(ByteString.decodeHex("2233").toByteArray()));
-//    assertEquals(2, byteString.indexOf(ByteString.decodeHex("33").toByteArray()));
-//    assertEquals(-1, byteString.indexOf(ByteString.decodeHex("112244").toByteArray()));
-//  }
+
+  @Test
+  public void indexOfByteArray() throws Exception {
+    ByteString byteString = factory.decodeHex("112233");
+    assertEquals(0, byteString.indexOf(ByteString.decodeHex("112233").toByteArray()));
+    assertEquals(1, byteString.indexOf(ByteString.decodeHex("2233").toByteArray()));
+    assertEquals(2, byteString.indexOf(ByteString.decodeHex("33").toByteArray()));
+    assertEquals(-1, byteString.indexOf(ByteString.decodeHex("112244").toByteArray()));
+  }
 //
 //  @Test
 //  public void lastIndexOfByteString() throws Exception {
