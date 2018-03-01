@@ -79,9 +79,29 @@ public class ByteString {
 
     @Override
     public String toString() {
-        return "ByteString{" +
-                "data=" + Arrays.toString(data) +
-                '}';
+        if(data == null || data.length == 0){
+            return "[size=0]";
+        }
+        String string = new String(data);
+        string = string.substring(0, Math.min(64, string.length()))
+                .replace("\\", "\\\\")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r");
+        if(containsReplacement(string)){
+            return "[hex=" + hex() + "]";
+        }
+        return "[text=" + string + ']';
+    }
+
+    private boolean containsReplacement(String string) {
+        int c;
+        for (int i = 0, length = string.length(); i < length; i += Character.charCount(c)) {
+            c = string.codePointAt(i);
+            if (c == '\ufffd') {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
