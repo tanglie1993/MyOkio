@@ -587,12 +587,12 @@ public final class ByteStringTest {
         + "60b420bb3851d9d47acb933dbe70399bf6c92da33af01d4fb770e98c0325f41d3ebaf8986da712c82bcd4d55"
         + "4bf0b54023c29b624de9ef9c2f931efc580f9afb…]", byteString.toString());
   }
-//
-//  @Test
-//  public void javaSerializationTestNonEmpty() throws Exception {
-//    ByteString byteString = factory.encodeUtf8(bronzeHorseman);
-//    assertEquivalent(byteString, TestUtil.reserialize(byteString));
-//  }
+
+  @Test
+  public void javaSerializationTestNonEmpty() throws Exception {
+    ByteString byteString = factory.encodeUtf8(bronzeHorseman);
+    TestUtil.assertEquivalent(byteString, TestUtil.reserialize(byteString));
+  }
 //
 //  @Test
 //  public void javaSerializationTestEmpty() throws Exception {

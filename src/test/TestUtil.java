@@ -1,14 +1,20 @@
 package test;
 
 import okio.Buffer;
+import okio.ByteString;
 import okio.Segment;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by pc on 2018/1/20.
@@ -50,5 +56,49 @@ public class TestUtil {
         }
 
         return result;
+    }
+
+    public static void assertEquivalent(ByteString b1, ByteString b2) {
+        // Equals.
+        assertTrue(b1.equals(b2));
+        assertTrue(b1.equals(b1));
+        assertTrue(b2.equals(b1));
+
+        // Hash code.
+        assertEquals(b1.hashCode(), b2.hashCode());
+        assertEquals(b1.hashCode(), b1.hashCode());
+        assertEquals(b1.toString(), b2.toString());
+
+        // Content.
+        assertEquals(b1.getData().length, b2.getData().length);
+        byte[] b2Bytes = b2.toByteArray();
+        for (int i = 0; i < b2Bytes.length; i++) {
+            byte b = b2Bytes[i];
+            assertEquals(b, b1.getByte(i));
+        }
+        assertByteArraysEquals(b1.toByteArray(), b2Bytes);
+
+        // Doesn't equal a different byte string.
+        assertFalse(b1.equals(null));
+        assertFalse(b1.equals(new Object()));
+        if (b2Bytes.length > 0) {
+            byte[] b3Bytes = b2Bytes.clone();
+            b3Bytes[b3Bytes.length - 1]++;
+            ByteString b3 = new ByteString(b3Bytes);
+            assertFalse(b1.equals(b3));
+            assertFalse(b1.hashCode() == b3.hashCode());
+        } else {
+            ByteString b3 = ByteString.encodeUtf8("a");
+            assertFalse(b1.equals(b3));
+            assertFalse(b1.hashCode() == b3.hashCode());
+        }
+    }
+
+    public static <T extends Serializable> T reserialize(T original) throws Exception {
+        Buffer buffer = new Buffer();
+        ObjectOutputStream out = new ObjectOutputStream(buffer.outputStream());
+        out.writeObject(original);
+        ObjectInputStream in = new ObjectInputStream(buffer.inputStream());
+        return (T) in.readObject();
     }
 }

@@ -6,6 +6,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import static okio.Util.arrayRangeEquals;
 /**
  * Created by pc on 2018/1/21.
  */
-public class ByteString {
+public class ByteString  implements Serializable {
 
     public static final ByteString EMPTY = ByteString.of();
 
