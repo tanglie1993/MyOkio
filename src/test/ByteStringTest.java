@@ -593,71 +593,71 @@ public final class ByteStringTest {
     ByteString byteString = factory.encodeUtf8(bronzeHorseman);
     TestUtil.assertEquivalent(byteString, TestUtil.reserialize(byteString));
   }
-//
-//  @Test
-//  public void javaSerializationTestEmpty() throws Exception {
-//    ByteString byteString = factory.decodeHex("");
-//    assertEquivalent(byteString, TestUtil.reserialize(byteString));
-//  }
-//
-//  @Test
-//  public void compareToSingleBytes() throws Exception {
-//    List<ByteString> originalByteStrings = Arrays.asList(
-//        factory.decodeHex("00"),
-//        factory.decodeHex("01"),
-//        factory.decodeHex("7e"),
-//        factory.decodeHex("7f"),
-//        factory.decodeHex("80"),
-//        factory.decodeHex("81"),
-//        factory.decodeHex("fe"),
-//        factory.decodeHex("ff"));
-//
-//    List<ByteString> sortedByteStrings = new ArrayList<>(originalByteStrings);
-//    Collections.shuffle(sortedByteStrings, new Random(0));
-//    Collections.sort(sortedByteStrings);
-//
-//    assertEquals(originalByteStrings, sortedByteStrings);
-//  }
-//
-//  @Test
-//  public void compareToMultipleBytes() throws Exception {
-//    List<ByteString> originalByteStrings = Arrays.asList(
-//        factory.decodeHex(""),
-//        factory.decodeHex("00"),
-//        factory.decodeHex("0000"),
-//        factory.decodeHex("000000"),
-//        factory.decodeHex("00000000"),
-//        factory.decodeHex("0000000000"),
-//        factory.decodeHex("0000000001"),
-//        factory.decodeHex("000001"),
-//        factory.decodeHex("00007f"),
-//        factory.decodeHex("0000ff"),
-//        factory.decodeHex("000100"),
-//        factory.decodeHex("000101"),
-//        factory.decodeHex("007f00"),
-//        factory.decodeHex("00ff00"),
-//        factory.decodeHex("010000"),
-//        factory.decodeHex("010001"),
-//        factory.decodeHex("01007f"),
-//        factory.decodeHex("0100ff"),
-//        factory.decodeHex("010100"),
-//        factory.decodeHex("01010000"),
-//        factory.decodeHex("0101000000"),
-//        factory.decodeHex("0101000001"),
-//        factory.decodeHex("010101"),
-//        factory.decodeHex("7f0000"),
-//        factory.decodeHex("7f0000ffff"),
-//        factory.decodeHex("ffffff"));
-//
-//    List<ByteString> sortedByteStrings = new ArrayList<>(originalByteStrings);
-//    Collections.shuffle(sortedByteStrings, new Random(0));
-//    Collections.sort(sortedByteStrings);
-//
-//    assertEquals(originalByteStrings, sortedByteStrings);
-//  }
-//
-//  @Test
-//  public void asByteBuffer() {
-//    assertEquals(0x42, ByteString.of((byte) 0x41, (byte) 0x42, (byte) 0x43).asByteBuffer().get(1));
-//  }
+
+  @Test
+  public void javaSerializationTestEmpty() throws Exception {
+    ByteString byteString = factory.decodeHex("");
+    TestUtil.assertEquivalent(byteString, TestUtil.reserialize(byteString));
+  }
+
+  @Test
+  public void compareToSingleBytes() throws Exception {
+    List<ByteString> originalByteStrings = Arrays.asList(
+        factory.decodeHex("00"),
+        factory.decodeHex("01"),
+        factory.decodeHex("7e"),
+        factory.decodeHex("7f"),
+        factory.decodeHex("80"),
+        factory.decodeHex("81"),
+        factory.decodeHex("fe"),
+        factory.decodeHex("ff"));
+
+    List<ByteString> sortedByteStrings = new ArrayList<>(originalByteStrings);
+    Collections.shuffle(sortedByteStrings, new Random(0));
+    Collections.sort(sortedByteStrings);
+
+    assertEquals(originalByteStrings, sortedByteStrings);
+  }
+
+  @Test
+  public void compareToMultipleBytes() throws Exception {
+    List<ByteString> originalByteStrings = Arrays.asList(
+        factory.decodeHex(""),
+        factory.decodeHex("00"),
+        factory.decodeHex("0000"),
+        factory.decodeHex("000000"),
+        factory.decodeHex("00000000"),
+        factory.decodeHex("0000000000"),
+        factory.decodeHex("0000000001"),
+        factory.decodeHex("000001"),
+        factory.decodeHex("00007f"),
+        factory.decodeHex("0000ff"),
+        factory.decodeHex("000100"),
+        factory.decodeHex("000101"),
+        factory.decodeHex("007f00"),
+        factory.decodeHex("00ff00"),
+        factory.decodeHex("010000"),
+        factory.decodeHex("010001"),
+        factory.decodeHex("01007f"),
+        factory.decodeHex("0100ff"),
+        factory.decodeHex("010100"),
+        factory.decodeHex("01010000"),
+        factory.decodeHex("0101000000"),
+        factory.decodeHex("0101000001"),
+        factory.decodeHex("010101"),
+        factory.decodeHex("7f0000"),
+        factory.decodeHex("7f0000ffff"),
+        factory.decodeHex("ffffff"));
+
+    List<ByteString> sortedByteStrings = new ArrayList<>(originalByteStrings);
+    Collections.shuffle(sortedByteStrings, new Random(0));
+    Collections.sort(sortedByteStrings);
+
+    assertEquals(originalByteStrings, sortedByteStrings);
+  }
+
+  @Test
+  public void asByteBuffer() {
+    assertEquals(0x42, ByteString.of((byte) 0x41, (byte) 0x42, (byte) 0x43).asByteBuffer().get(1));
+  }
 }

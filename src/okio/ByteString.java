@@ -16,7 +16,7 @@ import static okio.Util.arrayRangeEquals;
 /**
  * Created by pc on 2018/1/21.
  */
-public class ByteString  implements Serializable {
+public class ByteString implements Serializable, Comparable<ByteString> {
 
     public static final ByteString EMPTY = ByteString.of();
 
@@ -319,5 +319,23 @@ public class ByteString  implements Serializable {
 
     public String hex() {
         return Hex.hex(data);
+    }
+
+    @Override
+    public int compareTo(ByteString byteString) {
+        int sizeA = data.length;
+        int sizeB = byteString.data.length;
+        for (int i = 0, size = Math.min(sizeA, sizeB); i < size; i++) {
+            int byteA = getByte(i) & 0xff;
+            int byteB = byteString.getByte(i) & 0xff;
+            if (byteA == byteB) continue;
+            return byteA < byteB ? -1 : 1;
+        }
+        if (sizeA == sizeB) return 0;
+        return sizeA < sizeB ? -1 : 1;
+    }
+
+    public ByteBuffer asByteBuffer() {
+        return ByteBuffer.wrap(data).asReadOnlyBuffer();
     }
 }
