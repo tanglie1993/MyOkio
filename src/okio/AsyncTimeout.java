@@ -159,7 +159,7 @@ public class AsyncTimeout extends Timeout {
         }
         if (queue.isEmpty()) {
             AsyncTimeout.class.wait(IDLE_TIMEOUT_MILLIS);
-            return queue.isEmpty() ? null : queue.peek(); // The situation has changed.
+            return queue.isEmpty() ? null : awaitTimeout(); // The situation has changed.
         }
 
         AsyncTimeout node = queue.peek();
