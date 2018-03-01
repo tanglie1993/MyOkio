@@ -284,4 +284,15 @@ public class ByteString {
     public String base64Url() {
         return Base64.encodeUrl(data);
     }
+
+    public static ByteString decodeBase64(String base64) {
+        if (base64 == null) {
+            throw new IllegalArgumentException();
+        }
+        byte[] decoded = Base64.decode(base64);
+        if(decoded == null){
+            return null;
+        }
+        return new ByteString(decoded);
+    }
 }
