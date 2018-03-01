@@ -519,34 +519,34 @@ public final class ByteStringTest {
     assertEquals("\u0000\u0000\u0000", ByteString.decodeBase64("A    AAA").utf8());
     assertEquals("", ByteString.decodeBase64("    ").utf8());
   }
-//
-//  @Test
-//  public void encodeHex() throws Exception {
-//    assertEquals("000102", ByteString.of((byte) 0x0, (byte) 0x1, (byte) 0x2).hex());
-//  }
-//
-//  @Test
-//  public void decodeHex() throws Exception {
-//    assertEquals(ByteString.of((byte) 0x0, (byte) 0x1, (byte) 0x2), ByteString.decodeHex("000102"));
-//  }
-//
-//  @Test
-//  public void decodeHexOddNumberOfChars() throws Exception {
-//    try {
-//      ByteString.decodeHex("aaa");
-//      fail();
-//    } catch (IllegalArgumentException expected) {
-//    }
-//  }
-//
-//  @Test
-//  public void decodeHexInvalidChar() throws Exception {
-//    try {
-//      ByteString.decodeHex("a\u0000");
-//      fail();
-//    } catch (IllegalArgumentException expected) {
-//    }
-//  }
+
+  @Test
+  public void encodeHex() throws Exception {
+    assertEquals("000102", ByteString.of((byte) 0x0, (byte) 0x1, (byte) 0x2).hex());
+  }
+
+  @Test
+  public void decodeHex() throws Exception {
+    assertEquals(ByteString.of((byte) 0x0, (byte) 0x1, (byte) 0x2), ByteString.decodeHex("000102"));
+  }
+
+  @Test
+  public void decodeHexOddNumberOfChars() throws Exception {
+    try {
+      ByteString.decodeHex("aaa");
+      fail();
+    } catch (IllegalArgumentException expected) {
+    }
+  }
+
+  @Test
+  public void decodeHexInvalidChar() throws Exception {
+    try {
+      ByteString.decodeHex("a\u0000");
+      fail();
+    } catch (IllegalArgumentException expected) {
+    }
+  }
 //
 //  @Test
 //  public void toStringOnEmpty() {

@@ -295,4 +295,8 @@ public class ByteString {
         }
         return new ByteString(decoded);
     }
+
+    public String hex() {
+        return Hex.hex(data);
+    }
 }
