@@ -3,6 +3,7 @@ package okio;
 import test.TestUtil;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -270,5 +271,17 @@ public class ByteString {
         byte[] bytes = new byte[endIndex - startIndex];
         System.arraycopy(data, startIndex, bytes, 0, endIndex - startIndex);
         return new ByteString(bytes);
+    }
+
+    public void write(ByteArrayOutputStream out) throws IOException {
+        out.write(data);
+    }
+
+    public String base64() {
+        return Base64.encode(data);
+    }
+
+    public String base64Url() {
+        return Base64.encodeUrl(data);
     }
 }

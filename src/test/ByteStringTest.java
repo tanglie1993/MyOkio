@@ -456,33 +456,33 @@ public final class ByteStringTest {
     } catch (IllegalArgumentException expected) {
     }
   }
-//
-//  @Test
-//  public void write() throws Exception {
-//    ByteArrayOutputStream out = new ByteArrayOutputStream();
-//    factory.decodeHex("616263").write(out);
-//    assertByteArraysEquals(new byte[] { 0x61, 0x62, 0x63 }, out.toByteArray());
-//  }
-//
-//  @Test
-//  public void encodeBase64() {
-//    assertEquals("", factory.encodeUtf8("").base64());
-//    assertEquals("AA==", factory.encodeUtf8("\u0000").base64());
-//    assertEquals("AAA=", factory.encodeUtf8("\u0000\u0000").base64());
-//    assertEquals("AAAA", factory.encodeUtf8("\u0000\u0000\u0000").base64());
-//    assertEquals("SG93IG1hbnkgbGluZXMgb2YgY29kZSBhcmUgdGhlcmU/ICdib3V0IDIgbWlsbGlvbi4=",
-//        factory.encodeUtf8("How many lines of code are there? 'bout 2 million.").base64());
-//  }
-//
-//  @Test
-//  public void encodeBase64Url() {
-//    assertEquals("", factory.encodeUtf8("").base64Url());
-//    assertEquals("AA==", factory.encodeUtf8("\u0000").base64Url());
-//    assertEquals("AAA=", factory.encodeUtf8("\u0000\u0000").base64Url());
-//    assertEquals("AAAA", factory.encodeUtf8("\u0000\u0000\u0000").base64Url());
-//    assertEquals("SG93IG1hbnkgbGluZXMgb2YgY29kZSBhcmUgdGhlcmU_ICdib3V0IDIgbWlsbGlvbi4=",
-//        factory.encodeUtf8("How many lines of code are there? 'bout 2 million.").base64Url());
-//  }
+
+  @Test
+  public void write() throws Exception {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    factory.decodeHex("616263").write(out);
+    assertByteArraysEquals(new byte[] { 0x61, 0x62, 0x63 }, out.toByteArray());
+  }
+
+  @Test
+  public void encodeBase64() {
+    assertEquals("", factory.encodeUtf8("").base64());
+    assertEquals("AA==", factory.encodeUtf8("\u0000").base64());
+    assertEquals("AAA=", factory.encodeUtf8("\u0000\u0000").base64());
+    assertEquals("AAAA", factory.encodeUtf8("\u0000\u0000\u0000").base64());
+    assertEquals("SG93IG1hbnkgbGluZXMgb2YgY29kZSBhcmUgdGhlcmU/ICdib3V0IDIgbWlsbGlvbi4=",
+        factory.encodeUtf8("How many lines of code are there? 'bout 2 million.").base64());
+  }
+
+  @Test
+  public void encodeBase64Url() {
+    assertEquals("", factory.encodeUtf8("").base64Url());
+    assertEquals("AA==", factory.encodeUtf8("\u0000").base64Url());
+    assertEquals("AAA=", factory.encodeUtf8("\u0000\u0000").base64Url());
+    assertEquals("AAAA", factory.encodeUtf8("\u0000\u0000\u0000").base64Url());
+    assertEquals("SG93IG1hbnkgbGluZXMgb2YgY29kZSBhcmUgdGhlcmU_ICdib3V0IDIgbWlsbGlvbi4=",
+        factory.encodeUtf8("How many lines of code are there? 'bout 2 million.").base64Url());
+  }
 //
 //  @Test
 //  public void ignoreUnnecessaryPadding() {
