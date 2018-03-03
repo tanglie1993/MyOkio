@@ -33,15 +33,16 @@ public class DeflaterSink implements Sink {
   @Override
   public void write(Buffer source, long byteCount) throws IOException {
     checkOffsetAndCount(source.size(), 0, byteCount);
+    Segment sourceSegment = source.segmentList.getFirst();
     while (byteCount > 0) {
-      Segment sourceSegment = source.segmentList.getFirst();
       if(sourceSegment == null){
         return;
       }
-      int toDeflate = (int) Math.min(byteCount, sourceSegment.data.length - sourceSegment.rear);
+      int toDeflate = (int) Math.min(byteCount, sourceSegment.rear - sourceSegment.front);
       deflater.setInput(sourceSegment.data, sourceSegment.front, toDeflate);
       deflate(false);
       byteCount -= toDeflate;
+      sourceSegment = sourceSegment.next;
     }
   }
 

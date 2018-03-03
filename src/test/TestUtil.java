@@ -101,4 +101,12 @@ public class TestUtil {
         ObjectInputStream in = new ObjectInputStream(buffer.inputStream());
         return (T) in.readObject();
     }
+
+    static ByteString randomBytes(int length) {
+        Random random = new Random(0);
+        byte[] randomBytes = new byte[length];
+        random.nextBytes(randomBytes);
+        return ByteString.of(randomBytes);
+    }
+
 }

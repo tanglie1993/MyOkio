@@ -23,12 +23,16 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
+import java.util.StringJoiner;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static test.TestUtil.randomBytes;
+import static test.TestUtil.repeat;
 
 public final class DeflaterSinkTest {
   @Test
@@ -56,32 +60,38 @@ public final class DeflaterSinkTest {
     Buffer inflated = inflate(sink);
     assertEquals(original, inflated.readUtf8());
   }
-//
-//  @Test
-//  public void deflateWellCompressed() throws IOException {
-//    String original = repeat('a', 1024 * 1024);
-//    Buffer data = new Buffer();
-//    data.writeUtf8(original);
-//    Buffer sink = new Buffer();
-//    DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
-//    deflaterSink.write(data, data.size());
-//    deflaterSink.close();
-//    Buffer inflated = inflate(sink);
-//    assertEquals(original, inflated.readUtf8());
-//  }
-//
-//  @Test
-//  public void deflatePoorlyCompressed() throws IOException {
-//    ByteString original = randomBytes(1024 * 1024);
-//    Buffer data = new Buffer();
-//    data.write(original);
-//    Buffer sink = new Buffer();
-//    DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
-//    deflaterSink.write(data, data.size());
-//    deflaterSink.close();
-//    Buffer inflated = inflate(sink);
-//    assertEquals(original, inflated.readByteString());
-//  }
+
+  @Test
+  public void deflateWellCompressed() throws IOException {
+    String original = repeat('a', 1024 * 1024);
+    Buffer data = new Buffer();
+    data.writeUtf8(original);
+    Buffer sink = new Buffer();
+    DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
+    deflaterSink.write(data, data.size());
+    deflaterSink.close();
+    Buffer inflated = inflate(sink);
+    assertEquals(original, inflated.readUtf8());
+  }
+
+  @Test
+  public void deflatePoorlyCompressed() throws IOException {
+    ByteString original = randomBytes(1024 * 1024);
+    Buffer data = new Buffer();
+    data.write(original);
+    Buffer sink = new Buffer();
+    DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
+    deflaterSink.write(data, data.size());
+    deflaterSink.close();
+    Buffer inflated = inflate(sink);
+    ByteString inflatedStr =  inflated.readByteString();
+    for(int i = 0; i < 8193; i++){
+      if(inflatedStr.getByte(i) != original.getByte(i)){
+        System.out.println(String.format(Locale.CHINA, "difference: position %d original %d inflated %d", i, original.getByte(i), inflatedStr.getByte(i)));
+      }
+    }
+    assertEquals(original, inflatedStr);
+  }
 //
 //  @Test
 //  public void multipleSegmentsWithoutCompression() throws IOException {
