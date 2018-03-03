@@ -64,6 +64,7 @@ public class DeflaterSink implements Sink {
   }
 
   @Override public void flush() throws IOException {
+    deflate(true);
     sink.flush();
   }
 

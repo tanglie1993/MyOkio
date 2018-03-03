@@ -44,18 +44,18 @@ public final class DeflaterSinkTest {
     assertEquals(original, inflated.readUtf8());
   }
 
-//  @Test
-//  public void deflateWithSyncFlush() throws Exception {
-//    String original = "Yes, yes, yes. That's why we're taking extreme precautions.";
-//    Buffer data = new Buffer();
-//    data.writeUtf8(original);
-//    Buffer sink = new Buffer();
-//    DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
-//    deflaterSink.write(data, data.size());
-//    deflaterSink.flush();
-//    Buffer inflated = inflate(sink);
-//    assertEquals(original, inflated.readUtf8());
-//  }
+  @Test
+  public void deflateWithSyncFlush() throws Exception {
+    String original = "Yes, yes, yes. That's why we're taking extreme precautions.";
+    Buffer data = new Buffer();
+    data.writeUtf8(original);
+    Buffer sink = new Buffer();
+    DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
+    deflaterSink.write(data, data.size());
+    deflaterSink.flush();
+    Buffer inflated = inflate(sink);
+    assertEquals(original, inflated.readUtf8());
+  }
 //
 //  @Test
 //  public void deflateWellCompressed() throws IOException {
