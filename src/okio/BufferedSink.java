@@ -42,4 +42,6 @@ public interface BufferedSink extends Sink {
     BufferedSink writeDecimalLong(long value) throws IOException;
 
     BufferedSink writeHexadecimalUnsignedLong(long value);
+
+    Buffer buffer();
 }

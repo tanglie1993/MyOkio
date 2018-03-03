@@ -193,4 +193,9 @@ public class RealBufferedSink implements BufferedSink {
         buffer.writeHexadecimalUnsignedLong(value);
         return this;
     }
+
+    @Override
+    public Buffer buffer() {
+        return buffer;
+    }
 }
