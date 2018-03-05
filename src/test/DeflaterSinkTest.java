@@ -104,25 +104,25 @@ public final class DeflaterSinkTest {
     deflaterSink.close();
     assertEquals(repeat('a', byteCount), inflate(buffer).readUtf8(byteCount));
   }
-//
-//  @Test
-//  public void deflateIntoNonemptySink() throws Exception {
-//    String original = "They're moving in herds. They do move in herds.";
-//
-//    // Exercise all possible offsets for the outgoing segment.
-//    for (int i = 0; i < Segment.SIZE; i++) {
-//      Buffer data = new Buffer().writeUtf8(original);
-//      Buffer sink = new Buffer().writeUtf8(repeat('a', i));
-//
-//      DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
-//      deflaterSink.write(data, data.size());
-//      deflaterSink.close();
-//
-//      sink.skip(i);
-//      Buffer inflated = inflate(sink);
-//      assertEquals(original, inflated.readUtf8());
-//    }
-//  }
+
+  @Test
+  public void deflateIntoNonemptySink() throws Exception {
+    String original = "They're moving in herds. They do move in herds.";
+
+    // Exercise all possible offsets for the outgoing segment.
+    for (int i = 0; i < Segment.SIZE; i++) {
+      Buffer data = new Buffer().writeUtf8(original);
+      Buffer sink = new Buffer().writeUtf8(repeat('a', i));
+
+      DeflaterSink deflaterSink = new DeflaterSink(sink, new Deflater());
+      deflaterSink.write(data, data.size());
+      deflaterSink.close();
+
+      sink.skip(i);
+      Buffer inflated = inflate(sink);
+      assertEquals(original, inflated.readUtf8());
+    }
+  }
 //
 //  /**
 //   * This test deflates a single segment of without compression because that's
