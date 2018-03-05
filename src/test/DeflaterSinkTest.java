@@ -92,18 +92,18 @@ public final class DeflaterSinkTest {
     }
     assertEquals(original, inflatedStr);
   }
-//
-//  @Test
-//  public void multipleSegmentsWithoutCompression() throws IOException {
-//    Buffer buffer = new Buffer();
-//    Deflater deflater = new Deflater();
-//    deflater.setLevel(Deflater.NO_COMPRESSION);
-//    DeflaterSink deflaterSink = new DeflaterSink(buffer, deflater);
-//    int byteCount = Segment.SIZE * 4;
-//    deflaterSink.write(new Buffer().writeUtf8(repeat('a', byteCount)), byteCount);
-//    deflaterSink.close();
-//    assertEquals(repeat('a', byteCount), inflate(buffer).readUtf8(byteCount));
-//  }
+
+  @Test
+  public void multipleSegmentsWithoutCompression() throws IOException {
+    Buffer buffer = new Buffer();
+    Deflater deflater = new Deflater();
+    deflater.setLevel(Deflater.NO_COMPRESSION);
+    DeflaterSink deflaterSink = new DeflaterSink(buffer, deflater);
+    int byteCount = Segment.SIZE * 4;
+    deflaterSink.write(new Buffer().writeUtf8(repeat('a', byteCount)), byteCount);
+    deflaterSink.close();
+    assertEquals(repeat('a', byteCount), inflate(buffer).readUtf8(byteCount));
+  }
 //
 //  @Test
 //  public void deflateIntoNonemptySink() throws Exception {

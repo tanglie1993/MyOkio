@@ -58,7 +58,7 @@ public class DeflaterSink implements Sink {
       }
       if (deflated > 0) {
         toWrite.rear += deflated;
-      }else{
+      }else if(deflater.needsInput()){
         return;
       }
     }
@@ -74,12 +74,14 @@ public class DeflaterSink implements Sink {
     return sink.timeout();
   }
 
-  @Override public void close() throws IOException {
+  @Override
+  public void close() throws IOException {
     deflater.finish();
     deflate(false);
     deflater.end();
     sink.close();
   }
+
 
   @Override public String toString() {
     return getClass().getSimpleName() + "(" + sink.toString() + ")";
