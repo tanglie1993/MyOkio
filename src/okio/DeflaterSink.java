@@ -15,6 +15,8 @@
  */
 package okio;
 
+import test.MockSink;
+
 import java.io.IOException;
 import java.util.zip.Deflater;
 
@@ -27,6 +29,11 @@ public class DeflaterSink implements Sink {
 
   public DeflaterSink(BufferedSink sink, Deflater deflater) {
     this.sink = sink;
+    this.deflater = deflater;
+  }
+
+  public DeflaterSink(Sink mockSink, Deflater deflater) {
+    this.sink = Okio.buffer(mockSink);
     this.deflater = deflater;
   }
 

@@ -45,8 +45,23 @@ public class RealBufferedSink implements BufferedSink {
 
     @Override
     public void close() throws IOException {
-        flush();
-        sink.close();
+        IOException toThrow = null;
+        try {
+            flush();
+        }catch (IOException e){
+            toThrow = e;
+        }
+        if(toThrow != null){
+            try{
+                sink.close();
+            }catch (IOException e){
+
+            }
+            throw toThrow;
+        }else{
+            sink.close();
+        }
+
     }
 
     @Override

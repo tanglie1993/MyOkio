@@ -123,30 +123,30 @@ public final class DeflaterSinkTest {
       assertEquals(original, inflated.readUtf8());
     }
   }
-//
-//  /**
-//   * This test deflates a single segment of without compression because that's
-//   * the easiest way to force close() to emit a large amount of data to the
-//   * underlying sink.
-//   */
-//  @Test
-//  public void closeWithExceptionWhenWritingAndClosing() throws IOException {
-//    MockSink mockSink = new MockSink();
-//    mockSink.scheduleThrow(0, new IOException("first"));
-//    mockSink.scheduleThrow(1, new IOException("second"));
-//    Deflater deflater = new Deflater();
-//    deflater.setLevel(Deflater.NO_COMPRESSION);
-//    DeflaterSink deflaterSink = new DeflaterSink(mockSink, deflater);
-//    deflaterSink.write(new Buffer().writeUtf8(repeat('a', Segment.SIZE)), Segment.SIZE);
-//    try {
-//      deflaterSink.close();
-//      fail();
-//    } catch (IOException expected) {
-//      assertEquals("first", expected.getMessage());
-//    }
-//    mockSink.assertLogContains("close()");
-//  }
-//
+
+  /**
+   * This test deflates a single segment of without compression because that's
+   * the easiest way to force close() to emit a large amount of data to the
+   * underlying sink.
+   */
+  @Test
+  public void closeWithExceptionWhenWritingAndClosing() throws IOException {
+    MockSink mockSink = new MockSink();
+    mockSink.scheduleThrow(0, new IOException("first"));
+    mockSink.scheduleThrow(1, new IOException("second"));
+    Deflater deflater = new Deflater();
+    deflater.setLevel(Deflater.NO_COMPRESSION);
+    DeflaterSink deflaterSink = new DeflaterSink(mockSink, deflater);
+    deflaterSink.write(new Buffer().writeUtf8(repeat('a', Segment.SIZE)), Segment.SIZE);
+    try {
+      deflaterSink.close();
+      fail();
+    } catch (IOException expected) {
+      assertEquals("first", expected.getMessage());
+    }
+    mockSink.assertLogContains("close()");
+  }
+
   /**
    * Uses streaming decompression to inflate {@code deflated}. The input must
    * either be finished or have a trailing sync flush.

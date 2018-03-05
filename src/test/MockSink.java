@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /** A scriptable sink. Like Mockito, but worse and requiring less configuration. */
-final class MockSink implements Sink {
+public final class MockSink implements Sink {
   private final List<String> log = new ArrayList<String>();
   private final Map<Integer, IOException> callThrows = new LinkedHashMap<Integer, IOException>();
 
