@@ -1,5 +1,6 @@
 package okio;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -29,7 +30,11 @@ public class InflaterSource implements Source  {
         long inflated = 0;
         while (byteCount > 0) {
             if(sourceSegment == null){
-                return inflated;
+                if(byteCount > 0){
+                    throw new EOFException();
+                }else{
+                    return inflated;
+                }
             }
             int toInflate = (int) Math.min(byteCount, sourceSegment.rear - sourceSegment.front);
             inflater.setInput(sourceSegment.data, sourceSegment.front, toInflate);

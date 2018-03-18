@@ -37,16 +37,16 @@ public final class InflaterSourceTest {
     assertEquals("God help us, we're in the hands of engineers.", inflated.readUtf8());
   }
 
-//  @Test
-//  public void inflateTruncated() throws Exception {
-//    Buffer deflated = decodeBase64("eJxzz09RyEjNKVAoLdZRKE9VL0pVyMxTKMlIVchIzEspVshPU0jNS8/MS00tK"
-//        + "tYDAF6CDw==");
-//    try {
-//      inflate(deflated);
-//      fail();
-//    } catch (EOFException expected) {
-//    }
-//  }
+  @Test
+  public void inflateTruncated() throws Exception {
+    Buffer deflated = decodeBase64("eJxzz09RyEjNKVAoLdZRKE9VL0pVyMxTKMlIVchIzEspVshPU0jNS8/MS00tK"
+        + "tYDAF6CDw==");
+    try {
+      inflate(deflated);
+      fail();
+    } catch (EOFException expected) {
+    }
+  }
 //
 //  @Test
 //  public void inflateWellCompressed() throws Exception {
