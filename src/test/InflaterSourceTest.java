@@ -27,6 +27,7 @@ import java.util.zip.Inflater;
 //import static okio.TestUtil.repeat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static test.TestUtil.randomBytes;
 import static test.TestUtil.repeat;
 
 public final class InflaterSourceTest {
@@ -72,14 +73,15 @@ public final class InflaterSourceTest {
     Buffer inflated = inflate(deflated);
     assertEquals(original, inflated.readUtf8());
   }
-//
-//  @Test
-//  public void inflatePoorlyCompressed() throws Exception {
-//    ByteString original = randomBytes(1024 * 1024);
-//    Buffer deflated = deflate(original);
-//    Buffer inflated = inflate(deflated);
-//    assertEquals(original, inflated.readByteString());
-//  }
+
+  @Test
+  public void inflatePoorlyCompressed() throws Exception {
+    ByteString original = randomBytes(10);
+    Buffer deflated = deflate(original);
+    Buffer inflated = inflate(deflated);
+    ByteString expected = inflated.readByteString();
+    assertEquals(original, expected);
+  }
 //
 //  @Test
 //  public void inflateIntoNonemptySink() throws Exception {

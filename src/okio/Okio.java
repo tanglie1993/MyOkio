@@ -29,11 +29,45 @@ public class Okio {
         return source(new FileInputStream(path.toFile()));
     }
 
-    public static Sink sink(OutputStream outputStream) {
-        if(outputStream == null){
+    public static Sink sink(OutputStream out) {
+        if(out == null){
             throw new NullPointerException("outputStream cannot be null!");
         }
-        return new RealBufferedSink(outputStream);
+        if (out == null) throw new IllegalArgumentException("out == null");
+        Timeout timeout = new Timeout();
+        return new Sink() {
+            @Override
+            public void write(Buffer source, long byteCount) throws IOException {
+                Util.checkOffsetAndCount(source.size(), 0, byteCount);
+                while (byteCount > 0) {
+                    Segment head = source.segmentList.getFirst();
+                    int toCopy = (int) Math.min(byteCount, head.rear - head.front);
+                    out.write(head.data, head.front, toCopy);
+                    head.front += toCopy;
+                    byteCount -= toCopy;
+                }
+            }
+
+            @Override
+            public void flush() throws IOException {
+                out.flush();
+            }
+
+            @Override
+            public void close() throws IOException {
+                out.close();
+            }
+
+            @Override
+            public Timeout timeout() {
+                return timeout;
+            }
+
+            @Override
+            public String toString() {
+                return "sink(" + out + ")";
+            }
+        };
     }
 
     public static BufferedSink buffer(Sink sink) {
