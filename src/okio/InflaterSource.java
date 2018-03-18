@@ -23,22 +23,32 @@ public class InflaterSource implements Source  {
 
     @Override
     public long read(Buffer sink, long byteCount) throws IOException {
+        boolean exhausted = false;
         if(source.exhausted()){
-            return -1;
+            exhausted = true;
         }
         Segment sourceSegment = source.buffer().segmentList.getFirst();
         long totalInflated = 0;
         while (byteCount > 0) {
             if(sourceSegment == null){
-                return -1;
+                exhausted = true;
             }
             int toInflate = (int) Math.min(byteCount, sourceSegment.rear - sourceSegment.front);
             inflater.setInput(sourceSegment.data, sourceSegment.front, toInflate);
             sourceSegment.front += toInflate;
             long inflated = inflate(sink);
+            if(inflated > 0){
+                return inflated;
+            }
+            if (inflater.finished()) {
+                return -1;
+            }
             byteCount -= inflated;
             totalInflated += inflated;
             sourceSegment = sourceSegment.next;
+            if(exhausted){
+                throw new EOFException();
+            }
         }
         return totalInflated;
     }
