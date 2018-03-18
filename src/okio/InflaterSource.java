@@ -27,27 +27,24 @@ public class InflaterSource implements Source  {
             return -1;
         }
         Segment sourceSegment = source.buffer().segmentList.getFirst();
-        long inflated = 0;
+        long totalInflated = 0;
         while (byteCount > 0) {
             if(sourceSegment == null){
-                if(byteCount > 0){
-                    throw new EOFException();
-                }else{
-                    return inflated;
-                }
+                return -1;
             }
             int toInflate = (int) Math.min(byteCount, sourceSegment.rear - sourceSegment.front);
             inflater.setInput(sourceSegment.data, sourceSegment.front, toInflate);
             sourceSegment.front += toInflate;
-            inflate(sink);
-            byteCount -= toInflate;
-            inflated += toInflate;
+            long inflated = inflate(sink);
+            byteCount -= inflated;
+            totalInflated += inflated;
             sourceSegment = sourceSegment.next;
         }
-        return inflated;
+        return totalInflated;
     }
 
-    private void inflate(Buffer sink) throws IOException {
+    private long inflate(Buffer sink) throws IOException {
+        long result = 0;
         while (true) {
             try {
                 Segment toWrite = sink.writableSegment(1);
@@ -55,8 +52,9 @@ public class InflaterSource implements Source  {
                 inflated = inflater.inflate(toWrite.data, toWrite.rear, toWrite.data.length - toWrite.rear);
                 if (inflated > 0) {
                     toWrite.rear += inflated;
+                    result += inflated;
                 }else if(inflater.needsInput()){
-                    return;
+                    return result;
                 }
             }catch (DataFormatException e){
 
