@@ -89,7 +89,9 @@ public class ByteString implements Serializable, Comparable<ByteString> {
                 .replace("\n", "\\n")
                 .replace("\r", "\\r");
         if(containsReplacement(string)){
-            return "[hex=" + hex() + "]";
+            return data.length <= 64
+                    ? "[hex=" + hex() + "]"
+                    : "[size=" + data.length + " hex=" + substring(0, 64).hex() + "…]";
         }
         return "[text=" + string + ']';
     }
