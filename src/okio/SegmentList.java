@@ -51,6 +51,9 @@ public class SegmentList implements Cloneable {
             int canRemove = first.rear - first.front;
             if(canRemove >= length - removed){
                 first.front += length - removed;
+                if(canRemove == length - removed){
+                    remove();
+                }
                 return;
             }
             remove();

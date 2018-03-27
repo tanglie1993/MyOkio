@@ -43,7 +43,7 @@ public class Okio {
                     Segment head = source.segmentList.getFirst();
                     int toCopy = (int) Math.min(byteCount, head.rear - head.front);
                     out.write(head.data, head.front, toCopy);
-                    head.front += toCopy;
+                    source.skip(toCopy);
                     byteCount -= toCopy;
                 }
             }
