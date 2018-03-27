@@ -964,10 +964,11 @@ public final class BufferedSourceTest {
 //        assertEquals("abc", source.readUtf8());
 //    }
 //
-//    @Test public void selectEmptyByteStringFromEmptySource() throws IOException {
-//        Options options = Options.of(ByteString.of());
-//        assertEquals(0, source.select(options));
-//    }
+    @Test
+    public void selectEmptyByteStringFromEmptySource() throws IOException {
+        Options options = Options.of(ByteString.of());
+        assertEquals(0, source.select(options));
+    }
 
     @Test public void rangeEquals() throws IOException {
         sink.writeUtf8("A man, a plan, a canal. Panama.");

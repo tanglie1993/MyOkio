@@ -478,6 +478,25 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
+    public int select(Options options) throws IOException {
+        while (true) {
+            int index = buffer.selectPrefix(options);
+            if (index == -1) {
+                return -1;
+            }
+
+            int selectedSize = options.byteStrings[index].getData().length;
+            if (selectedSize <= buffer.size()) {
+                buffer.skip(selectedSize);
+                return index;
+            }
+            if (source.read(buffer, Segment.SIZE) == -1) {
+                return -1;
+            }
+        }
+    }
+
+    @Override
     public String toString() {
         return "RealBufferedSource{" +
                 "source=" + source +

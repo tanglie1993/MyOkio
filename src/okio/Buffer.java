@@ -591,6 +591,62 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         return rangeEqualsChecked(offset, bytes, bytesOffset, byteCount);
     }
 
+    @Override
+    public int select(Options options) throws IOException {
+        Segment firstSegment = null;
+        if(segmentList.has(1)){
+            firstSegment = segmentList.getFirst();
+        }else {
+            return options.indexOf(ByteString.EMPTY);
+        }
+
+        ByteString[] byteStrings = options.byteStrings;
+        for (int i = 0, listSize = byteStrings.length; i < listSize; i++) {
+            ByteString byteString = byteStrings[i];
+            if (size() >= byteString.getData().length &&
+                    rangeEquals(firstSegment, firstSegment.front, byteString, 0, byteString.getData().length)) {
+                skip(byteString.getData().length);
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    int selectPrefix(Options options) {
+        Segment s = null;
+        if(segmentList.has(1)){
+            s = segmentList.getFirst();
+        }
+        ByteString[] byteStrings = options.byteStrings;
+        for (int i = 0, listSize = byteStrings.length; i < listSize; i++) {
+            ByteString b = byteStrings[i];
+            int bytesLimit = (int) Math.min(size(), b.getData().length);
+            if (bytesLimit == 0 || rangeEquals(s, s.front, b, 0, bytesLimit)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private boolean rangeEquals(Segment segment, int segmentFront, ByteString bytes, int bytesOffset, int bytesLimit) {
+        int segmentRear = segment.rear;
+        byte[] data = segment.data;
+        for (int i = bytesOffset; i < bytesLimit; ) {
+            if (segmentFront == segmentRear) {
+                segment = segment.next;
+                data = segment.data;
+                segmentFront = segment.front;
+                segmentRear = segment.rear;
+            }
+            if (data[segmentFront] != bytes.getByte(i)) {
+                return false;
+            }
+            segmentFront++;
+            i++;
+        }
+        return true;
+    }
+
     boolean rangeEqualsChecked(int offset, ByteString bytes, int bytesOffset, int byteCount) {
         for(int i = offset; i < offset + byteCount; i++){
             if(i - offset + bytesOffset >= bytes.getData().length){

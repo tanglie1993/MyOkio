@@ -82,4 +82,6 @@ public interface BufferedSource extends Source {
     boolean rangeEquals(int offset, ByteString byteString) throws IOException;
 
     boolean rangeEquals(int offset, ByteString byteString, int start, int end) throws IOException;
+
+    int select(Options options) throws IOException;
 }
