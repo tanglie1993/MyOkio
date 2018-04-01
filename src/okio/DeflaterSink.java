@@ -93,4 +93,9 @@ public class DeflaterSink implements Sink {
   @Override public String toString() {
     return getClass().getSimpleName() + "(" + sink.toString() + ")";
   }
+
+  public void finishDeflate() throws IOException {
+    deflater.finish();
+    deflate(false);
+  }
 }
