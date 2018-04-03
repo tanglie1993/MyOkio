@@ -73,9 +73,8 @@ public class InflaterSource implements Source  {
                     return result;
                 }
             }catch (DataFormatException e){
-
+                throw new EOFException();
             }
-
         }
     }
 
