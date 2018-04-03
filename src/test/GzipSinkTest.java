@@ -28,18 +28,18 @@ import static org.junit.Assert.fail;
 import static test.TestUtil.repeat;
 
 public final class GzipSinkTest {
-//  @Test
-//  public void gzipGunzip() throws Exception {
-//    Buffer data = new Buffer();
-//    String original = "It's a UNIX system! I know this!";
-//    data.writeUtf8(original);
-//    Buffer sink = new Buffer();
-//    GzipSink gzipSink = new GzipSink(sink);
-//    gzipSink.write(data, data.size());
-//    gzipSink.close();
-//    Buffer inflated = gunzip(sink);
-//    assertEquals(original, inflated.readUtf8());
-//  }
+  @Test
+  public void gzipGunzip() throws Exception {
+    Buffer data = new Buffer();
+    String original = "It's a UNIX system! I know this!";
+    data.writeUtf8(original);
+    Buffer sink = new Buffer();
+    GzipSink gzipSink = new GzipSink(sink);
+    gzipSink.write(data, data.size());
+    gzipSink.close();
+    Buffer inflated = gunzip(sink);
+    assertEquals(original, inflated.readUtf8());
+  }
 
   @Test
   public void closeWithExceptionWhenWritingAndClosing() throws IOException {
