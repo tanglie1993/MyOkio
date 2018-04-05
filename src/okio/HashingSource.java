@@ -80,6 +80,9 @@ public final class HashingSource extends ForwardingSource {
       Segment s = sink.segmentList.getFirst();
       while (offset > start) {
         s = s.prev;
+        if(s == null){
+          s = sink.segmentList.getLast();
+        }
         offset -= (s.rear - s.front);
       }
 
