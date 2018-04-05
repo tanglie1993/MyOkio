@@ -67,8 +67,7 @@ public class RealBufferedSource implements BufferedSource {
         }catch (EOFException e){
 
         }
-        buffer.read(data, length);
-        return result;
+        return buffer.read(data, length);
     }
 
     @Override
