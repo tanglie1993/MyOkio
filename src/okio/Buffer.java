@@ -1,7 +1,12 @@
 package okio;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -813,5 +818,73 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             bytes[i] = segmentList.getByte(i);
         }
         return new ByteString(bytes);
+    }
+
+    /** Returns the 128-bit MD5 hash of this buffer. */
+    public ByteString md5() {
+        return digest("MD5");
+    }
+
+    /** Returns the 160-bit SHA-1 hash of this buffer. */
+    public ByteString sha1() {
+        return digest("SHA-1");
+    }
+
+    /** Returns the 256-bit SHA-256 hash of this buffer. */
+    public ByteString sha256() {
+        return digest("SHA-256");
+    }
+
+    /** Returns the 512-bit SHA-512 hash of this buffer. */
+    public ByteString sha512() {
+        return digest("SHA-512");
+    }
+
+    private ByteString digest(String algorithm) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+            if (segmentList.getFirst() != null) {
+                messageDigest.update(segmentList.getFirst().data, segmentList.getFirst().front, segmentList.getFirst().rear - segmentList.getFirst().front);
+                for (Segment s = segmentList.getFirst().next; s != segmentList.getFirst(); s = s.next) {
+                    messageDigest.update(s.data, s.front, s.rear - s.front);
+                }
+            }
+            return ByteString.of(messageDigest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            throw new AssertionError();
+        }
+    }
+
+    /** Returns the 160-bit SHA-1 HMAC of this buffer. */
+    public ByteString hmacSha1(ByteString key) {
+        return hmac("HmacSHA1", key);
+    }
+
+    /** Returns the 256-bit SHA-256 HMAC of this buffer. */
+    public ByteString hmacSha256(ByteString key) {
+        return hmac("HmacSHA256", key);
+    }
+
+    /** Returns the 512-bit SHA-512 HMAC of this buffer. */
+    public ByteString hmacSha512(ByteString key) {
+        return hmac("HmacSHA512", key);
+    }
+
+    private ByteString hmac(String algorithm, ByteString key) {
+        try {
+            Mac mac = Mac.getInstance(algorithm);
+            mac.init(new SecretKeySpec(key.toByteArray(), algorithm));
+            if (segmentList.getFirst() != null) {
+                mac.update(segmentList.getFirst().data, segmentList.getFirst().front, segmentList.getFirst().rear - segmentList.getFirst().front);
+                for (Segment s = segmentList.getFirst().next; s != segmentList.getFirst(); s = s.next) {
+                    mac.update(s.data, s.front, s.rear - s.front);
+                }
+            }
+            return ByteString.of(mac.doFinal());
+        } catch (NoSuchAlgorithmException e) {
+            throw new AssertionError();
+        } catch (InvalidKeyException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

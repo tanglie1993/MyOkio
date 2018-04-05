@@ -2,6 +2,8 @@ package okio;
 
 import test.TestUtil;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,6 +11,9 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import static okio.Util.arrayRangeEquals;
@@ -339,5 +344,53 @@ public class ByteString implements Serializable, Comparable<ByteString> {
 
     public ByteBuffer asByteBuffer() {
         return ByteBuffer.wrap(data).asReadOnlyBuffer();
+    }
+
+    public ByteString md5() {
+        return digest("MD5");
+    }
+
+    public ByteString sha1() {
+        return digest("SHA-1");
+    }
+
+    public ByteString sha256() {
+        return digest("SHA-256");
+    }
+
+    public ByteString sha512() {
+        return digest("SHA-512");
+    }
+
+    private ByteString digest(String algorithm) {
+        try {
+            return ByteString.of(MessageDigest.getInstance(algorithm).digest(data));
+        } catch (NoSuchAlgorithmException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    public ByteString hmacSha1(ByteString key) {
+        return hmac("HmacSHA1", key);
+    }
+
+    public ByteString hmacSha256(ByteString key) {
+        return hmac("HmacSHA256", key);
+    }
+
+    public ByteString hmacSha512(ByteString key) {
+        return hmac("HmacSHA512", key);
+    }
+
+    private ByteString hmac(String algorithm, ByteString key) {
+        try {
+            Mac mac = Mac.getInstance(algorithm);
+            mac.init(new SecretKeySpec(key.toByteArray(), algorithm));
+            return ByteString.of(mac.doFinal(data));
+        } catch (NoSuchAlgorithmException e) {
+            throw new AssertionError(e);
+        } catch (InvalidKeyException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }
