@@ -855,21 +855,6 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
         }
     }
 
-//    private ByteString digest(String algorithm) {
-//        try {
-//            MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
-//            if (head != null) {
-//                messageDigest.update(head.data, head.pos, head.limit - head.pos);
-//                for (Segment s = head.next; s != head; s = s.next) {
-//                    messageDigest.update(s.data, s.pos, s.limit - s.pos);
-//                }
-//            }
-//            return ByteString.of(messageDigest.digest());
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new AssertionError();
-//        }
-//    }
-
     /** Returns the 160-bit SHA-1 HMAC of this buffer. */
     public ByteString hmacSha1(ByteString key) {
         return hmac("HmacSHA1", key);
@@ -891,7 +876,7 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             mac.init(new SecretKeySpec(key.toByteArray(), algorithm));
             if (segmentList.getFirst() != null) {
                 mac.update(segmentList.getFirst().data, segmentList.getFirst().front, segmentList.getFirst().rear - segmentList.getFirst().front);
-                for (Segment s = segmentList.getFirst().next; s != segmentList.getFirst(); s = s.next) {
+                for (Segment s = segmentList.getFirst().next; s != null; s = s.next) {
                     mac.update(s.data, s.front, s.rear - s.front);
                 }
             }

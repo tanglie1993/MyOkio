@@ -399,7 +399,11 @@ public class SegmentList implements Cloneable {
     }
 
     public Segment getFirst() {
-        return segmentList.getFirst();
+        try{
+            return segmentList.getFirst();
+        }catch (NoSuchElementException e){
+            return null;
+        }
     }
 
     public Segment getLast() {
