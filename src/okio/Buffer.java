@@ -895,4 +895,50 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             throw new AssertionError(e);
         }
     }
+
+    @Override
+    public String readUtf8LineStrict() throws IOException {
+        return readUtf8LineStrict(Long.MAX_VALUE);
+    }
+
+    @Override
+    public String readUtf8LineStrict(long limit) throws IOException {
+        if (limit < 0) {
+            throw new IllegalArgumentException("limit < 0: " + limit);
+        }
+        long scanLength = limit == Long.MAX_VALUE ? Long.MAX_VALUE : limit + 1;
+        long newline = indexOf((byte) '\n', 0, (int) scanLength);
+        if (newline != -1) {
+            return readUtf8Line(newline);
+        }
+        if (scanLength < size() && getByte(scanLength - 1) == '\r' && getByte(scanLength) == '\n') {
+            return readUtf8Line(scanLength);
+        }
+        Buffer data = new Buffer();
+        copyTo(data, 0, Math.min(32, size()));
+        throw new EOFException("\\n not found: limit=" + Math.min(size(), limit)
+                + " content=" + data.readByteString().hex() + '…');
+    }
+
+    @Override
+    public String readUtf8Line() throws IOException {
+        long newline = indexOf((byte) '\n');
+        if (newline == -1) {
+            return size() != 0 ? readUtf8(size()) : null;
+        }
+        return readUtf8Line(newline);
+    }
+
+    String readUtf8Line(long newline) throws IOException {
+        if (newline > 0 && getByte(newline - 1) == '\r') {
+            String result = readUtf8((int) (newline - 1));
+            skip(2);
+            return result;
+
+        } else {
+            String result = readUtf8((int) newline);
+            skip(1);
+            return result;
+        }
+    }
 }

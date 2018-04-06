@@ -496,6 +496,38 @@ public class RealBufferedSource implements BufferedSource {
         }
     }
 
+    @Override public String readUtf8LineStrict() throws IOException {
+        return readUtf8LineStrict(Long.MAX_VALUE);
+    }
+
+    @Override public String readUtf8LineStrict(long limit) throws IOException {
+        if (limit < 0) {
+            throw new IllegalArgumentException("limit < 0: " + limit);
+        }
+        long scanLength = limit == Long.MAX_VALUE ? Long.MAX_VALUE : limit + 1;
+        long newline = indexOf((byte) '\n', 0, (int) scanLength);
+        if (newline != -1) return buffer.readUtf8Line(newline);
+        if (scanLength < Long.MAX_VALUE
+                && request(scanLength) && buffer.getByte(scanLength - 1) == '\r'
+                && request(scanLength + 1) && buffer.getByte(scanLength) == '\n') {
+            return buffer.readUtf8Line(scanLength);
+        }
+        Buffer data = new Buffer();
+        buffer.copyTo(data, 0, Math.min(32, buffer.size()));
+        throw new EOFException("\\n not found: limit=" + Math.min(buffer.size(), limit)
+                + " content=" + data.readByteString().hex() + '…');
+    }
+
+    @Override
+    public String readUtf8Line() throws IOException {
+        long newline = indexOf((byte) '\n');
+        if (newline == -1) {
+            return buffer.size() != 0 ? readUtf8(buffer.size()) : null;
+        }
+
+        return buffer.readUtf8Line(newline);
+    }
+
     @Override
     public String toString() {
         return "RealBufferedSource{" +
