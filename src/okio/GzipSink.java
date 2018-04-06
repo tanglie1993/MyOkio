@@ -39,8 +39,10 @@ public final class GzipSink implements Sink {
     writeHeader();
   }
 
+  long totalWrite = 0;
   @Override
   public void write(Buffer source, long byteCount) throws IOException {
+    System.out.println("write 1");
     if (byteCount < 0) {
       throw new IllegalArgumentException("byteCount < 0: " + byteCount);
     }
@@ -48,7 +50,9 @@ public final class GzipSink implements Sink {
       return;
     }
     updateCrc(source, byteCount);
+    totalWrite += byteCount;
     deflaterSink.write(source, byteCount);
+    System.out.println("" +totalWrite);
   }
 
   @Override

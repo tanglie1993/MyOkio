@@ -387,6 +387,7 @@ public class RealBufferedSource implements BufferedSource {
     public InputStream inputStream() {
         return new InputStream() {
             @Override public int read() throws IOException {
+                System.out.println("read");
                 if (closed) {
                     throw new IOException("closed");
                 }

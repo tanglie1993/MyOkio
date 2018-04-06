@@ -887,4 +887,12 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             throw new IllegalArgumentException(e);
         }
     }
+
+    public void clear() throws IOException {
+        try {
+            skip(size());
+        } catch (EOFException e) {
+            throw new AssertionError(e);
+        }
+    }
 }

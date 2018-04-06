@@ -1,6 +1,7 @@
 package okio;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,5 +39,44 @@ public class Timeout {
     public void setDeadlineNanoTime(long deadlineNanoTime) {
         this.deadlineNanoTime = deadlineNanoTime;
         this.hasDeadline = true;
+    }
+
+    public final void waitUntilNotified(Object monitor) throws InterruptedIOException {
+        try {
+            boolean hasDeadline = hasDeadline();
+            long timeoutNanos = Timeout.this.timeoutNanos;
+
+            if (!hasDeadline && timeoutNanos == 0L) {
+                monitor.wait(); // There is no timeout: wait forever.
+                return;
+            }
+
+            // Compute how long we'll wait.
+            long waitNanos;
+            long start = System.nanoTime();
+            if (hasDeadline && timeoutNanos != 0) {
+                long deadlineNanos = deadlineNanoTime - start;
+                waitNanos = Math.min(timeoutNanos, deadlineNanos);
+            } else if (hasDeadline) {
+                waitNanos = deadlineNanoTime - start;
+            } else {
+                waitNanos = timeoutNanos;
+            }
+
+            // Attempt to wait that long. This will break out early if the monitor is notified.
+            long elapsedNanos = 0L;
+            if (waitNanos > 0L) {
+                long waitMillis = waitNanos / 1000000L;
+                monitor.wait(waitMillis, (int) (waitNanos - waitMillis * 1000000L));
+                elapsedNanos = System.nanoTime() - start;
+            }
+
+            // Throw if the timeout elapsed before the monitor was notified.
+            if (elapsedNanos >= waitNanos) {
+                throw new InterruptedIOException("timeout");
+            }
+        } catch (InterruptedException e) {
+            throw new InterruptedIOException("interrupted");
+        }
     }
 }
