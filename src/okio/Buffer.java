@@ -898,16 +898,16 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     @Override
     public String readUtf8LineStrict() throws IOException {
-        return readUtf8LineStrict(Long.MAX_VALUE);
+        return readUtf8LineStrict(Integer.MAX_VALUE);
     }
 
     @Override
-    public String readUtf8LineStrict(long limit) throws IOException {
+    public String readUtf8LineStrict(int limit) throws IOException {
         if (limit < 0) {
             throw new IllegalArgumentException("limit < 0: " + limit);
         }
-        long scanLength = limit == Long.MAX_VALUE ? Long.MAX_VALUE : limit + 1;
-        long newline = indexOf((byte) '\n', 0, (int) scanLength);
+        int scanLength = limit == Integer.MAX_VALUE ? Integer.MAX_VALUE : limit + 1;
+        long newline = indexOf((byte) '\n', 0, scanLength);
         if (newline != -1) {
             return readUtf8Line(newline);
         }

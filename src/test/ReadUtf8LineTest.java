@@ -28,7 +28,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(Parameterized.class)
+@RunWith(IDECompatibleParameterized.class)
 public final class ReadUtf8LineTest {
   private interface Factory {
     BufferedSource create(Buffer data);

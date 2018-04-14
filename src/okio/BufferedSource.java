@@ -85,7 +85,7 @@ public interface BufferedSource extends Source {
 
     String readUtf8LineStrict() throws IOException;
 
-    String readUtf8LineStrict(long limit) throws IOException;
+    String readUtf8LineStrict(int limit) throws IOException;
 
     int select(Options options) throws IOException;
 

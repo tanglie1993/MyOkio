@@ -497,17 +497,17 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override public String readUtf8LineStrict() throws IOException {
-        return readUtf8LineStrict(Long.MAX_VALUE);
+        return readUtf8LineStrict(Integer.MAX_VALUE);
     }
 
-    @Override public String readUtf8LineStrict(long limit) throws IOException {
+    @Override public String readUtf8LineStrict(int limit) throws IOException {
         if (limit < 0) {
             throw new IllegalArgumentException("limit < 0: " + limit);
         }
-        long scanLength = limit == Long.MAX_VALUE ? Long.MAX_VALUE : limit + 1;
+        long scanLength = limit == Integer.MAX_VALUE ? Integer.MAX_VALUE : limit + 1;
         long newline = indexOf((byte) '\n', 0, (int) scanLength);
         if (newline != -1) return buffer.readUtf8Line(newline);
-        if (scanLength < Long.MAX_VALUE
+        if (scanLength < Integer.MAX_VALUE
                 && request(scanLength) && buffer.getByte(scanLength - 1) == '\r'
                 && request(scanLength + 1) && buffer.getByte(scanLength) == '\n') {
             return buffer.readUtf8Line(scanLength);
