@@ -106,8 +106,8 @@ public class RealBufferedSource implements BufferedSource {
     }
 
     @Override
-    public boolean exhausted() {
-        return buffer.size() == 0;
+    public boolean exhausted() throws IOException {
+        return buffer.size() == 0 && source.read(buffer, 1) == -1;
     }
 
     @Override
