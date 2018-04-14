@@ -289,7 +289,7 @@ public class RealBufferedSource implements BufferedSource {
                 return -1;
             }
             searchIndex++;
-            if(buffer.getByte(buffer.size() - 1) == b){
+            if(buffer.getByte(buffer.size() - 1) == b && searchIndex < toIndex){
                 return searchIndex;
             }
         }
@@ -506,7 +506,9 @@ public class RealBufferedSource implements BufferedSource {
         }
         long scanLength = limit == Integer.MAX_VALUE ? Integer.MAX_VALUE : limit + 1;
         long newline = indexOf((byte) '\n', 0, (int) scanLength);
-        if (newline != -1) return buffer.readUtf8Line(newline);
+        if (newline != -1) {
+            return buffer.readUtf8Line(newline);
+        }
         if (scanLength < Integer.MAX_VALUE
                 && request(scanLength) && buffer.getByte(scanLength - 1) == '\r'
                 && request(scanLength + 1) && buffer.getByte(scanLength) == '\n') {
