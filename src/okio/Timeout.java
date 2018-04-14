@@ -47,11 +47,10 @@ public class Timeout {
             long timeoutNanos = Timeout.this.timeoutNanos;
 
             if (!hasDeadline && timeoutNanos == 0L) {
-                monitor.wait(); // There is no timeout: wait forever.
+                monitor.wait();
                 return;
             }
 
-            // Compute how long we'll wait.
             long waitNanos;
             long start = System.nanoTime();
             if (hasDeadline && timeoutNanos != 0) {
@@ -63,7 +62,6 @@ public class Timeout {
                 waitNanos = timeoutNanos;
             }
 
-            // Attempt to wait that long. This will break out early if the monitor is notified.
             long elapsedNanos = 0L;
             if (waitNanos > 0L) {
                 long waitMillis = waitNanos / 1000000L;
