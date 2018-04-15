@@ -10,6 +10,7 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -37,9 +38,39 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     @Override
     public Buffer writeUtf8(String a) {
         long start = System.currentTimeMillis();
-        byte[] bytes = a.getBytes();
+
+        final byte[] cpBytes = new byte[6]; // IndexOutOfBounds for too large code points
+        a.codePoints().forEach((cp) -> {
+            if (cp < 0) {
+                throw new IllegalStateException("No negative code point allowed");
+            } else if (cp < 0x80) {
+                Buffer.this.writeByte((byte) cp);
+            } else {
+                int bi = 0;
+                int lastPrefix = 0xC0;
+                int lastMask = 0x1F;
+                for (;;) {
+                    int b = 0x80 | (cp & 0x3F);
+                    cpBytes[bi] = (byte)b;
+                    ++bi;
+                    cp >>= 6;
+                    if ((cp & ~lastMask) == 0) {
+                        cpBytes[bi] = (byte) (lastPrefix | cp);
+                        ++bi;
+                        break;
+                    }
+                    lastPrefix = 0x80 | (lastPrefix >> 1);
+                    lastMask >>= 1;
+                }
+                while (bi > 0) {
+                    --bi;
+                    Buffer.this.writeByte((byte) cpBytes[bi]);
+                }
+            }
+        });
+
         getBytesTime += System.currentTimeMillis() - start;
-        write(bytes);
+//        write(bytes);
         totalWriteTime += System.currentTimeMillis() - start;
         return this;
     }
