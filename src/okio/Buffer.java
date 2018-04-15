@@ -1,5 +1,7 @@
 package okio;
 
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
@@ -29,9 +31,16 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     }
 
+    long totalWriteTime = 0;
+    long getBytesTime = 0;
+
     @Override
     public Buffer writeUtf8(String a) {
-        write(a.getBytes());
+        long start = System.currentTimeMillis();
+        byte[] bytes = a.getBytes();
+        getBytesTime += System.currentTimeMillis() - start;
+        write(bytes);
+        totalWriteTime += System.currentTimeMillis() - start;
         return this;
     }
 
@@ -940,5 +949,17 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
             skip(1);
             return result;
         }
+    }
+
+    public long getTotalWriteTime() {
+        return totalWriteTime;
+    }
+
+    public long getSegmentListWriteTime() {
+        return segmentList.totalWriteTime;
+    }
+
+    public long getGetBytesTime() {
+        return getBytesTime;
     }
 }

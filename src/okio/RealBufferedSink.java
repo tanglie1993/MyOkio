@@ -79,10 +79,26 @@ public class RealBufferedSink implements BufferedSink {
         return sink.timeout();
     }
 
+    long totalWriteTime = 0;
+
     @Override
     public BufferedSink writeUtf8(String s) throws IOException {
+        long start = System.currentTimeMillis();
         buffer.writeUtf8(s);
+        totalWriteTime += System.currentTimeMillis() - start;
         return this;
+    }
+
+    public long getTotalWriteTime() {
+        return totalWriteTime;
+    }
+
+    public long getSegmentListWriteTime() {
+        return buffer.getSegmentListWriteTime();
+    }
+
+    public long getBufferWriteTime() {
+        return buffer.getTotalWriteTime();
     }
 
     @Override
@@ -212,5 +228,9 @@ public class RealBufferedSink implements BufferedSink {
     @Override
     public Buffer buffer() {
         return buffer;
+    }
+
+    public long getGetBytesTime() {
+        return buffer.getGetBytesTime();
     }
 }

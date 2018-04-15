@@ -316,7 +316,10 @@ public class SegmentList implements Cloneable {
         return result;
     }
 
+    long totalWriteTime = 0;
+
     public void write(byte[] bytes, int startIndex, int endIndex) {
+        long start = System.currentTimeMillis();
         int nextWrite = startIndex;
         while(nextWrite < endIndex){
             Segment toWrite;
@@ -337,6 +340,7 @@ public class SegmentList implements Cloneable {
                 nextWrite += available;
             }
         }
+        totalWriteTime += (System.currentTimeMillis() - start);
     }
 
     Segment getWritableSegment(int minimumCapacity) {
