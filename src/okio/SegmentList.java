@@ -148,6 +148,7 @@ public class SegmentList implements Cloneable {
         if(segmentList.size() == 0){
             return;
         }
+        SegmentPool.recycle(segmentList.getFirst());
         segmentList.removeFirst();
         if(segmentList.size() > 0){
             segmentList.getFirst().prev = null;
@@ -298,7 +299,7 @@ public class SegmentList implements Cloneable {
     public void write(byte b) {
         Segment toWrite;
         if(segmentList.size() == 0 || segmentList.getLast().front >= segmentList.getLast().rear || segmentList.getLast().rear >= Segment.SIZE){
-            toWrite = new Segment();
+            toWrite = SegmentPool.getSegment();
             add(segmentList, toWrite);
         }else{
             toWrite = segmentList.getLast();
@@ -324,7 +325,7 @@ public class SegmentList implements Cloneable {
         while(nextWrite < endIndex){
             Segment toWrite;
             if(segmentList.size() == 0 || segmentList.getLast().front >= segmentList.getLast().rear || segmentList.getLast().rear >= Segment.SIZE){
-                toWrite = new Segment();
+                toWrite = SegmentPool.getSegment();
                 add(segmentList, toWrite);
             }else{
                 toWrite = segmentList.getLast();
@@ -345,13 +346,13 @@ public class SegmentList implements Cloneable {
 
     Segment getWritableSegment(int minimumCapacity) {
         if (segmentList.size() == 0) {
-            Segment segment = new Segment();
+            Segment segment = SegmentPool.getSegment();
             add(segmentList, segment);
             return segment;
         }
         Segment lastSegment = segmentList.getLast();
         if (lastSegment.rear + minimumCapacity > Segment.SIZE) {
-            Segment segment = new Segment();
+            Segment segment = SegmentPool.getSegment();
             add(segmentList, segment);
             return segment;
         }

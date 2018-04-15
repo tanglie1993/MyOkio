@@ -18,6 +18,7 @@ package test;
 import okio.BufferedSource;
 import okio.Okio;
 import okio.RealBufferedSink;
+import okio.SegmentPool;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

@@ -86,7 +86,17 @@ public class RealBufferedSink implements BufferedSink {
 //        long start = System.currentTimeMillis();
         buffer.writeUtf8(s);
 //        totalWriteTime += System.currentTimeMillis() - start;
+        writeCompletedSegmentsToSink();
         return this;
+    }
+
+    void writeCompletedSegmentsToSink() throws IOException {
+//        if (closed) throw new IllegalStateException("closed");
+        long byteCount = buffer.completeSegmentByteCount();
+        if (byteCount > 0) {
+            sink.write(buffer, byteCount);
+        }
+//        return this;
     }
 
     public long getTotalWriteTime() {
