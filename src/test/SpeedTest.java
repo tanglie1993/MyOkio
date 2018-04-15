@@ -34,7 +34,7 @@ public final class SpeedTest {
     long start = System.currentTimeMillis();
 
     RealBufferedSink sink = (RealBufferedSink) Okio.buffer(Okio.sink(file));
-    for(int i = 0; i < 100000000; i++){
+    for(int i = 0; i < 10000000; i++){
       sink.writeUtf8("1234567890");
     }
     sink.close();
@@ -42,8 +42,8 @@ public final class SpeedTest {
 //    assertEquals(20, file.length());
     System.out.println("time: " + (System.currentTimeMillis() - start));
     System.out.println("write time: " + sink.getTotalWriteTime());
-    System.out.println("get bytes time: " + sink.getGetBytesTime());
     System.out.println("buffer write time: " + sink.getBufferWriteTime());
+    System.out.println("buffer writebyte time: " + sink.getBufferWriteByteTime());
     System.out.println("segment list write time: " + sink.getSegmentListWriteTime());
     BufferedSource source = Okio.buffer(Okio.source(file));
 //    assertEquals("Hello, java.io file!", source.readUtf8());

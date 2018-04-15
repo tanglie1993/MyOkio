@@ -33,18 +33,19 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     long totalWriteTime = 0;
-    long getBytesTime = 0;
+    long writeByteTime = 0;
+    final byte[] cpBytes = new byte[6];
 
     @Override
     public Buffer writeUtf8(String a) {
-        long start = System.currentTimeMillis();
-
-        final byte[] cpBytes = new byte[6]; // IndexOutOfBounds for too large code points
+//        long start = System.currentTimeMillis();
         a.codePoints().forEach((cp) -> {
             if (cp < 0) {
                 throw new IllegalStateException("No negative code point allowed");
             } else if (cp < 0x80) {
+//                long writeByteStart = System.currentTimeMillis();
                 Buffer.this.writeByte((byte) cp);
+//                writeByteTime += System.currentTimeMillis() - writeByteStart;
             } else {
                 int bi = 0;
                 int lastPrefix = 0xC0;
@@ -64,14 +65,15 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
                 }
                 while (bi > 0) {
                     --bi;
+//                    long writeByteStart = System.currentTimeMillis();
                     Buffer.this.writeByte((byte) cpBytes[bi]);
+//                    writeByteTime += System.currentTimeMillis() - writeByteStart;
                 }
             }
         });
-
-        getBytesTime += System.currentTimeMillis() - start;
+//        totalWriteTime += System.currentTimeMillis() - start;
 //        write(bytes);
-        totalWriteTime += System.currentTimeMillis() - start;
+
         return this;
     }
 
@@ -988,9 +990,5 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
     public long getSegmentListWriteTime() {
         return segmentList.totalWriteTime;
-    }
-
-    public long getGetBytesTime() {
-        return getBytesTime;
     }
 }
