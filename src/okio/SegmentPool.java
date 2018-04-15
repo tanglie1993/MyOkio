@@ -2,7 +2,7 @@ package okio;
 
 public class SegmentPool {
 
-    private static final int TOTAL_COUNT = 0;
+    private static final int TOTAL_COUNT = 100;
 
     static Segment segment;
 
@@ -13,7 +13,6 @@ public class SegmentPool {
             return new Segment();
         }else{
             Segment result = segment;
-            segment = null;
             result.next = null;
             segment = segment.next;
             count--;
