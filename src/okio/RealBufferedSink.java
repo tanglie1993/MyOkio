@@ -83,20 +83,16 @@ public class RealBufferedSink implements BufferedSink {
 
     @Override
     public BufferedSink writeUtf8(String s) throws IOException {
-//        long start = System.currentTimeMillis();
         buffer.writeUtf8(s);
-//        totalWriteTime += System.currentTimeMillis() - start;
         writeCompletedSegmentsToSink();
         return this;
     }
 
-    void writeCompletedSegmentsToSink() throws IOException {
-//        if (closed) throw new IllegalStateException("closed");
+    private void writeCompletedSegmentsToSink() throws IOException {
         long byteCount = buffer.completeSegmentByteCount();
         if (byteCount > 0) {
             sink.write(buffer, byteCount);
         }
-//        return this;
     }
 
     public long getTotalWriteTime() {
@@ -126,70 +122,84 @@ public class RealBufferedSink implements BufferedSink {
     }
 
     @Override
-    public BufferedSink write(byte[] bytes) {
+    public BufferedSink write(byte[] bytes) throws IOException {
         buffer.write(bytes);
+        writeCompletedSegmentsToSink();
         return this;
     }
 
     @Override
-    public void writeByte(byte b) {
+    public void writeByte(byte b) throws IOException {
         buffer.writeByte(b);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeShort(short s) {
+    public void writeShort(short s) throws IOException {
         buffer.writeShort(s);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeShortLe(short s) {
+    public void writeShortLe(short s) throws IOException {
         buffer.writeShortLe(s);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeInt(int i) {
+    public void writeInt(int i) throws IOException {
         buffer.writeInt(i);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeIntLe(int i) {
+    public void writeIntLe(int i) throws IOException {
         buffer.writeIntLe(i);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeLong(long l) {
+    public void writeLong(long l) throws IOException {
         buffer.writeLong(l);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeLongLe(long l) {
+    public void writeLongLe(long l) throws IOException {
         buffer.writeLongLe(l);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public BufferedSink write(ByteString byteString) {
+    public BufferedSink write(ByteString byteString) throws IOException {
         buffer.write(byteString.getData());
+        writeCompletedSegmentsToSink();
         return this;
     }
 
     @Override
-    public void writeUtf8(String string, int startIndex, int endIndex) {
+    public void writeUtf8(String string, int startIndex, int endIndex) throws IOException {
         buffer.writeUtf8(string, startIndex, endIndex);
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeString(String string, Charset charset) {
+    public void writeString(String string, Charset charset) throws IOException {
         buffer.write(string.getBytes(charset));
+        writeCompletedSegmentsToSink();
     }
 
     @Override
-    public void writeString(String string, int start, int end, Charset charset) {
+    public void writeString(String string, int start, int end, Charset charset) throws IOException {
         buffer.write(string.substring(start, end).getBytes(charset));
+        writeCompletedSegmentsToSink();
     }
 
     @Override
     public long write(Source source, long length) throws IOException {
-        return buffer.write(source, length);
+        long result = buffer.write(source, length);
+        writeCompletedSegmentsToSink();
+        return result;
     }
 
     @Override
@@ -225,13 +235,15 @@ public class RealBufferedSink implements BufferedSink {
     @Override
     public BufferedSink writeDecimalLong(long value) throws IOException {
         buffer.writeDecimalLong(value);
+        writeCompletedSegmentsToSink();
         return this;
     }
 
 
     @Override
-    public BufferedSink writeHexadecimalUnsignedLong(long value) {
+    public BufferedSink writeHexadecimalUnsignedLong(long value) throws IOException {
         buffer.writeHexadecimalUnsignedLong(value);
+        writeCompletedSegmentsToSink();
         return this;
     }
 
