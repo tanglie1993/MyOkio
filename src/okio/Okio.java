@@ -1,7 +1,10 @@
 package okio;
 
 import java.io.*;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.file.Path;
+import java.util.logging.Level;
 
 /**
  * Created by pc on 2018/1/18.
@@ -119,6 +122,66 @@ public class Okio {
             }
 
             @Override public void close() throws IOException {
+            }
+        };
+    }
+
+    public static Source source(Socket socket) throws IOException {
+        if (socket == null) {
+            throw new IllegalArgumentException("socket == null");
+        }
+        AsyncTimeout timeout = timeout(socket);
+        Source source = source(socket.getInputStream(), timeout);
+        return timeout.source(source);
+    }
+
+    private static AsyncTimeout timeout(final Socket socket) {
+        return new AsyncTimeout() {
+            @Override protected IOException newTimeoutException(IOException cause) {
+                InterruptedIOException ioe = new SocketTimeoutException("timeout");
+                if (cause != null) {
+                    ioe.initCause(cause);
+                }
+                return ioe;
+            }
+
+            @Override protected void timedOut() {
+                try {
+                    socket.close();
+                } catch (Exception e) {
+//                    logger.log(Level.WARNING, "Failed to close timed out socket " + socket, e);
+                }
+            }
+        };
+    }
+
+    private static Source source(final InputStream in, final Timeout timeout) {
+        if (in == null) throw new IllegalArgumentException("in == null");
+        if (timeout == null) throw new IllegalArgumentException("timeout == null");
+
+        return new Source() {
+            @Override public long read(Buffer sink, long byteCount) throws IOException {
+                if (byteCount < 0) {
+                    throw new IllegalArgumentException("byteCount < 0: " + byteCount);
+                }
+                if (byteCount == 0) {
+                    return 0;
+                }
+//                timeout.throwIfReached();
+                Segment tail = sink.writableSegment(1);
+                int maxToCopy = (int) Math.min(byteCount, Segment.SIZE - tail.rear);
+                int bytesRead = in.read(tail.data, tail.rear, maxToCopy);
+                if (bytesRead == -1) return -1;
+                tail.rear += bytesRead;
+                return bytesRead;
+            }
+
+            @Override public void close() throws IOException {
+                in.close();
+            }
+
+            @Override public Timeout timeout() {
+                return timeout;
             }
         };
     }
