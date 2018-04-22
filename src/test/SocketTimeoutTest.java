@@ -49,6 +49,19 @@ public final class SocketTimeoutTest {
     socket.close();
   }
 
+  @Test
+  public void readWithTimeout() throws Exception {
+    Socket socket = socket(0, 0);
+    BufferedSource source = Okio.buffer(Okio.source(socket));
+    source.timeout().timeout(250, TimeUnit.MILLISECONDS);
+    try {
+      source.require(ONE_MB);
+      fail();
+    } catch (SocketTimeoutException expected) {
+    }
+    socket.close();
+  }
+
 
   /**
    * Returns a socket that can read {@code readableByteCount} incoming bytes and

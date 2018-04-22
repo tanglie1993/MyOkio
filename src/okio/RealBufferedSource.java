@@ -78,7 +78,7 @@ public class RealBufferedSource implements BufferedSource {
 
     @Override
     public Timeout timeout() {
-        return Timeout.NONE;
+        return source.timeout();
     }
 
     @Override
