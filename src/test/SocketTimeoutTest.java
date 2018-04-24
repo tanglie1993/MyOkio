@@ -73,6 +73,26 @@ public final class SocketTimeoutTest {
     socket.close();
   }
 
+  @Test
+  public void writeWithTimeout() throws Exception {
+    Socket socket = socket(0, 0);
+    Sink sink = Okio.sink(socket);
+    sink.timeout().timeout(500, TimeUnit.MILLISECONDS);
+    byte[] data = new byte[ONE_MB];
+    long start = System.nanoTime();
+    try {
+      sink.write(new Buffer().write(data), data.length);
+      sink.flush();
+      fail();
+    } catch (SocketTimeoutException expected) {
+    }
+    long elapsed = System.nanoTime() - start;
+    socket.close();
+
+    assertTrue("elapsed: " + elapsed, TimeUnit.NANOSECONDS.toMillis(elapsed) >= 500);
+    assertTrue("elapsed: " + elapsed, TimeUnit.NANOSECONDS.toMillis(elapsed) <= 750);
+  }
+
   /**
    * Returns a socket that can read {@code readableByteCount} incoming bytes and
    * will accept {@code writableByteCount} written bytes. The socket will idle
