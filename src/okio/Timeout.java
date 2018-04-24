@@ -41,6 +41,12 @@ public class Timeout {
         this.hasDeadline = true;
     }
 
+    public Timeout deadlineNanoTime(long deadlineNanoTime) {
+        this.hasDeadline = true;
+        this.deadlineNanoTime = deadlineNanoTime;
+        return this;
+    }
+
     public final void waitUntilNotified(Object monitor) throws InterruptedIOException {
         try {
             boolean hasDeadline = hasDeadline();
