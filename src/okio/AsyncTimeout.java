@@ -181,11 +181,15 @@ public class AsyncTimeout extends Timeout {
         return new Sink() {
             @Override
             public void write(Buffer source, long byteCount) throws IOException {
+                for(StackTraceElement element : new Throwable().getStackTrace()){
+                    System.out.println("aynctimeout write " + element);
+                }
+                System.out.println("aynctimeout write " + byteCount);
                 checkOffsetAndCount(source.size(), 0, byteCount);
 
                 while (byteCount > 0L) {
                     long toWrite = 0L;
-                    for (Segment s = source.segmentList.getFirst(); toWrite < TIMEOUT_WRITE_SIZE; s = s.next) {
+                    for (Segment s = source.segmentList.getFirst(); toWrite < TIMEOUT_WRITE_SIZE && s != null; s = s.next) {
                         int segmentSize = s.rear - s.front;
                         toWrite += segmentSize;
                         if (toWrite >= byteCount) {
@@ -197,9 +201,8 @@ public class AsyncTimeout extends Timeout {
                     boolean throwOnTimeout = false;
                     enter();
                     try {
+                        System.out.println("aynctimeout sink.write " + toWrite + " " + byteCount);
                         sink.write(source, toWrite);
-                        System.out.println("byteCount " + byteCount);
-                        System.out.println("toWrite " + toWrite);
                         byteCount -= toWrite;
                         throwOnTimeout = true;
                     } catch (IOException e) {

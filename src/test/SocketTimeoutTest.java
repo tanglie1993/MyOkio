@@ -62,6 +62,16 @@ public final class SocketTimeoutTest {
     socket.close();
   }
 
+  @Test
+  public void writeWithoutTimeout() throws Exception {
+    Socket socket = socket(0, ONE_MB);
+    Sink sink = Okio.buffer(Okio.sink(socket));
+    sink.timeout().timeout(500, TimeUnit.MILLISECONDS);
+    byte[] data = new byte[ONE_MB];
+    sink.write(new Buffer().write(data), data.length);
+    sink.flush();
+    socket.close();
+  }
 
   /**
    * Returns a socket that can read {@code readableByteCount} incoming bytes and

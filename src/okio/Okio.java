@@ -6,6 +6,8 @@ import java.net.SocketTimeoutException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 
+import static okio.Util.checkOffsetAndCount;
+
 /**
  * Created by pc on 2018/1/18.
  */
@@ -171,7 +173,9 @@ public class Okio {
                 Segment tail = sink.writableSegment(1);
                 int maxToCopy = (int) Math.min(byteCount, Segment.SIZE - tail.rear);
                 int bytesRead = in.read(tail.data, tail.rear, maxToCopy);
-                if (bytesRead == -1) return -1;
+                if (bytesRead == -1) {
+                    return -1;
+                }
                 tail.rear += bytesRead;
                 return bytesRead;
             }
@@ -182,6 +186,56 @@ public class Okio {
 
             @Override public Timeout timeout() {
                 return timeout;
+            }
+        };
+    }
+
+    public static Sink sink(Socket socket) throws IOException {
+        if (socket == null) throw new IllegalArgumentException("socket == null");
+        AsyncTimeout timeout = timeout(socket);
+        Sink sink = sink(socket.getOutputStream(), timeout);
+        return timeout.sink(sink);
+    }
+
+    private static Sink sink(final OutputStream out, final Timeout timeout) {
+        if (out == null) {
+            throw new IllegalArgumentException("out == null");
+        }
+        if (timeout == null) {
+            throw new IllegalArgumentException("timeout == null");
+        }
+
+        return new Sink() {
+            @Override public void write(Buffer source, long byteCount) throws IOException {
+                checkOffsetAndCount(source.size(), 0, byteCount);
+                while (byteCount > 0) {
+                    timeout.throwIfReached();
+                    Segment head = source.segmentList.getFirst();
+                    int toCopy = (int) Math.min(byteCount, head.rear - head.front);
+                    System.out.println("okio sink write byteCount " + byteCount);
+                    System.out.println("okio sink write front " + head.front);
+                    System.out.println("okio sink write toCopy " + toCopy);
+                    System.out.println("okio sink write source.size() " + source.size());
+                    out.write(head.data, head.front, toCopy);
+                    byteCount -= toCopy;
+                    source.skip(toCopy);
+                }
+            }
+
+            @Override public void flush() throws IOException {
+                out.flush();
+            }
+
+            @Override public void close() throws IOException {
+                out.close();
+            }
+
+            @Override public Timeout timeout() {
+                return timeout;
+            }
+
+            @Override public String toString() {
+                return "sink(" + out + ")";
             }
         };
     }
