@@ -5,10 +5,7 @@ import test.TestUtil;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
@@ -392,5 +389,12 @@ public class ByteString implements Serializable, Comparable<ByteString> {
         } catch (InvalidKeyException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    public void write(OutputStream outputStream) throws IOException {
+        if (outputStream == null) {
+            throw new IllegalArgumentException("out == null");
+        }
+        outputStream.write(data);
     }
 }

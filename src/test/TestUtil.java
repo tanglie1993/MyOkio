@@ -56,6 +56,44 @@ public class TestUtil {
         return result;
     }
 
+    @SuppressWarnings("SelfEquals")
+    public static void assertEquivalent(Buffer b1, Buffer b2) {
+        // Equals.
+        assertTrue(b1.equals(b2));
+        assertTrue(b1.equals(b1));
+        assertTrue(b2.equals(b1));
+
+        // Hash code.
+        assertEquals(b1.hashCode(), b2.hashCode());
+        assertEquals(b1.hashCode(), b1.hashCode());
+        assertEquals(b1.toString(), b2.toString());
+
+        // Content.
+        assertEquals(b1.size(), b2.size());
+        Buffer buffer = new Buffer();
+        b2.copyTo(buffer, 0, b2.size());
+        byte[] b2Bytes = b2.readByteArray();
+        for (int i = 0; i < b2Bytes.length; i++) {
+            byte b = b2Bytes[i];
+            assertEquals(b, b1.getByte(i));
+        }
+
+        // Doesn't equal a different buffer.
+        assertFalse(b1.equals(null));
+        assertFalse(b1.equals(new Object()));
+        if (b2Bytes.length > 0) {
+            byte[] b3Bytes = b2Bytes.clone();
+            b3Bytes[b3Bytes.length - 1]++;
+            Buffer b3 = new Buffer().write(b3Bytes);
+            assertFalse(b1.equals(b3));
+            assertFalse(b1.hashCode() == b3.hashCode());
+        } else {
+            Buffer b3 = new Buffer().writeUtf8("a");
+            assertFalse(b1.equals(b3));
+            assertFalse(b1.hashCode() == b3.hashCode());
+        }
+    }
+
     public static void assertEquivalent(ByteString b1, ByteString b2) {
         // Equals.
         assertTrue(b1.equals(b2));
