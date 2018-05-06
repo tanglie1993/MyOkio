@@ -4,9 +4,9 @@ public class SegmentPool {
 
     private static final int TOTAL_COUNT = 100;
 
-    static Segment segment;
+    public static Segment segment;
 
-    static int count = 0;
+    public static int count = 0;
 
     static synchronized Segment getSegment(){
         if(segment == null){
