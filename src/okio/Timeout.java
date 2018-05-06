@@ -32,7 +32,7 @@ public class Timeout {
     }
 
     public void deadline(int length, TimeUnit timeUnit) {
-        this.deadlineNanoTime = timeUnit.toNanos(length);
+        this.deadlineNanoTime = timeUnit.toNanos(length) + System.nanoTime();
         this.hasDeadline = true;
     }
 
@@ -71,7 +71,10 @@ public class Timeout {
             long elapsedNanos = 0L;
             if (waitNanos > 0L) {
                 long waitMillis = waitNanos / 1000000L;
+                System.out.println("waitMillis: " + waitMillis);
+                System.out.println("(int) (waitNanos - waitMillis * 1000000L): " + (int) (waitNanos - waitMillis * 1000000L));
                 monitor.wait(waitMillis, (int) (waitNanos - waitMillis * 1000000L));
+                System.out.println("elapsedNanos: " + (System.nanoTime() - start));
                 elapsedNanos = System.nanoTime() - start;
             }
 
