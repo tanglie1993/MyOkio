@@ -781,13 +781,46 @@ public class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     public void copyTo(Buffer target, long startIndex, long length) {
-        for(long i = startIndex; i < startIndex + length; i++){
-            byte b = getByte(i);
-            if(b == -1){
+        if(!segmentList.has(1)){
+            return;
+        }
+        Segment segment = segmentList.getFirst();
+        Segment last = segmentList.getLast();
+        long skipped = 0;
+        long written = 0;
+        while(segment != null){
+            if(skipped < startIndex) {
+                if (skipped + (segment.rear - segment.front) < startIndex) {
+                    skipped += segment.rear - segment.front;
+                } else {
+                    long copyStart = startIndex - skipped + segment.front;
+                    long copyLength = Math.min(segment.rear - segment.front - startIndex + skipped, length);
+                    skipped = startIndex;
+                    written += copyLength;
+                    target.write(segment.data, (int) copyStart, (int) copyLength);
+                }
+            }else if(written < length){
+                if (written + (segment.rear - segment.front) < length) {
+                    written += segment.rear - segment.front;
+                    target.append(SegmentPool.getSegment(segment));
+                } else {
+                    long copyLength = Math.min(segment.rear - segment.front, length - written);
+                    target.write(segment.data, segment.front, (int) copyLength);
+                    break;
+                }
+            }else{
                 break;
             }
-            target.writeByte(getByte(i));
+            if(segment == last){
+                return;
+            }else{
+                segment = segment.next;
+            }
         }
+    }
+
+    private void append(Segment next) {
+        segmentList.append(next);
     }
 
     @Override

@@ -5,8 +5,6 @@ package okio;
  */
 public class Segment {
 
-
-
     public static final int SIZE = 8192;
 
     public final byte[] data;
@@ -14,6 +12,10 @@ public class Segment {
     public int front = 0;
 
     public int rear;
+
+    public boolean isShared;
+
+    public boolean isOwner = true;
 
     Segment prev;
 
@@ -24,8 +26,10 @@ public class Segment {
     }
 
     public Segment(Segment segment) {
-        this();
-        System.arraycopy(segment.data, 0, this.data, 0, Segment.SIZE);
+        this.data = segment.data;
+        isShared = true;
+        segment.isShared = true;
+        isOwner = false;
         this.front = segment.front;
         this.rear = segment.rear;
     }

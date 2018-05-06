@@ -21,7 +21,7 @@ public class SegmentPool {
     }
 
     static synchronized void recycle(Segment segment){
-        if(count >= TOTAL_COUNT){
+        if(count >= TOTAL_COUNT || segment.isShared){
             return;
         }
         segment.front = 0;
@@ -31,5 +31,17 @@ public class SegmentPool {
         segment.prev = null;
         SegmentPool.segment = segment;
         count++;
+    }
+
+    public static synchronized Segment getSegment(Segment next) {
+        if(segment == null){
+            return new Segment(next);
+        }else{
+            Segment result = segment;
+            result.next = null;
+            segment = segment.next;
+            count--;
+            return result;
+        }
     }
 }

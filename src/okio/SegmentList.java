@@ -24,7 +24,7 @@ public class SegmentList implements Cloneable {
     public SegmentList clone(){
         LinkedList<Segment> newSegmentList = new LinkedList<>();
         for(Segment segment : segmentList){
-            add(newSegmentList, new Segment(segment));
+            add(newSegmentList, SegmentPool.getSegment(segment));
         }
         return new SegmentList(newSegmentList);
     }
@@ -298,7 +298,8 @@ public class SegmentList implements Cloneable {
 
     public void write(byte b) {
         Segment toWrite;
-        if(segmentList.size() == 0 || segmentList.getLast().front >= segmentList.getLast().rear || segmentList.getLast().rear >= Segment.SIZE){
+        if(segmentList.size() == 0 || segmentList.getLast().front >= segmentList.getLast().rear
+                || segmentList.getLast().rear >= Segment.SIZE || !segmentList.getLast().isOwner){
             toWrite = SegmentPool.getSegment();
             add(segmentList, toWrite);
         }else{
@@ -345,7 +346,7 @@ public class SegmentList implements Cloneable {
     }
 
     Segment getWritableSegment(int minimumCapacity) {
-        if (segmentList.size() == 0) {
+        if (segmentList.size() == 0 || !segmentList.getLast().isOwner) {
             Segment segment = SegmentPool.getSegment();
             add(segmentList, segment);
             return segment;
@@ -413,5 +414,9 @@ public class SegmentList implements Cloneable {
 
     public Segment getLast() {
         return segmentList.getLast();
+    }
+
+    public void append(Segment next) {
+        add(segmentList, next);
     }
 }
